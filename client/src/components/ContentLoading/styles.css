@@ -1,0 +1,16 @@
+.content-loading{
+    width: inherit;
+    height: 100%;
+    background: #22292f;
+    position: fixed;
+    top: 0;
+    left: inherit;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+}
+.content-loading img{
+    width: 200px;
+    height: 200px;
+}

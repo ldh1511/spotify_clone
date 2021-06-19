@@ -1,0 +1,1 @@
+export default API_ENDPOINT='https://api.spotify.com/'

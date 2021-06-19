@@ -1,0 +1,38 @@
+.sidebar{
+    background: black;
+    height: 100vh;
+    width: 19%;
+    overflow: hidden;
+    position: fixed;
+    top: 0;
+    left: 0;
+}
+.sidebar img{
+    display: block;
+    width: 155px;
+    padding: 15px 0 0 0;
+}
+.sidebar-list{
+    margin: 0;
+    padding: 0;
+}
+.sidebar-list li{
+    color: #b3b3b3;
+    font-weight: 700;
+    font-size: 1rem;
+    padding: 10px 20px;
+    margin: 3px;
+    text-transform: capitalize;
+}
+.sidebar-list li a{
+    color: #b3b3b3;
+    text-decoration: none;
+    font-weight: 500;
+}
+.mid{
+    margin-top: 25px;
+}
+.bot li{
+    font-weight:200;
+    padding: 5px 20px;
+}

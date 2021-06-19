@@ -1,0 +1,15 @@
+.gene{
+    margin-top: 75px;
+    height: 100%;
+    background: inherit;
+    padding: 0 25px;
+}
+.gene .card-block .card-list{
+    flex-wrap: wrap;
+}
+.gene .card-block .card-block-top .card-block-top-left h3{
+    color:white
+}
+.gene .card-list .card-item{
+    margin-bottom:25px;
+}
