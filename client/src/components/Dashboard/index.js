@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import Home from '../../containers/Home';
 import Header from '../Header';
 import Sidebar from "./Sidebar";
+import Footer from '../Footer';
 import ContentLoading from '../ContentLoading';
 import './styles.css'
 import { Switch, Route } from "react-router-dom";
@@ -11,6 +12,7 @@ import { getUserPlaylist } from "../../redux/actions/info";
 
 import Playlist from "../../containers/Playlist";
 import Gene from "../../containers/Gene";
+import Search from "../../containers/Search";
 Dashboard.defaultProps = {
   info:''
 }
@@ -31,8 +33,10 @@ function Dashboard(props)  {
           <Route exact path='/' component={Home}/>
           <Route path='/playlist' component={Playlist}/>
           <Route path='/gene' component={Gene}/>
+          <Route path='/search' component={Search}/>
         </Switch>
       </div>
+      <Footer/>
     </div>
   );
 };

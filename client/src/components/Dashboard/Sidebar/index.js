@@ -2,6 +2,7 @@ import React from 'react';
 import './styles.css';
 import logo from '../../../assets/images/logo_spotify.jpg';
 import {PropTypes, defaultProps} from 'prop-types';
+import { NavLink } from 'react-router-dom';
 Sidebar.defaultProps={
     items:[]
 }
@@ -16,8 +17,8 @@ function Sidebar(props) {
         <div className="sidebar">
             <img src={logo} alt=""></img>
             <ul className="sidebar-list top">
-                <li><a href="true">Home</a></li>
-                <li><a href="true">Search</a></li>
+                <li><NavLink to="/">Home</NavLink></li>
+                <li><NavLink to="/search">Search</NavLink></li>
                 <li><a href="true">Your library</a></li>
             </ul>
             <ul className="sidebar-list mid">

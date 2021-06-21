@@ -70,6 +70,7 @@ function* watchFetchContentHome() {
     const data = [relatedArtists, categories, tracks];
     yield put(getContentHomeSuccess(data));
     yield put(hideContentLoading());
+
 }
 function* watchFetchTracksInPlaylist({payload}){
     yield put(showContentLoading());
