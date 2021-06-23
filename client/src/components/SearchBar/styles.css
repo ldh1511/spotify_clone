@@ -1,0 +1,19 @@
+.search-bar{
+    background: white;
+    border-radius: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    color: black;
+    padding: 10px;
+    width: 50%;
+    margin-bottom: 30px;
+}
+.search-bar input{
+    outline: none;
+    border: none;
+    background: none;
+    font-family: inherit;
+    font-size: inherit;
+    flex: 2;
+}

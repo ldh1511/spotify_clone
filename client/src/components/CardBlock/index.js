@@ -1,13 +1,21 @@
 import React from 'react';
 import './styles.css';
 import CardList from '../CardList';
-import {NavLink} from 'react-router-dom';
+import PlaylistTable from '../../components/PlaylistTable';
+import { NavLink } from 'react-router-dom';
+CardBlock.defaultProps = {
+    type: ''
+}
 function CardBlock(props) {
-    const {name, data, id}=props;
-    //console.log(id);
-    const renderCardList=()=>{
-        let xhtml=null;
-        xhtml=<CardList data={data}/>
+    const { name, data, id, param, type } = props;
+    const renderCardList = () => {
+        let xhtml = null;
+        if (type !== 'track') {
+            xhtml = <CardList data={data} type={type} />
+        }
+        else{
+            xhtml=<PlaylistTable data={data} name="tracks" param={param} type='track'/>
+        }
         return xhtml;
     }
     return (
@@ -17,7 +25,7 @@ function CardBlock(props) {
                     <h3>{name}</h3>
                 </div>
                 <div className="card-block-top-right">
-                    <NavLink to={`/gene/${id}`}>Xem tất cả</NavLink>
+                    <NavLink to={param ? `/search-result/${param}/${name}` : `/gene/${id}`}>Xem tất cả</NavLink>
                 </div>
             </div>
             {renderCardList()}

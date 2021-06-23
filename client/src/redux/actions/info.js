@@ -114,3 +114,85 @@ export const getTracksPlaylistFailed=(data)=>{
         payload:data
     }
 }
+export const getCategoriesSuccess=(data)=>{
+    return{
+        type:constants.GET_CATEGORIES_SUCCESS,
+        payload:data
+    }
+}
+export const getCategoriesFailed=(data)=>{
+    return{
+        type:constants.GET_CATEGORIES_FAILED,
+        payload:data
+    }
+}
+export const getCategories=()=>{
+    return{
+        type:constants.GET_CATEGORIES
+    }
+}
+
+export const SearchValue=(data)=>{
+    return{
+        type:constants.SEARCH_VALUE,
+        payload:data
+    }
+}
+export const Search=(param)=>{
+    return{
+        type:constants.SEARCH,
+        payload:param
+    }
+}
+
+export const SearchAlbumsResult=(data)=>{
+    return{
+        type:constants.SEARCH_ALBUMS_RESULT,
+        payload:data
+    }
+}
+export const SearchAlbums=(param)=>{
+    return{
+        type:constants.SEARCH_ALBUMS,
+        payload:param
+    }
+}
+
+export const SearchArtistsResult=(data)=>{
+    return{
+        type:constants.SEARCH_ARTISTS_RESULT,
+        payload:data
+    }
+}
+export const SearchArtists=(param)=>{
+    return{
+        type:constants.SEARCH_ARTISTS,
+        payload:param
+    }
+}
+
+export const SearchPlaylistsResult=(data)=>{
+    return{
+        type:constants.SEARCH_PLAYLISTS_RESULT,
+        payload:data
+    }
+}
+export const SearchPlaylists=(param)=>{
+    return{
+        type:constants.SEARCH_PLAYLISTS,
+        payload:param
+    }
+}
+
+export const SearchTracksResult=(data)=>{
+    return{
+        type:constants.SEARCH_TRACKS_RESULT,
+        payload:data
+    }
+}
+export const SearchTracks=(param)=>{
+    return{
+        type:constants.SEARCH_TRACKS,
+        payload:param
+    }
+}

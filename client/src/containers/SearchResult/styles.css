@@ -1,0 +1,20 @@
+.search-result{
+    margin-top: 75px;
+    width: 100%;
+    height: 100%;
+    background: inherit;
+    color: white;
+    padding: 0 25px;
+    margin-bottom: 100px;
+}
+.search-result h3{
+    font-size: 2rem;
+    font-weight: 300;
+    margin-bottom: 15px;
+}
+.search-result .card-list{
+    flex-wrap: wrap;
+}
+.search-result .card-list .card-item{
+    margin-bottom: 20px;
+}

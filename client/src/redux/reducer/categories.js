@@ -16,6 +16,19 @@ const categories = (state = categoriesInitialState, action) => {
             return {
                 ...state
             }
+        case constants.GET_CATEGORIES:
+            return{
+                ...state
+            }
+        case constants.GET_CATEGORIES_SUCCESS:
+            return{
+                ...state,
+                categories:action.payload
+            }
+        case constants.GET_CATEGORIES_FAILED:
+            return{
+                ...state
+            }
         default:
             return state
     }

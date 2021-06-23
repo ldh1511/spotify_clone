@@ -18,7 +18,6 @@ Gene.defaultProps = {
 function Gene(props) {
     const { location, getCategoryAction, categoryInfo, categoryPlaylist } = props;
     let pathname = location.pathname.split('/');
-    console.log(categoryPlaylist);
     let match = pathname[pathname.length - 1];
     useEffect(() => {
         getCategoryAction(match);

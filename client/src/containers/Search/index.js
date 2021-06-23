@@ -1,37 +1,112 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import { getCategories } from '../../redux/actions/info';
 import './styles.css';
+import CategoriesList from '../../components/CategoriesList';
+import PlaylistTable from '../../components/PlaylistTable';
+import SearchBar from '../../components/SearchBar';
+import CardBlock from '../../components/CardBlock';
 Search.propTypes = {
-    
+    categories: PropTypes.array,
+    getCategoriesAction: PropTypes.func,
+    search: PropTypes.object,
+    param: PropTypes.string
 };
-
+Search.defaultProps = {
+    categories: [],
+    search: {
+        albums: {
+            items: []
+        },
+        artists: {
+            items: []
+        },
+        playlists: {
+            items: []
+        },
+        tracks: {
+            items: []
+        }
+    },
+    param: ''
+}
 function Search(props) {
+    const { getCategoriesAction, categories, search, param } = props;
+    useEffect(() => {
+        getCategoriesAction();
+    }, [])
+    const renderSearchPlaylists = () => {
+        const { playlists } = search;
+        let xhtml = null;
+        let data = playlists.items.filter((item, i) => i < 5)
+        if (playlists.items.length > 0) {
+            xhtml = <CardBlock data={data} name="playlists" param={param} type='playlist' />
+        }
+        return xhtml;
+    }
+    const renderSearchTracks = () => {
+        const { tracks } = search;
+        let xhtml = null;
+        let data = tracks.items.filter((item, i) => i < 5)
+        if (tracks.items.length > 0) {
+            xhtml = <CardBlock data={data} name="tracks" param={param} type='track'/>
+        }
+        return xhtml;
+    }
+    const renderSearchAlbums = () => {
+        const { albums } = search;
+        let xhtml = null;
+        let data = albums.items.filter((item, i) => i < 5)
+        if (albums.items.length > 0) {
+            xhtml = <CardBlock data={data} name="albums" param={param} type='album' />
+        }
+        return xhtml;
+    }
+    const renderSearchArtists = () => {
+        const { artists } = search;
+        let xhtml = null;
+        let data = artists.items.filter((item, i) => i < 5)
+        if (artists.items.length > 0) {
+            xhtml = <CardBlock data={data} name="artists" param={param} type='artist' />
+        }
+        return xhtml;
+    }
+    const renderSearchResult = () => {
+        let xhtml = null;
+        if (renderSearchPlaylists() && renderSearchAlbums()) {
+            xhtml = (
+                <>
+                    {renderSearchTracks()}
+                    {renderSearchArtists()}
+                    {renderSearchPlaylists()}
+                    {renderSearchAlbums()}
+                </>
+            )
+        }
+        else {
+            xhtml = <CategoriesList data={categories} />
+        }
+        return xhtml;
+    }
     return (
         <div className="search-container">
-            <div className="categories">
-                <div className="category-item">
-                    <img alt="" src="https://i.scdn.co/image/ab67706f0000000378c5761cf4e4fd410356c854"></img>
-                    <h3>Podcast</h3>
-                </div>
-                <div className="category-item">
-                    <img alt="" src="https://i.scdn.co/image/ab67706f0000000378c5761cf4e4fd410356c854"></img>
-                    <h3>Podcast</h3>
-                </div>
-                <div className="category-item">
-                    <img alt="" src="https://i.scdn.co/image/ab67706f0000000378c5761cf4e4fd410356c854"></img>
-                    <h3>Podcast</h3>
-                </div>
-                <div className="category-item">
-                    <img alt="" src="https://i.scdn.co/image/ab67706f0000000378c5761cf4e4fd410356c854"></img>
-                    <h3>Podcast</h3>
-                </div>
-                <div className="category-item">
-                    <img alt="" src="https://i.scdn.co/image/ab67706f0000000378c5761cf4e4fd410356c854"></img>
-                    <h3>Podcast</h3>
-                </div>
-            </div>
+            <SearchBar />
+            {renderSearchResult()}
         </div>
     );
 }
-
-export default Search;
+const mapStateToProps = (state) => {
+    return {
+        categories: state.categories.categories,
+        search: state.search.result,
+        param: state.search.param
+    }
+};
+const mapDispatchToProps = (dispatch) => {
+    return {
+        getCategoriesAction: bindActionCreators(getCategories, dispatch)
+    }
+}
+export default connect(mapStateToProps, mapDispatchToProps)(Search);

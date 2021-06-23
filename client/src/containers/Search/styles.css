@@ -1,10 +1,11 @@
 .search-container{
     margin-top: 75px;
     width: 100%;
-    height: 100vh;
+    height: 100%;
     background: #121212;
     color: white;
     padding: 0 25px;
+    padding-top: 20px;
 }
 .categories{
     display: flex;
@@ -19,10 +20,13 @@
     border-radius: 8px;
     overflow: hidden;
     width: calc(20% - 20px);
-    margin-bottom: 15px;
+    margin-bottom: 25px;
     cursor: pointer;
     transition: all .4s ease-in;
+    text-decoration: none;
+    color:white;
 }
+
 .category-item img{
     width: 110px;
     height: 110px;

@@ -46,6 +46,7 @@ function Home(props) {
                 data={categoriesPlaylistsLimit[i]}
                 name={item.name}
                 id={item.id}
+                type='playlist'
             />
         ))
         return xhtml

@@ -13,6 +13,7 @@ import { getUserPlaylist } from "../../redux/actions/info";
 import Playlist from "../../containers/Playlist";
 import Gene from "../../containers/Gene";
 import Search from "../../containers/Search";
+import SearchResult from "../../containers/SearchResult";
 Dashboard.defaultProps = {
   info:''
 }
@@ -34,6 +35,8 @@ function Dashboard(props)  {
           <Route path='/playlist' component={Playlist}/>
           <Route path='/gene' component={Gene}/>
           <Route path='/search' component={Search}/>
+          <Route path='/search-result' component={SearchResult}/>
+          
         </Switch>
       </div>
       <Footer/>
