@@ -14,6 +14,7 @@ import Playlist from "../../containers/Playlist";
 import Gene from "../../containers/Gene";
 import Search from "../../containers/Search";
 import SearchResult from "../../containers/SearchResult";
+import Artist from "../../containers/Artist";
 Dashboard.defaultProps = {
   info:''
 }
@@ -36,7 +37,7 @@ function Dashboard(props)  {
           <Route path='/gene' component={Gene}/>
           <Route path='/search' component={Search}/>
           <Route path='/search-result' component={SearchResult}/>
-          
+          <Route path='/artist' component={Artist}/>
         </Switch>
       </div>
       <Footer/>

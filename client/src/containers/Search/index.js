@@ -49,7 +49,7 @@ function Search(props) {
     const renderSearchTracks = () => {
         const { tracks } = search;
         let xhtml = null;
-        let data = tracks.items.filter((item, i) => i < 5)
+        let data = tracks.items.filter((item, i) => i < 5);
         if (tracks.items.length > 0) {
             xhtml = <CardBlock data={data} name="tracks" param={param} type='track'/>
         }

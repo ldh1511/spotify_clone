@@ -196,3 +196,43 @@ export const SearchTracks=(param)=>{
         payload:param
     }
 }
+
+export const getArtistSuccess=(data)=>{
+    return{
+        type:constants.GET_ARTIST_SUCCESS,
+        payload:data
+    }
+}
+export const getArtistFailed=(data)=>{
+    return{
+        type:constants.GET_ARTIST_FAILED,
+        payload:data
+    }
+}
+export const getArtist=(id)=>{
+    return{
+        type:constants.GET_ARTIST,
+        payload:id
+    }
+}
+export const getArtistTopTrackSuccess=(data)=>{
+    return{
+        type:constants.GET_ARTIST_SUCCESS,
+        payload:data
+    }
+}
+export const getArtistTopTrackFailed=(data)=>{
+    return{
+        type:constants.GET_ARTIST_FAILED,
+        payload:data
+    }
+}
+export const getArtistTopTrack=(idArtist, idCountry)=>{
+    return{
+        type:constants.GET_ARTIST,
+        payload:{
+            idArtist:idArtist,
+            idCountry:idCountry
+        }
+    }
+}

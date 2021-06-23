@@ -11,7 +11,6 @@ PlaylistTable.defaultProps = {
 }
 function PlaylistTable(props) {
     const { data } = props
-    console.log(data);
     const getNameOfArtist = (data) => {
         let result = "";
         data.map(item => {
@@ -39,7 +38,7 @@ function PlaylistTable(props) {
                             <td>{(Math.round((item.track.duration_ms * convert) * 100) / 100).toFixed(2)}</td>
                         </tr>
                         ) : (
-                            <tr style={{gridTemplateColumns:'5% 90% 5%'}}>
+                            <tr style={{ gridTemplateColumns: '5% 90% 5%' }}>
                                 <td>{i}</td>
                                 <td className="track-info">
                                     <img alt="" src={item.album.images[0].url} />
@@ -58,10 +57,12 @@ function PlaylistTable(props) {
 
         return xhtml
     }
-    return (
-        <div className="playlist-table">
-            <table>
-                {data[0].track?
+    const renderHeader = () => {
+        let xhtml = null;
+        if (data[0]) {
+            xhtml = (
+                <thead>
+                    {data[0].track !== undefined ?
                     <tr>
                         <th>#</th>
                         <th>tiêu đề</th>
@@ -72,9 +73,15 @@ function PlaylistTable(props) {
                     :
                     <></>
                 }
-                <thead>
-                    
                 </thead>
+            )
+        }
+        return xhtml;
+    }
+    return (
+        <div className="playlist-table">
+            <table>
+                {renderHeader()}
                 <tbody>
                     {renderElement()}
                 </tbody>

@@ -17,8 +17,8 @@ function Sidebar(props) {
         <div className="sidebar">
             <img src={logo} alt=""></img>
             <ul className="sidebar-list top">
-                <li><NavLink to="/">Home</NavLink></li>
-                <li><NavLink to="/search">Search</NavLink></li>
+                <li><NavLink activeClassName="li-active" to="/">Home</NavLink></li>
+                <li><NavLink activeClassName="li-active" to="/search">Search</NavLink></li>
                 <li><a href="true">Your library</a></li>
             </ul>
             <ul className="sidebar-list mid">

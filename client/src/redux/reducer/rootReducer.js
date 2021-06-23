@@ -1,4 +1,5 @@
 import { combineReducers } from 'redux';
+import artist from './artist';
 import categories from './categories';
 import contentHome from './contentHome';
 import info from './info';
@@ -16,6 +17,7 @@ const rootReducer = combineReducers({
     contentHome:contentHome,
     tracks:tracks,
     categories:categories,
-    search:search
+    search:search,
+    artist:artist,
 });
 export default rootReducer;

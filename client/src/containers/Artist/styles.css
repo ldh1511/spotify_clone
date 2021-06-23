@@ -1,0 +1,14 @@
+.artists{
+    margin-top: 75px;
+    width: 100%;
+    height: 100%;
+    background: inherit;
+    color: white;
+    padding: 0 25px;
+    margin-bottom: 120px;
+}
+.artists h2{
+    font-weight: 100;
+    text-transform: capitalize;
+    font-size: 2rem;
+}

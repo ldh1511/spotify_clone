@@ -4,7 +4,8 @@ import CardList from '../CardList';
 import PlaylistTable from '../../components/PlaylistTable';
 import { NavLink } from 'react-router-dom';
 CardBlock.defaultProps = {
-    type: ''
+    type: '',
+    data:[]
 }
 function CardBlock(props) {
     const { name, data, id, param, type } = props;

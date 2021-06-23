@@ -12,7 +12,8 @@ import {
     getTracksPlaylistSuccess,
     getCategorySuccess,
     getCategoriesSuccess,
-    SearchValue
+    SearchValue,
+    getArtistSuccess
 } from '../redux/actions/info';
 import { hideContentLoading, hideLoading, showContentLoading, showLoading } from '../redux/actions/ui';
 const spotify = new SpotifyWebApi();
@@ -124,6 +125,15 @@ function* SearchTracks({payload }) {
     const res=yield call(spotify.searchTracks, payload);
     console.log(res);
 }
+function* watchFetchArtist({payload}){
+    yield put(showContentLoading());
+    const res=yield call(spotify.getArtist,payload);
+    const track=yield call(spotify.getArtistTopTracks,payload,'VN');
+    const albums=yield call(spotify.getArtistAlbums,payload);
+    const related=yield call(spotify.getArtistRelatedArtists,payload);
+    yield put(getArtistSuccess([res,track, albums, related]));
+    yield put(hideContentLoading());
+}
 function* rootSaga() {
     yield takeLatest(constants.GET_USER_INFO, watchFetchUserInfo);
     yield takeLatest(constants.GET_RECENT_PLAYLISTS, watchFetchRecentPlaylist);
@@ -137,5 +147,6 @@ function* rootSaga() {
     yield takeLatest(constants.SEARCH_ARTISTS, SearchArtists);
     yield takeLatest(constants.SEARCH_PLAYLISTS, SearchPlaylists);
     yield takeLatest(constants.SEARCH_TRACKS, SearchTracks);
+    yield takeLatest(constants.GET_ARTIST, watchFetchArtist);
 }
 export default rootSaga;
