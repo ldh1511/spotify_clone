@@ -1,7 +1,7 @@
 import React from 'react';
 
 
-function test(props) {
+function Test(props) {
     return (
         <div className='test-component'>
             <h1>this is test component</h1>
@@ -9,4 +9,4 @@ function test(props) {
     );
 }
 
-export default test;
+export default Test;

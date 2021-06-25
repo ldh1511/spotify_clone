@@ -8,7 +8,7 @@ CardBlock.defaultProps = {
     data:[]
 }
 function CardBlock(props) {
-    const { name, data, id, param, type } = props;
+    const { name, data, id, param, type, match, path, own } = props;
     const renderCardList = () => {
         let xhtml = null;
         if (type !== 'track') {
@@ -19,6 +19,17 @@ function CardBlock(props) {
         }
         return xhtml;
     }
+    const renderPathname=()=>{
+        if(param){
+            return `/search-result/${param}/${name}`;
+        }
+        else if(match && path && own){
+            return `/${own}/${match}/${path}`;
+        }
+        else{
+            return `/gene/${id}`;
+        }
+    }
     return (
         <div className="card-block">
             <div className="card-block-top">
@@ -26,7 +37,7 @@ function CardBlock(props) {
                     <h3>{name}</h3>
                 </div>
                 <div className="card-block-top-right">
-                    <NavLink to={param ? `/search-result/${param}/${name}` : `/gene/${id}`}>Xem tất cả</NavLink>
+                    <NavLink to={renderPathname()}>Xem tất cả</NavLink>
                 </div>
             </div>
             {renderCardList()}

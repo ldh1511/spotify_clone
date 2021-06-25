@@ -12,7 +12,6 @@ CardItem.defaultProps = {
 }
 function CardList(props) {
     const { data, type } = props;
-    console.log('albums',data)
     const renderCardItem = () => {
         let xhtml = null;
         xhtml = data.map((item,i) => {

@@ -15,10 +15,13 @@ import Gene from "../../containers/Gene";
 import Search from "../../containers/Search";
 import SearchResult from "../../containers/SearchResult";
 import Artist from "../../containers/Artist";
+import Test from "../test";
+import RelatedArtists from "../../containers/RelatedArtists";
+import Albums from "../../containers/Albums";
 Dashboard.defaultProps = {
-  info:''
+  info: ''
 }
-function Dashboard(props)  {
+function Dashboard(props) {
   const { getUserPlaylistAction, info, playlist } = props;
   useEffect(() => {
     if (info.id) {
@@ -29,18 +32,27 @@ function Dashboard(props)  {
     <div className="dashboard">
       <Sidebar items={playlist.items} />
       <div className="dashboard-content">
-        <ContentLoading/>
-        <Header  images={info.images} name={info.display_name}/>
+        <ContentLoading />
+        <Header images={info.images} name={info.display_name} />
         <Switch>
-          <Route exact path='/' component={Home}/>
-          <Route path='/playlist' component={Playlist}/>
-          <Route path='/gene' component={Gene}/>
-          <Route path='/search' component={Search}/>
-          <Route path='/search-result' component={SearchResult}/>
-          <Route path='/artist' component={Artist}/>
+          <Route exact path='/' component={Home} />
+          <Route path='/playlist' component={Playlist} />
+          <Route path='/gene' component={Gene} />
+          <Route path='/search' component={Search} />
+          <Route path='/search-result' component={SearchResult} />
+          <Route
+            path='/artist'
+            render={({ match: { url } }) => (
+              <>
+                <Route path={`${url}/:id`} component={Artist} exact />
+                <Route path={`${url}/:id/related-artists`} component={RelatedArtists} />
+                <Route path={`${url}/:id/albums`} component={Albums} />
+              </>
+            )}
+          />
         </Switch>
       </div>
-      <Footer/>
+      <Footer />
     </div>
   );
 };

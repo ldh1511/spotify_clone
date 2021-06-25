@@ -151,10 +151,13 @@ export const SearchAlbumsResult=(data)=>{
         payload:data
     }
 }
-export const SearchAlbums=(param)=>{
+export const SearchAlbums=(param, cur)=>{
     return{
         type:constants.SEARCH_ALBUMS,
-        payload:param
+        payload:{
+            p:param,
+            cur:cur
+        }
     }
 }
 
@@ -164,10 +167,13 @@ export const SearchArtistsResult=(data)=>{
         payload:data
     }
 }
-export const SearchArtists=(param)=>{
+export const SearchArtists=(param,cur)=>{
     return{
         type:constants.SEARCH_ARTISTS,
-        payload:param
+        payload:{
+            p:param,
+            cur:cur
+        }
     }
 }
 
@@ -177,10 +183,13 @@ export const SearchPlaylistsResult=(data)=>{
         payload:data
     }
 }
-export const SearchPlaylists=(param)=>{
+export const SearchPlaylists=(param, cur)=>{
     return{
         type:constants.SEARCH_PLAYLISTS,
-        payload:param
+        payload:{
+            p:param,
+            cur:cur
+        }
     }
 }
 
@@ -190,10 +199,13 @@ export const SearchTracksResult=(data)=>{
         payload:data
     }
 }
-export const SearchTracks=(param)=>{
+export const SearchTracks=(param,cur)=>{
     return{
         type:constants.SEARCH_TRACKS,
-        payload:param
+        payload:{
+            p:param,
+            cur:cur
+        }
     }
 }
 

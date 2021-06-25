@@ -36,24 +36,52 @@ const search = (state = searchInitialState, action) => {
                 ...state
             }
         case constants.SEARCH_ALBUMS_RESULT:
+            let newAlbums=state.result.albums.items.concat(action.payload.items)
             return {
                 ...state,
-                result: {...state.result, albums:action.payload}
+                result: {
+                    ...state.result, 
+                    albums:{
+                        ...state.result.albums, 
+                        items:newAlbums
+                    }
+                }
             }
         case constants.SEARCH_ARTISTS_RESULT:
+            let newArtists=state.result.artists.items.concat(action.payload.items)
             return {
                 ...state,
-                result: {...state.result, artists:action.payload}
+                result: {
+                    ...state.result, 
+                    artists:{
+                        ...state.result.artists, 
+                        items:newArtists
+                    }
+                }
             }
         case constants.SEARCH_TRACKS_RESULT:
+            let newItems=state.result.tracks.items.concat(action.payload.items)
             return {
                 ...state,
-                result: {...state.result, tracks:action.payload}
+                result: {
+                    ...state.result, 
+                    tracks:{
+                        ...state.result.tracks, 
+                        items:newItems
+                    }
+                }
             }
         case constants.SEARCH_PLAYLISTS_RESULT:
+            let newPlaylists=state.result.playlists.items.concat(action.payload.items)
             return {
                 ...state,
-                result: {...state.result, playlists:action.payload}
+                result: {
+                    ...state.result, 
+                    playlists:{
+                        ...state.result.playlists, 
+                        items:newPlaylists
+                    }
+                }
             }
         default:
             return state

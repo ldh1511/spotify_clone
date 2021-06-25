@@ -35,7 +35,9 @@ function PlaylistTable(props) {
                             </td>
                             <td className="track-album">{item.track.album.name}</td>
                             <td>{item.added_at.split('T')[0]}</td>
-                            <td>{(Math.round((item.track.duration_ms * convert) * 100) / 100).toFixed(2)}</td>
+                            <td>
+                                {(Math.round((item.track.duration_ms * convert) * 100) / 100).toFixed(2)}
+                            </td>
                         </tr>
                         ) : (
                             <tr style={{ gridTemplateColumns: '5% 90% 5%' }}>
@@ -47,7 +49,9 @@ function PlaylistTable(props) {
                                         <span>{getNameOfArtist(item.artists)}</span>
                                     </div>
                                 </td>
-                                <td>{(Math.round((item.duration_ms * convert) * 100) / 100).toFixed(2)}</td>
+                                <td>
+                                    {(Math.round((item.duration_ms * convert) * 100) / 100).toFixed(2)}
+                                </td>
                             </tr>
                         )
                     }
