@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import Banner from '../../components/Banner';
-import PlaylistTable from '../../components/PlaylistTable';
+import TrackTable from '../../components/TrackTable';
 import { getTracksPlaylist } from '../../redux/actions/info';
 import './styles.css';
 import PropTypes from 'prop-types';
@@ -40,7 +40,7 @@ function Playlist(props) {
                 <div className="playlist-btn">
                     <button className="play-btn btn-active"><i className="fas fa-play"></i></button>
                 </div>
-                <PlaylistTable data={tracksInPlaylist}/>
+                <TrackTable data={tracksInPlaylist}/>
             </div>
         </div>
     );

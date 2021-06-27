@@ -1,0 +1,21 @@
+.related-album{
+    margin-top: 75px;
+    width: 100%;
+    height: 100%;
+    background: inherit;
+    color: white;
+    padding: 0 25px;
+    margin-bottom: 120px;
+}
+.related-album h3{
+    font-size: 2rem;
+    font-weight: 100;
+    text-transform: capitalize;
+    margin-bottom: 20px;
+}
+.related-album .card-list{
+    flex-wrap: wrap;
+}
+.related-album .card-list .card-item{
+    margin-bottom: 20px;
+}

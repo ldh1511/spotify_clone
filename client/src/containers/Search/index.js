@@ -5,7 +5,6 @@ import { bindActionCreators } from 'redux';
 import { getCategories } from '../../redux/actions/info';
 import './styles.css';
 import CategoriesList from '../../components/CategoriesList';
-import PlaylistTable from '../../components/PlaylistTable';
 import SearchBar from '../../components/SearchBar';
 import CardBlock from '../../components/CardBlock';
 Search.propTypes = {
@@ -40,7 +39,7 @@ function Search(props) {
     const renderSearchPlaylists = () => {
         const { playlists } = search;
         let xhtml = null;
-        let data = playlists.items.filter((item, i) => i < 5)
+        let data = playlists.items.slice(0,5);
         if (playlists.items.length > 0) {
             xhtml = <CardBlock data={data} name="playlists" param={param} type='playlist' />
         }
@@ -49,7 +48,7 @@ function Search(props) {
     const renderSearchTracks = () => {
         const { tracks } = search;
         let xhtml = null;
-        let data = tracks.items.filter((item, i) => i < 5);
+        let data = tracks.items.slice(0,5);
         if (tracks.items.length > 0) {
             xhtml = <CardBlock data={data} name="tracks" param={param} type='track'/>
         }
@@ -58,7 +57,7 @@ function Search(props) {
     const renderSearchAlbums = () => {
         const { albums } = search;
         let xhtml = null;
-        let data = albums.items.filter((item, i) => i < 5)
+        let data = albums.items.slice(0,5);
         if (albums.items.length > 0) {
             xhtml = <CardBlock data={data} name="albums" param={param} type='album' />
         }
@@ -67,7 +66,7 @@ function Search(props) {
     const renderSearchArtists = () => {
         const { artists } = search;
         let xhtml = null;
-        let data = artists.items.filter((item, i) => i < 5)
+        let data = artists.items.slice(0,5);
         if (artists.items.length > 0) {
             xhtml = <CardBlock data={data} name="artists" param={param} type='artist' />
         }

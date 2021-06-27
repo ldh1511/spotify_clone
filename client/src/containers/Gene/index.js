@@ -24,7 +24,7 @@ function Gene(props) {
     }, [])
     const renderCardList=()=>{
         let xhtml=null;
-        xhtml=<CardList data={categoryPlaylist}/>
+        xhtml=<CardList data={categoryPlaylist} type='playlist'/>
         return xhtml;
     }
     return (

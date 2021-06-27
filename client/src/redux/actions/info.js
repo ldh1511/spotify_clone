@@ -248,3 +248,60 @@ export const getArtistTopTrack=(idArtist, idCountry)=>{
         }
     }
 }
+
+export const getAlbumTracksSuccess=(data)=>{
+    return{
+        type:constants.GET_ALBUM_TRACK_SUCCESS,
+        payload:data
+    }
+}
+export const getAlbumTracksFailed=(data)=>{
+    return{
+        type:constants.GET_ALBUM_TRACK_FAILED,
+        payload:data
+    }
+}
+export const getAlbumTracks=(param)=>{
+    return{
+        type:constants.GET_ALBUM_TRACK,
+        payload:param
+    }
+}
+
+export const getAlbumSuccess=(data)=>{
+    return{
+        type:constants.GET_ALBUM_SUCCESS,
+        payload:data
+    }
+}
+export const getAlbumFailed=(data)=>{
+    return{
+        type:constants.GET_ALBUM_FAILED,
+        payload:data
+    }
+}
+export const getAlbum=(param)=>{
+    return{
+        type:constants.GET_ALBUM,
+        payload:param
+    }
+}
+
+export const getArtistAlbumSuccess=(data)=>{
+    return{
+        type:constants.GET_ARTIST_ALBUM_SUCCESS,
+        payload:data
+    }
+}
+export const getArtistAlbumFailed=(data)=>{
+    return{
+        type:constants.GET_ARTIST_ALBUM_FAILED,
+        payload:data
+    }
+}
+export const getArtistAlbum=(param)=>{
+    return{
+        type:constants.GET_ARTIST_ALBUM,
+        payload:param
+    }
+}

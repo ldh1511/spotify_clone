@@ -17,7 +17,11 @@ import {
     SearchTracksResult,
     SearchAlbumsResult,
     SearchArtistsResult,
-    SearchPlaylistsResult
+    SearchPlaylistsResult,
+    getAlbumTracksSuccess,
+    getAlbumSuccess,
+    getAlbumFailed,
+    getArtistAlbumSuccess
 } from '../redux/actions/info';
 import { hideContentLoading, hideLoading, showContentLoading, showLoading } from '../redux/actions/ui';
 const spotify = new SpotifyWebApi();
@@ -89,18 +93,18 @@ function* watchFetchTracksInPlaylist({ payload }) {
 }
 function* watchFetchCategory({ payload }) {
     yield put(showContentLoading());
-    const info = yield call(spotify.getCategory, payload,{country:'VN'});
-    const res = yield call(spotify.getCategoryPlaylists, payload,{country:'VN'});
+    const info = yield call(spotify.getCategory, payload, { country: 'VN' });
+    const res = yield call(spotify.getCategoryPlaylists, payload, { country: 'VN' });
     yield put(getCategorySuccess([info, res]));
     yield put(hideContentLoading());
 }
 function* watchFetchCategories() {
-    const res = yield call(spotify.getCategories,{country:'VN'});
+    const res = yield call(spotify.getCategories, { country: 'VN' });
     yield put(getCategoriesSuccess(res.categories.items))
 }
 function* Search({ payload }) {
     try {
-        const res = yield call(spotify.search, payload, ["album", "track", "artist", "playlist"],{limit:50});
+        const res = yield call(spotify.search, payload, ["album", "track", "artist", "playlist"], { limit: 50 });
         yield put(SearchValue(res));
     }
     catch {
@@ -113,34 +117,53 @@ function* Search({ payload }) {
         yield put(SearchValue(data));
     }
 }
-function* SearchAlbums({payload }) {
-    const {p, cur}=payload;
-    const res=yield call(spotify.search, p,["album"],{limit:50, offset:cur});
+function* SearchAlbums({ payload }) {
+    const { p, cur } = payload;
+    const res = yield call(spotify.search, p, ["album"], { limit: 50, offset: cur });
     yield put(SearchAlbumsResult(res.albums));
 }
-function* SearchArtists({payload }) {
-    const {p, cur}=payload;
-    const res=yield call(spotify.search, p,["artist"],{limit:50, offset:cur});
+function* SearchArtists({ payload }) {
+    const { p, cur } = payload;
+    const res = yield call(spotify.search, p, ["artist"], { limit: 50, offset: cur });
     yield put(SearchArtistsResult(res.artists));
 }
-function* SearchPlaylists({payload }) {
-    const {p, cur}=payload;
-    const res=yield call(spotify.search, p,["playlist"],{limit:50, offset:cur});
+function* SearchPlaylists({ payload }) {
+    const { p, cur } = payload;
+    const res = yield call(spotify.search, p, ["playlist"], { limit: 50, offset: cur });
     yield put(SearchPlaylistsResult(res.playlists));
 }
-function* SearchTracks({payload }) {
-    const {p, cur}=payload;
-    const res=yield call(spotify.search, p,["track"],{limit:50, offset:cur});
+function* SearchTracks({ payload }) {
+    const { p, cur } = payload;
+    const res = yield call(spotify.search, p, ["track"], { limit: 50, offset: cur });
     yield put(SearchTracksResult(res.tracks));
 }
-function* watchFetchArtist({payload}){
+function* watchFetchArtist({ payload }) {
     yield put(showContentLoading());
-    const res=yield call(spotify.getArtist,payload,{limit:50});
-    const track=yield call(spotify.getArtistTopTracks,payload,'VN');
-    const albums=yield call(spotify.getArtistAlbums,payload,{limit:50});
-    const related=yield call(spotify.getArtistRelatedArtists,payload,{limit:50});
-    yield put(getArtistSuccess([res,track, albums, related]));
+    const res = yield call(spotify.getArtist, payload, { limit: 50 });
+    const track = yield call(spotify.getArtistTopTracks, payload, 'VN');
+    const albums = yield call(spotify.getArtistAlbums, payload, { limit: 50 });
+    const related = yield call(spotify.getArtistRelatedArtists, payload, { limit: 50 });
+    yield put(getArtistSuccess([res, track, albums, related]));
     yield put(hideContentLoading());
+}
+function* watchFetchAlbumTrack({ payload }) {
+    try {
+        const res = yield all(payload.map(id => call(spotify.getAlbumTracks, id)))
+        yield put(getAlbumTracksSuccess(res));
+    }
+    catch {
+        yield put(getAlbumFailed('error'));
+    }
+}
+function* watchFetchAlbum({ payload }) {
+    const res = yield call(spotify.getAlbum, payload);
+    yield put(getAlbumSuccess(res));
+}
+function* watchFetchArtistAlbum({ payload }) {
+
+    const res = yield call(spotify.getArtistAlbums, payload, {limit:50});
+    yield put(getArtistAlbumSuccess(res));
+
 }
 function* rootSaga() {
     yield takeLatest(constants.GET_USER_INFO, watchFetchUserInfo);
@@ -156,5 +179,8 @@ function* rootSaga() {
     yield takeLatest(constants.SEARCH_PLAYLISTS, SearchPlaylists);
     yield takeLatest(constants.SEARCH_TRACKS, SearchTracks);
     yield takeLatest(constants.GET_ARTIST, watchFetchArtist);
+    yield takeLatest(constants.GET_ALBUM_TRACK, watchFetchAlbumTrack);
+    yield takeLatest(constants.GET_ALBUM, watchFetchAlbum);
+    yield takeEvery(constants.GET_ARTIST_ALBUM, watchFetchArtistAlbum);
 }
 export default rootSaga;

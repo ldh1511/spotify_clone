@@ -9,7 +9,6 @@ import { Switch, Route } from "react-router-dom";
 import { connect } from 'react-redux';
 import { bindActionCreators } from "redux";
 import { getUserPlaylist } from "../../redux/actions/info";
-
 import Playlist from "../../containers/Playlist";
 import Gene from "../../containers/Gene";
 import Search from "../../containers/Search";
@@ -18,6 +17,8 @@ import Artist from "../../containers/Artist";
 import Test from "../test";
 import RelatedArtists from "../../containers/RelatedArtists";
 import Albums from "../../containers/Albums";
+import Album from "../../containers/Album";
+import RelatedAlbums from "../../containers/RelatedAlbums";
 Dashboard.defaultProps = {
   info: ''
 }
@@ -39,6 +40,15 @@ function Dashboard(props) {
           <Route path='/playlist' component={Playlist} />
           <Route path='/gene' component={Gene} />
           <Route path='/search' component={Search} />
+          <Route
+            path='/album'
+            render={({ match: { url } }) => (
+              <>
+                <Route path={`${url}/:id`} component={Album} exact />
+                <Route path={`${url}/:id/related-albums`} component={RelatedAlbums} />
+              </>
+            )}
+          />
           <Route path='/search-result' component={SearchResult} />
           <Route
             path='/artist'
@@ -47,6 +57,7 @@ function Dashboard(props) {
                 <Route path={`${url}/:id`} component={Artist} exact />
                 <Route path={`${url}/:id/related-artists`} component={RelatedArtists} />
                 <Route path={`${url}/:id/albums`} component={Albums} />
+                <Route path={`${url}/:id/singles`} component={Albums} />
               </>
             )}
           />

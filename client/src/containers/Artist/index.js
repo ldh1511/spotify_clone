@@ -2,13 +2,11 @@ import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import './styles.css';
 import { getArtist } from '../../redux/actions/info';
-import PlaylistTable from '../../components/PlaylistTable';
+import TrackTable from '../../components/TrackTable';
 import CardBlock from '../../components/CardBlock';
 import Banner from '../../components/Banner';
-import { Route, Switch, useRouteMatch } from "react-router-dom";
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import Test from '../../components/test';
 Artist.propTypes = {
     artist: PropTypes.object,
     album: PropTypes.object,
@@ -22,10 +20,10 @@ Artist.defaultProps = {
     topTracks: [],
     albums: { items: [] },
     related: { artists: [] },
+    singles:[]
 }
 function Artist(props) {
-    const { location, getArtistAction, artist, topTracks, albums, related } = props;
-    let { path, url } = useRouteMatch();
+    const { location, getArtistAction, artist, topTracks, albums, related, singles } = props;
     let pathname = location.pathname.split('/');
     let match = pathname[pathname.length - 1];
     useEffect(() => {
@@ -36,14 +34,15 @@ function Artist(props) {
         xhtml = (
             <>
                 <h2>famous</h2>
-                <PlaylistTable data={topTracks} name="tracks" type='track' />
+                <TrackTable data={topTracks} name="tracks" type='track' />
             </>
         )
         return xhtml;
     }
     const renderAlbums = () => {
         let xhtml = null;
-        let data = albums.items.filter((item, i) => i < 5);
+        let data = albums.items.filter((item, i) => (item.album_type==='album'));
+        data=data.slice(0,5);
         xhtml = (
             <CardBlock
                 name="albums"
@@ -56,9 +55,25 @@ function Artist(props) {
         )
         return xhtml;
     }
+    const renderSingle= () => {
+        let xhtml = null;
+        let data = singles.filter((item, i) => (item.album_type==='single'));
+        data=data.slice(0,5);
+        xhtml = (
+            <CardBlock
+                name="singles"
+                type="album"
+                data={data}
+                match={match}
+                path='singles'
+                own='artist'
+            />
+        )
+        return xhtml;
+    }
     const renderRelated = () => {
         let xhtml = null;
-        let data = related.artists.filter((item, i) => i < 5);
+        let data = related.artists.slice(0,5);
         xhtml = (
             <CardBlock
                 name="related artists"
@@ -80,6 +95,7 @@ function Artist(props) {
             />
             {renderPlaylists()}
             {renderAlbums()}
+            {renderSingle()}
             {renderRelated()}
            
 
@@ -91,7 +107,8 @@ const mapStateToProps = state => {
         artist: state.artist.artistInfo,
         topTracks: state.artist.topTracks,
         albums: state.artist.albums,
-        related: state.artist.related
+        related: state.artist.related,
+        singles: state.artist.singles,
     }
 };
 const mapDispatchToProps = (dispatch) => {

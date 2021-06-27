@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import './styles.css';
 import { SearchAlbums, SearchArtists, SearchPlaylists, SearchTracks } from '../../redux/actions/info';
-import PlaylistTable from '../../components/PlaylistTable';
+import TrackTable from '../../components/TrackTable';
 import CardList from '../../components/CardList';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
@@ -101,7 +101,7 @@ function SearchResult(props) {
         else {
             xhtml = (
                 <>
-                    <PlaylistTable data={data} name="tracks" param={param} type='track' />
+                    <TrackTable data={data} name="tracks" param={param} type='track' />
                     <p
                         onClick={() => handleClick(data.length, total, type)}
                         className="see-more--btn">

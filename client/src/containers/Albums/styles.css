@@ -6,6 +6,7 @@
     color: white;
     padding: 0 25px;
     margin-bottom: 120px;
+    position: relative;
 }
 .albums .card-list{
     flex-wrap: wrap;
@@ -28,7 +29,6 @@
 .filter-block{
     display: flex;
     justify-content: space-between;
-    width: 7%;
 }
 .filter-block i{
     display: flex;
@@ -44,4 +44,20 @@
 }
 .filter-block i:hover{
     background: #464646;
+}
+.album-blocks{
+    padding-top: 80px;
+}
+.albums-filter-right{
+    display: flex;
+}
+.select-box{
+    margin-right: 20px;
+    width: 160px;
+    background: inherit;
+    color: #b3b3b3;
+    outline: none;
+    border-radius: 5px;
+    border: 2px solid #b3b3b3;
+    font-family: inherit;
 }

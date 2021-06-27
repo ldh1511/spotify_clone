@@ -11,7 +11,6 @@ RelatedArtists.defaultProps = {
 }
 function RelatedArtists(props) {
     const { artistRelated } = props;
-    console.log(artistRelated);
     const renderCardList = () => {
         let xhtml = null;
         xhtml = <CardList data={artistRelated} type='artist' />

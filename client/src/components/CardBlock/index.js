@@ -1,7 +1,7 @@
 import React from 'react';
 import './styles.css';
 import CardList from '../CardList';
-import PlaylistTable from '../../components/PlaylistTable';
+import TrackTable from '../../components/TrackTable';
 import { NavLink } from 'react-router-dom';
 CardBlock.defaultProps = {
     type: '',
@@ -15,20 +15,22 @@ function CardBlock(props) {
             xhtml = <CardList data={data} type={type} />
         }
         else{
-            xhtml=<PlaylistTable data={data} name="tracks" param={param} type='track'/>
+            xhtml=<TrackTable data={data} name="tracks" param={param} type='track'/>
         }
         return xhtml;
     }
     const renderPathname=()=>{
+        let pathname=null;
         if(param){
-            return `/search-result/${param}/${name}`;
+            pathname= `/search-result/${param}/${name}`;
         }
         else if(match && path && own){
-            return `/${own}/${match}/${path}`;
+            pathname= `/${own}/${match}/${path}`;
         }
         else{
-            return `/gene/${id}`;
+            pathname= `/gene/${id}`;
         }
+        return pathname;
     }
     return (
         <div className="card-block">
