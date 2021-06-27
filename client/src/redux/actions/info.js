@@ -299,9 +299,66 @@ export const getArtistAlbumFailed=(data)=>{
         payload:data
     }
 }
+
 export const getArtistAlbum=(param)=>{
     return{
         type:constants.GET_ARTIST_ALBUM,
         payload:param
+    }
+}
+
+export const getArtistFollowedSuccess=(data)=>{
+    return{
+        type:constants.GET_ARTIST_FOLLOWED_SUCCESS,
+        payload:data
+    }
+}
+export const getArtistFollowedFailed=(data)=>{
+    return{
+        type:constants.GET_ARTIST_FOLLOWED_FAILED,
+        payload:data
+    }
+}
+export const getArtistFollowed=()=>{
+    return{
+        type:constants.GET_ARTIST_FOLLOWED,
+    }
+}
+
+export const FollowArtistSuccess=(data)=>{
+    return{
+        type:constants.FOLLOW_ARTIST_SUCCESS,
+        payload:data
+    }
+}
+export const FollowArtistFailed=(data)=>{
+    return{
+        type:constants.FOLLOW_ARTIST_FAILED,
+        payload:data
+    }
+}
+export const FollowArtist=(id)=>{
+    return{
+        type:constants.FOLLOW_ARTIST,
+        payload:id
+    }
+}
+
+export const UnFollowArtistSuccess=(data)=>{
+    return{
+        type:constants.UNFOLLOW_ARTIST_SUCCESS,
+        payload:data
+    }
+}
+export const UnFollowArtistFailed=(data)=>{
+    return{
+        type:constants.UNFOLLOW_ARTIST_FAILED,
+        payload:data
+    }
+}
+export const UnFollowArtist=(id)=>{
+    return{
+        type:constants.UNFOLLOW_ARTIST,
+        payload:id
     }
 }

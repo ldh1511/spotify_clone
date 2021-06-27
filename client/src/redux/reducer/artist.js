@@ -25,6 +25,15 @@ const artist = (state = artistInitialState, action) => {
             }
         case constants.GET_ALBUM_TRACK_FAILED:
             return state
+        case constants.GET_ARTIST_FOLLOWED:
+            return state
+        case constants.GET_ARTIST_FOLLOWED_SUCCESS:
+            return{
+                ...state,
+                followedArtists:action.payload
+            }
+        case constants.GET_ARTIST_FOLLOWED_FAILED:
+            return state
         default:
             return state
     }

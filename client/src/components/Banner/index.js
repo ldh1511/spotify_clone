@@ -8,7 +8,8 @@ Banner.propTypes = {
     owner: PropTypes.string,
 };
 function Banner(props) {
-    const { name, description, image, owner, type } = props
+    const { name, description, image, owner, type, followed } = props;
+    console.log(followed)
     return (
         <div className="banner-top">
             <div
@@ -22,6 +23,14 @@ function Banner(props) {
                 <h1>{name}</h1>
                 <p>{description}</p>
                 <span>{owner}</span>
+                {type === 'artist' ?
+                    <button className={followed===true?'followed follow-btn':'follow-btn'}>
+                        {followed===true?'Followed':'Follow'}
+                    </button>
+                    :
+                    <></>
+                }
+
             </div>
         </div>
     );

@@ -20,10 +20,20 @@ Artist.defaultProps = {
     topTracks: [],
     albums: { items: [] },
     related: { artists: [] },
-    singles:[]
+    singles: [],
+    followedArtists: { items: [] }
 }
 function Artist(props) {
-    const { location, getArtistAction, artist, topTracks, albums, related, singles } = props;
+    const {
+        location,
+        getArtistAction,
+        artist,
+        topTracks,
+        albums,
+        related,
+        singles,
+        followedArtists } = props;
+    const { items } = followedArtists, { id } = artist;
     let pathname = location.pathname.split('/');
     let match = pathname[pathname.length - 1];
     useEffect(() => {
@@ -39,10 +49,18 @@ function Artist(props) {
         )
         return xhtml;
     }
+    const checkFollow = () => {
+        let check = null, result = false;
+        check = items.filter(item => item.id === id);
+        if (check.length > 0) {
+            result = true;
+        }
+        return result;
+    }
     const renderAlbums = () => {
         let xhtml = null;
-        let data = albums.items.filter((item, i) => (item.album_type==='album'));
-        data=data.slice(0,5);
+        let data = albums.items.filter((item, i) => (item.album_type === 'album'));
+        data = data.slice(0, 5);
         xhtml = (
             <CardBlock
                 name="albums"
@@ -55,10 +73,10 @@ function Artist(props) {
         )
         return xhtml;
     }
-    const renderSingle= () => {
+    const renderSingle = () => {
         let xhtml = null;
-        let data = singles.filter((item, i) => (item.album_type==='single'));
-        data=data.slice(0,5);
+        let data = singles.filter((item, i) => (item.album_type === 'single'));
+        data = data.slice(0, 5);
         xhtml = (
             <CardBlock
                 name="singles"
@@ -67,13 +85,14 @@ function Artist(props) {
                 match={match}
                 path='singles'
                 own='artist'
+
             />
         )
         return xhtml;
     }
     const renderRelated = () => {
         let xhtml = null;
-        let data = related.artists.slice(0,5);
+        let data = related.artists.slice(0, 5);
         xhtml = (
             <CardBlock
                 name="related artists"
@@ -92,12 +111,13 @@ function Artist(props) {
                 name={artist.name}
                 image={artist.images[0].url}
                 type="artist"
+                followed={checkFollow()}
             />
             {renderPlaylists()}
             {renderAlbums()}
             {renderSingle()}
             {renderRelated()}
-           
+            {checkFollow()}
 
         </div>
     );
@@ -109,6 +129,7 @@ const mapStateToProps = state => {
         albums: state.artist.albums,
         related: state.artist.related,
         singles: state.artist.singles,
+        followedArtists: state.artist.followedArtists
     }
 };
 const mapDispatchToProps = (dispatch) => {

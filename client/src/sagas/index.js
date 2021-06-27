@@ -21,7 +21,8 @@ import {
     getAlbumTracksSuccess,
     getAlbumSuccess,
     getAlbumFailed,
-    getArtistAlbumSuccess
+    getArtistAlbumSuccess,
+    getArtistFollowedSuccess
 } from '../redux/actions/info';
 import { hideContentLoading, hideLoading, showContentLoading, showLoading } from '../redux/actions/ui';
 const spotify = new SpotifyWebApi();
@@ -81,7 +82,10 @@ function* watchFetchContentHome() {
     const data = [relatedArtists, categories, tracks];
     yield put(getContentHomeSuccess(data));
     yield put(hideContentLoading());
-
+}
+function* watchFetchArtistFollowed(){
+    const res = yield call(spotify.getFollowedArtists,{limit:50});
+    yield put(getArtistFollowedSuccess(res.artists));
 }
 function* watchFetchTracksInPlaylist({ payload }) {
     yield put(showContentLoading());
@@ -170,6 +174,7 @@ function* rootSaga() {
     yield takeLatest(constants.GET_RECENT_PLAYLISTS, watchFetchRecentPlaylist);
     yield takeEvery(constants.GET_USER_PLAYLISTS, watchFetchUserPlaylist);
     yield takeEvery(constants.GET_CONTENT_HOME, watchFetchContentHome);
+    yield takeEvery(constants.GET_ARTIST_FOLLOWED, watchFetchArtistFollowed);
     yield takeEvery(constants.GET_TRACKS_PLAYLIST, watchFetchTracksInPlaylist);
     yield takeEvery(constants.GET_CATEGORY, watchFetchCategory);
     yield takeEvery(constants.GET_CATEGORIES, watchFetchCategories);

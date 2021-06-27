@@ -4,7 +4,7 @@ import CurrentList from '../../components/CurrentList';
 import CardBlock from '../../components/CardBlock';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { getContentHome, getRecentPlaylist } from '../../redux/actions/info';
+import { getArtistFollowed, getContentHome, getRecentPlaylist } from '../../redux/actions/info';
 import PropTypes from 'prop-types';
 Home.propTypes = {
     recentlyPlaylist: PropTypes.array,
@@ -28,11 +28,13 @@ function Home(props) {
         recentlyPlaylist,
         relatedArtists,
         categories,
-        categoriesPlaylists
+        categoriesPlaylists,
+        getArtistFollowedAction
     } = props;
     useEffect(() => {
         getRecentPlaylistAcion()
         getContentHomeAction()
+        getArtistFollowedAction()
     }, [])
     const renderCategoriesPlaylists = () => {
         let categoriesPlaylistsLimit = categoriesPlaylists.map(item => (
@@ -80,7 +82,8 @@ function Home(props) {
 const mapDispatchToProps = dispatch => {
     return {
         getRecentPlaylistAcion: bindActionCreators(getRecentPlaylist, dispatch),
-        getContentHomeAction: bindActionCreators(getContentHome, dispatch)
+        getContentHomeAction: bindActionCreators(getContentHome, dispatch),
+        getArtistFollowedAction: bindActionCreators(getArtistFollowed, dispatch),
     }
 }
 const mapStateToProps = state => {

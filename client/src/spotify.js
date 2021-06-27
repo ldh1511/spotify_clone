@@ -10,7 +10,13 @@ const scopes = [
   "user-library-modify",
   "user-top-read",
   "user-modify-playback-state",
-  "playlist-modify-private"
+  "user-follow-modify",
+  "user-follow-read",
+  "playlist-modify-public",
+  "playlist-read-private",
+  "playlist-modify-private",
+  "playlist-read-collaborative",
+  "ugc-image-upload"
 ];
 
 export const getTokenFromUrl=()=>{
