@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import './styles.css';
 Banner.propTypes = {
@@ -6,10 +6,25 @@ Banner.propTypes = {
     description: PropTypes.string,
     image: PropTypes.string,
     owner: PropTypes.string,
+    follow:PropTypes.func,
+    unfollow:PropTypes.func,
 };
 function Banner(props) {
-    const { name, description, image, owner, type, followed } = props;
-    console.log(followed)
+    const { name, description, image, owner, type, followed, id, follow, unfollow } = props;
+    const [followState, setFollowState]=useState(followed);
+    useEffect(()=>{
+        setFollowState(followed);
+    },[followed])
+    const handleFollow = (stateFollow) => {
+        if (stateFollow === true) {
+            unfollow(id)
+            setFollowState(false);
+        }
+        else {
+            follow(id);
+            setFollowState(true);
+        }
+    }
     return (
         <div className="banner-top">
             <div
@@ -24,8 +39,11 @@ function Banner(props) {
                 <p>{description}</p>
                 <span>{owner}</span>
                 {type === 'artist' ?
-                    <button className={followed===true?'followed follow-btn':'follow-btn'}>
-                        {followed===true?'Followed':'Follow'}
+                    <button
+                        onClick={() => handleFollow(followState)}
+                        className={followState === true ? 'followed follow-btn' : 'follow-btn'}
+                    >
+                        {followState === true ? 'Followed' : 'Follow'}
                     </button>
                     :
                     <></>

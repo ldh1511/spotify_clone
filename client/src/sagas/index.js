@@ -22,7 +22,11 @@ import {
     getAlbumSuccess,
     getAlbumFailed,
     getArtistAlbumSuccess,
-    getArtistFollowedSuccess
+    getArtistFollowedSuccess,
+    FollowArtistSuccess,
+    FollowArtistFailed,
+    UnFollowArtistSuccess,
+    UnFollowArtistFailed
 } from '../redux/actions/info';
 import { hideContentLoading, hideLoading, showContentLoading, showLoading } from '../redux/actions/ui';
 const spotify = new SpotifyWebApi();
@@ -103,8 +107,10 @@ function* watchFetchCategory({ payload }) {
     yield put(hideContentLoading());
 }
 function* watchFetchCategories() {
+    yield put(showContentLoading());
     const res = yield call(spotify.getCategories, { country: 'VN' });
     yield put(getCategoriesSuccess(res.categories.items))
+    yield put(hideContentLoading());
 }
 function* Search({ payload }) {
     try {
@@ -169,6 +175,24 @@ function* watchFetchArtistAlbum({ payload }) {
     yield put(getArtistAlbumSuccess(res));
 
 }
+function* watchFollowArtist({payload}){
+    try{
+        yield call(spotify.followArtists,[payload]);
+        yield put(FollowArtistSuccess(payload));
+    }
+    catch{
+        yield put(FollowArtistFailed(payload));
+    }
+}
+function* watchUnFollowArtist({payload}){
+    try{
+        yield call(spotify.unfollowArtists,[payload]);
+        yield put(UnFollowArtistSuccess(payload));
+    }
+    catch{
+        yield put(UnFollowArtistFailed(payload));
+    }
+}
 function* rootSaga() {
     yield takeLatest(constants.GET_USER_INFO, watchFetchUserInfo);
     yield takeLatest(constants.GET_RECENT_PLAYLISTS, watchFetchRecentPlaylist);
@@ -187,5 +211,7 @@ function* rootSaga() {
     yield takeLatest(constants.GET_ALBUM_TRACK, watchFetchAlbumTrack);
     yield takeLatest(constants.GET_ALBUM, watchFetchAlbum);
     yield takeEvery(constants.GET_ARTIST_ALBUM, watchFetchArtistAlbum);
+    yield takeEvery(constants.FOLLOW_ARTIST, watchFollowArtist);
+    yield takeEvery(constants.UNFOLLOW_ARTIST, watchUnFollowArtist);
 }
 export default rootSaga;

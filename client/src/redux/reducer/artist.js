@@ -34,6 +34,10 @@ const artist = (state = artistInitialState, action) => {
             }
         case constants.GET_ARTIST_FOLLOWED_FAILED:
             return state
+        case constants.FOLLOW_ARTIST:
+            return state
+        case constants.UNFOLLOW_ARTIST:
+            return state
         default:
             return state
     }

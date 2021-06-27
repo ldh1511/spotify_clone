@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import './styles.css';
-import { getArtist } from '../../redux/actions/info';
+import { FollowArtist, getArtist, getArtistFollowed, UnFollowArtist } from '../../redux/actions/info';
 import TrackTable from '../../components/TrackTable';
 import CardBlock from '../../components/CardBlock';
 import Banner from '../../components/Banner';
@@ -32,12 +32,16 @@ function Artist(props) {
         albums,
         related,
         singles,
-        followedArtists } = props;
+        followedArtists,
+        FollowArtistAction,
+        UnFollowArtistAction,
+        getArtistFollowedAction} = props;
     const { items } = followedArtists, { id } = artist;
     let pathname = location.pathname.split('/');
     let match = pathname[pathname.length - 1];
     useEffect(() => {
         getArtistAction(match);
+        getArtistFollowedAction();
     }, [match])
     const renderPlaylists = () => {
         let xhtml = null;
@@ -52,6 +56,7 @@ function Artist(props) {
     const checkFollow = () => {
         let check = null, result = false;
         check = items.filter(item => item.id === id);
+        console.log(check);
         if (check.length > 0) {
             result = true;
         }
@@ -112,12 +117,14 @@ function Artist(props) {
                 image={artist.images[0].url}
                 type="artist"
                 followed={checkFollow()}
+                id={id}
+                follow={FollowArtistAction}
+                unfollow={UnFollowArtistAction}
             />
             {renderPlaylists()}
             {renderAlbums()}
             {renderSingle()}
             {renderRelated()}
-            {checkFollow()}
 
         </div>
     );
@@ -134,7 +141,10 @@ const mapStateToProps = state => {
 };
 const mapDispatchToProps = (dispatch) => {
     return {
-        getArtistAction: bindActionCreators(getArtist, dispatch)
+        getArtistAction: bindActionCreators(getArtist, dispatch),
+        FollowArtistAction: bindActionCreators(FollowArtist,dispatch),
+        UnFollowArtistAction: bindActionCreators(UnFollowArtist,dispatch),
+        getArtistFollowedAction: bindActionCreators(getArtistFollowed,dispatch)
     }
 }
 export default connect(mapStateToProps, mapDispatchToProps)(Artist);
