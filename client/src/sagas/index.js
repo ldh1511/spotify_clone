@@ -26,7 +26,13 @@ import {
     FollowArtistSuccess,
     FollowArtistFailed,
     UnFollowArtistSuccess,
-    UnFollowArtistFailed
+    UnFollowArtistFailed,
+    GetSavedTracksSuccess,
+    GetSavedTracksFailed,
+    GetSavedALbumsSuccess,
+    GetSavedALbumsFailed,
+    GetSavedShowsFailed,
+    GetSavedShowsSuccess,
 } from '../redux/actions/info';
 import { hideContentLoading, hideLoading, showContentLoading, showLoading } from '../redux/actions/ui';
 const spotify = new SpotifyWebApi();
@@ -73,7 +79,7 @@ function* watchFetchContentHome() {
     const resp = yield call(spotify.getMyTopArtists);
     let [relatedArtists, categories] = yield all([
         yield all(resp.items.map(item => call(spotify.getArtistRelatedArtists, item.id))),
-        call(spotify.getCategories),
+        call(spotify.getCategories, { country: 'VN' }),
     ])
     const randCatArr = [];
     for (let i = 0; i < 3; i++) {
@@ -193,6 +199,33 @@ function* watchUnFollowArtist({payload}){
         yield put(UnFollowArtistFailed(payload));
     }
 }
+function* watchFetchSavedTracks(){
+    try{
+        const res=yield call(spotify.getMySavedTracks);
+        yield put(GetSavedTracksSuccess(res))
+    }
+    catch{
+        yield put(GetSavedTracksFailed('error'))
+    }
+}
+function* watchFetchSavedAlbums(){
+    try{
+        const res=yield call(spotify.getMySavedAlbums);
+        yield put(GetSavedALbumsSuccess(res))
+    }
+    catch{
+        yield put(GetSavedALbumsFailed('error'))
+    }
+}
+function* watchFetchSavedShows(){
+    try{
+        const res=yield call(spotify.getMySavedShows);
+        yield put(GetSavedShowsSuccess(res));
+    }
+    catch{
+        yield put(GetSavedShowsFailed('error'))
+    }
+}
 function* rootSaga() {
     yield takeLatest(constants.GET_USER_INFO, watchFetchUserInfo);
     yield takeLatest(constants.GET_RECENT_PLAYLISTS, watchFetchRecentPlaylist);
@@ -213,5 +246,8 @@ function* rootSaga() {
     yield takeEvery(constants.GET_ARTIST_ALBUM, watchFetchArtistAlbum);
     yield takeEvery(constants.FOLLOW_ARTIST, watchFollowArtist);
     yield takeEvery(constants.UNFOLLOW_ARTIST, watchUnFollowArtist);
+    yield takeEvery(constants.GET_SAVED_TRACKS, watchFetchSavedTracks);
+    yield takeEvery(constants.GET_SAVED_ALBUMS, watchFetchSavedAlbums);
+    yield takeEvery(constants.GET_SAVED_SHOWS, watchFetchSavedShows);
 }
 export default rootSaga;

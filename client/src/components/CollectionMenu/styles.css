@@ -1,0 +1,24 @@
+.collection-menu{
+    display:flex;
+    align-items:center;
+}
+.collection-menu li{
+    list-style:none;
+}
+.collection-menu li a{
+    padding:10px 20px;
+    color: white;
+    transition: all .3s;
+    cursor: pointer;
+    border-radius: 4px;
+    font-weight: 500;
+    display:block;
+    text-decoration:none;
+    color: white;
+}
+.collection-active{
+    background: #2e2e2e;
+}
+.collection-menu li a:hover{
+    background: #2e2e2e;
+}

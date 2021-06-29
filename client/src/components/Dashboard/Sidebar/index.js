@@ -19,7 +19,7 @@ function Sidebar(props) {
             <ul className="sidebar-list top">
                 <li><NavLink activeClassName="li-active" to="/">Home</NavLink></li>
                 <li><NavLink activeClassName="li-active" to="/search">Search</NavLink></li>
-                <li><a href="true">Your library</a></li>
+                <li><NavLink activeClassName="li-active" to="/collection/playlists">Library</NavLink></li>
             </ul>
             <ul className="sidebar-list mid">
                 <li><a href="true">Create Playlist</a></li>

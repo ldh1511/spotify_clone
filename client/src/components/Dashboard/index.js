@@ -19,6 +19,7 @@ import RelatedArtists from "../../containers/RelatedArtists";
 import Albums from "../../containers/Albums";
 import Album from "../../containers/Album";
 import RelatedAlbums from "../../containers/RelatedAlbums";
+import Collection from "../../containers/Collection";
 Dashboard.defaultProps = {
   info: ''
 }
@@ -61,6 +62,16 @@ function Dashboard(props) {
               </>
             )}
           />
+          <Route 
+          path='/collection'
+            render={({ match: { url } }) => (
+              <>
+                <Route path={`${url}/playlists`} component={Collection} exact />
+                <Route path={`${url}/albums`} component={Collection} />
+                <Route path={`${url}/podcasts`} component={Collection} />
+                <Route path={`${url}/artists`} component={Collection} />
+              </>
+            )}/>
         </Switch>
       </div>
       <Footer />

@@ -6,6 +6,7 @@ import contentHome from './contentHome';
 import info from './info';
 import recentPlaylist from './recentPlaylist';
 import search from './search';
+import show from './show';
 import tracks from './tracks';
 import ui from './ui';
 import userPlaylists from './userplaylists';
@@ -20,6 +21,7 @@ const rootReducer = combineReducers({
     categories:categories,
     search:search,
     artist:artist,
-    album:album
+    album:album,
+    show:show
 });
 export default rootReducer;

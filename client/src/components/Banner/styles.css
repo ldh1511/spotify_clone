@@ -8,6 +8,11 @@
     height:240px;
     overflow: hidden;
     border-radius: 4px;
+    position:relative;
+    background:#333;
+}
+.banner-img svg{
+    color:#b3b3b3;
 }
 .banner-img img{
     display:block;

@@ -20,7 +20,6 @@
     color: #b3b3b3;
     font-weight: 700;
     font-size: 1rem;
-    padding: 10px 20px;
     margin: 3px;
     text-transform: capitalize;
 }
@@ -28,6 +27,10 @@
     color: #b3b3b3;
     text-decoration: none;
     font-weight: 500;
+    padding: 10px 20px;
+    display: block;
+    border-radius: 5px;
+    margin: 10px;
 }
 .mid{
     margin-top: 25px;
@@ -38,4 +41,5 @@
 }
 .li-active{
     color:white!important;
+    background: #2e2e2e;
 }

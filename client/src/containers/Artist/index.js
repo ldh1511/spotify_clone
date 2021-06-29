@@ -56,7 +56,6 @@ function Artist(props) {
     const checkFollow = () => {
         let check = null, result = false;
         check = items.filter(item => item.id === id);
-        console.log(check);
         if (check.length > 0) {
             result = true;
         }

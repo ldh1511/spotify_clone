@@ -20,6 +20,15 @@ const album = (state = albumInitialState, action) => {
             }
         case constants.GET_ARTIST_ALBUM_FAILED:
             return state
+        case constants.GET_SAVED_ALBUMS:
+            return state
+        case constants.GET_SAVED_ALBUMS_SUCCESS:
+            return{
+                ...state,
+                savedAlbums:action.payload
+            }
+        case constants.GET_SAVED_ALBUMS_FAILED:
+            return state
         default:
             return state
     }

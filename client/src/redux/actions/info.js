@@ -362,3 +362,57 @@ export const UnFollowArtist=(id)=>{
         payload:id
     }
 }
+
+export const GetSavedTracksSuccess=(data)=>{
+    return{
+        type:constants.GET_SAVED_TRACKS_SUCCESS,
+        payload:data
+    }
+}
+export const GetSavedTracksFailed=(data)=>{
+    return{
+        type:constants.GET_SAVED_TRACKS_FAILED,
+        payload:data
+    }
+}
+export const GetSavedTracks=()=>{
+    return{
+        type:constants.GET_SAVED_TRACKS
+    }
+}
+
+export const GetSavedALbumsSuccess=(data)=>{
+    return{
+        type:constants.GET_SAVED_ALBUMS_SUCCESS,
+        payload:data
+    }
+}
+export const GetSavedALbumsFailed=(data)=>{
+    return{
+        type:constants.GET_SAVED_ALBUMS_FAILED,
+        payload:data
+    }
+}
+export const GetSavedALbums=()=>{
+    return{
+        type:constants.GET_SAVED_ALBUMS
+    }
+}
+
+export const GetSavedShowsSuccess=(data)=>{
+    return{
+        type:constants.GET_SAVED_SHOWS_SUCCESS,
+        payload:data
+    }
+}
+export const GetSavedShowsFailed=(data)=>{
+    return{
+        type:constants.GET_SAVED_SHOWS_FAILED,
+        payload:data
+    }
+}
+export const GetSavedShows=()=>{
+    return{
+        type:constants.GET_SAVED_SHOWS
+    }
+}

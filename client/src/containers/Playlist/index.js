@@ -31,7 +31,7 @@ function Playlist(props) {
         <div className="playlist">
             <Banner 
                 name={playlistInfo.name}
-                image={playlistInfo.images[0].url}
+                image={playlistInfo.images[0]?playlistInfo.images[0].url:''}
                 description={playlistInfo.description}
                owner={playlistInfo.owner.display_name}
                 type={playlistInfo.type}
