@@ -9,26 +9,24 @@ import SpotifyWebApi from 'spotify-web-api-js';
 import { getUserInfo, setToken } from './redux/actions/info';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
+import { getToken } from './apis/info';
 const spotify = new SpotifyWebApi();
 function App(props) {
   const { setTokenAction, getUserInfoAction } = props;
   const [token, setToken] = useState(null);
+  window.location.hash="";
   useEffect(() => {
     const curToken = localStorage.getItem('token');
-    const hash = getTokenFromUrl();
-    window.location.hash = "";
-    const _token = hash.access_token;
-    if (curToken) {
-      spotify.setAccessToken(curToken);
-      setToken(curToken);
-    }
-    else {
-      if (_token) {
-        setToken(_token);
-        setTokenAction(_token);
-        spotify.setAccessToken(_token);
+    if (!curToken) {
+      const hash = getTokenFromUrl();
+      const code = hash;
+      const setTokenActions = async () => {
+        let res = await getToken(code);
+        setTokenAction(res.data.access_token);
       }
+      setTokenActions();
     }
+    setToken(curToken);
     getUserInfoAction();
   }, [])
   return (

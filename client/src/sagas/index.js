@@ -1,6 +1,6 @@
-import { call, put, delay, takeLatest, takeEvery, all } from 'redux-saga/effects';
+import { call, put, takeLatest, takeEvery, all } from 'redux-saga/effects';
 import * as constants from './../constants/actions';
-import SpotifyWebApi from 'spotify-web-api-js';
+import * as api from '../apis/info';
 import {
     getContentHomeSuccess,
     getRecentPlaylistFailed,
@@ -33,14 +33,16 @@ import {
     GetSavedALbumsFailed,
     GetSavedShowsFailed,
     GetSavedShowsSuccess,
+    GetSavedEpisodesSuccess,
+    GetSavedEpisodesFailed,
 } from '../redux/actions/info';
 import { hideContentLoading, hideLoading, showContentLoading, showLoading } from '../redux/actions/ui';
-const spotify = new SpotifyWebApi();
 function* watchFetchUserInfo() {
     yield put(showLoading());
     try {
-        const res = yield call(spotify.getMe);
-        yield put(getUserInfoSuccess(res));
+        const res = yield call(api.getMe);
+        console.log(res);
+        yield put(getUserInfoSuccess(res.data));
     }
     catch {
         yield put(getUserInfoFailed('error'))
@@ -49,8 +51,8 @@ function* watchFetchUserInfo() {
 }
 function* watchFetchUserPlaylist({ payload }) {
     try {
-        const res = yield call(spotify.getUserPlaylists, payload);
-        yield put(getUserPlaylistSuccess(res));
+        const res = yield call(api.getUserPlaylists, payload);
+        yield put(getUserPlaylistSuccess(res.data));
 
     }
     catch {
@@ -59,16 +61,17 @@ function* watchFetchUserPlaylist({ payload }) {
 }
 function* watchFetchRecentPlaylist() {
     try {
-        const res = yield call(spotify.getMyRecentlyPlayedTracks);
+        const res = yield call(api.getRecentlyPlaylistTrack);
         let idPlaylist = []
-        res.items.map((item) => {
+        res.data.items.map((item) => {
             let id = item.context.uri;
             id = id.split(':')[2]
-            idPlaylist.push(id)
+            idPlaylist.push(id);
+            return true;
         })
         idPlaylist = Array.from(new Set(idPlaylist));
-        const resp = yield all(idPlaylist.map(item => call(spotify.getPlaylist, item)));
-        yield put(getRecentPlaylistSuccess(resp));
+        const resp = yield all(idPlaylist.map(item => call(api.getPlaylist, item)));
+        yield put(getRecentPlaylistSuccess(resp.data));
     }
     catch {
         yield put(getRecentPlaylistFailed('error'))
@@ -76,52 +79,63 @@ function* watchFetchRecentPlaylist() {
 }
 function* watchFetchContentHome() {
     yield put(showContentLoading());
-    const resp = yield call(spotify.getMyTopArtists);
+    const resp = yield call(api.getMyTop, 'artists');
     let [relatedArtists, categories] = yield all([
-        yield all(resp.items.map(item => call(spotify.getArtistRelatedArtists, item.id))),
-        call(spotify.getCategories, { country: 'VN' }),
+        yield all(resp.data.items.map(item => call(api.getArtistRelatedArtists, item.id))),
+        call(api.getCategories, { country: 'VN' }),
     ])
     const randCatArr = [];
     for (let i = 0; i < 3; i++) {
         // lấy ngãu nhiên category
-        const randCat = Math.floor(Math.random() * (categories.categories.items.length - 1));
+        const randCat = Math.floor(Math.random() * (categories.data.categories.items.length - 1));
         randCatArr.push(randCat);
     }
-    categories = categories.categories.items.filter((item, i) => randCatArr.includes(i) === true);
-    const tracks = yield all(categories.map(item => call(spotify.getCategoryPlaylists, item.id)));
-    const data = [relatedArtists, categories, tracks];
+    categories = categories.data.categories.items.filter((item, i) => randCatArr.includes(i) === true);
+    const tracks = yield all(categories.map(item => call(api.getCategoryPlaylists, item.id)));
+    let newTracks = [];
+    let newRelatedArtists = [];
+    tracks.map(item => {
+        newTracks.push(item.data);
+        return true;
+    });
+    relatedArtists.map(item => {
+        newRelatedArtists.push(item.data);
+        return true;
+    });
+    console.log(newTracks);
+    const data = [relatedArtists, categories, newTracks];
     yield put(getContentHomeSuccess(data));
     yield put(hideContentLoading());
 }
-function* watchFetchArtistFollowed(){
-    const res = yield call(spotify.getFollowedArtists,{limit:50});
-    yield put(getArtistFollowedSuccess(res.artists));
+function* watchFetchArtistFollowed() {
+    const res = yield call(api.getFollowedArtists, { limit: 50 });
+    yield put(getArtistFollowedSuccess(res.data.artists));
 }
 function* watchFetchTracksInPlaylist({ payload }) {
     yield put(showContentLoading());
-    const data = yield call(spotify.getPlaylist, payload);
-    const res = yield call(spotify.getPlaylistTracks, payload);
-    const dataArr = [data, res.items];
+    const data = yield call(api.getPlaylist, payload);
+    const res = yield call(api.getPlaylistTracks, payload);
+    const dataArr = [data.data, res.data.items];
     yield put(getTracksPlaylistSuccess(dataArr));
     yield put(hideContentLoading());
 }
 function* watchFetchCategory({ payload }) {
     yield put(showContentLoading());
-    const info = yield call(spotify.getCategory, payload, { country: 'VN' });
-    const res = yield call(spotify.getCategoryPlaylists, payload, { country: 'VN' });
-    yield put(getCategorySuccess([info, res]));
+    const info = yield call(api.getCategory, payload, { country: 'VN' });
+    const res = yield call(api.getCategoryPlaylists, payload, { country: 'VN' });
+    yield put(getCategorySuccess([info.data, res.data]));
     yield put(hideContentLoading());
 }
 function* watchFetchCategories() {
     yield put(showContentLoading());
-    const res = yield call(spotify.getCategories, { country: 'VN' });
-    yield put(getCategoriesSuccess(res.categories.items))
+    const res = yield call(api.getCategories, { country: 'VN' });
+    yield put(getCategoriesSuccess(res.data.categories.items))
     yield put(hideContentLoading());
 }
 function* Search({ payload }) {
     try {
-        const res = yield call(spotify.search, payload, ["album", "track", "artist", "playlist"], { limit: 50 });
-        yield put(SearchValue(res));
+        const res = yield call(api.search, payload, ["album", "track", "artist", "playlist"], { limit: 50 });
+        yield put(SearchValue(res.data));
     }
     catch {
         const data = {
@@ -135,96 +149,112 @@ function* Search({ payload }) {
 }
 function* SearchAlbums({ payload }) {
     const { p, cur } = payload;
-    const res = yield call(spotify.search, p, ["album"], { limit: 50, offset: cur });
-    yield put(SearchAlbumsResult(res.albums));
+    const res = yield call(api.search, p, ["album"], { limit: 50, offset: cur });
+    yield put(SearchAlbumsResult(res.data.albums));
 }
 function* SearchArtists({ payload }) {
     const { p, cur } = payload;
-    const res = yield call(spotify.search, p, ["artist"], { limit: 50, offset: cur });
-    yield put(SearchArtistsResult(res.artists));
+    const res = yield call(api.search, p, ["artist"], { limit: 50, offset: cur });
+    yield put(SearchArtistsResult(res.data.artists));
 }
 function* SearchPlaylists({ payload }) {
     const { p, cur } = payload;
-    const res = yield call(spotify.search, p, ["playlist"], { limit: 50, offset: cur });
-    yield put(SearchPlaylistsResult(res.playlists));
+    const res = yield call(api.search, p, ["playlist"], { limit: 50, offset: cur });
+    yield put(SearchPlaylistsResult(res.data.playlists));
 }
 function* SearchTracks({ payload }) {
     const { p, cur } = payload;
-    const res = yield call(spotify.search, p, ["track"], { limit: 50, offset: cur });
-    yield put(SearchTracksResult(res.tracks));
+    const res = yield call(api.search, p, ["track"], { limit: 50, offset: cur });
+    yield put(SearchTracksResult(res.data.tracks));
 }
 function* watchFetchArtist({ payload }) {
     yield put(showContentLoading());
-    const res = yield call(spotify.getArtist, payload, { limit: 50 });
-    const track = yield call(spotify.getArtistTopTracks, payload, 'VN');
-    const albums = yield call(spotify.getArtistAlbums, payload, { limit: 50 });
-    const related = yield call(spotify.getArtistRelatedArtists, payload, { limit: 50 });
-    yield put(getArtistSuccess([res, track, albums, related]));
+    const res = yield call(api.getArtist, payload, { limit: 50 });
+    const track = yield call(api.getArtistTopTracks, payload, { market: 'VN' });
+    const albums = yield call(api.getArtistAlbums, payload, { limit: 50 });
+    const related = yield call(api.getArtistRelatedArtists, payload, { limit: 50 });
+    yield put(getArtistSuccess([res.data, track.data, albums.data, related.data]));
     yield put(hideContentLoading());
 }
 function* watchFetchAlbumTrack({ payload }) {
     try {
-        const res = yield all(payload.map(id => call(spotify.getAlbumTracks, id)))
-        yield put(getAlbumTracksSuccess(res));
+        const res = yield all(payload.map(id => call(api.getAlbumTracks, id)))
+        yield put(getAlbumTracksSuccess(res.data));
     }
     catch {
         yield put(getAlbumFailed('error'));
     }
 }
 function* watchFetchAlbum({ payload }) {
-    const res = yield call(spotify.getAlbum, payload);
-    yield put(getAlbumSuccess(res));
+    const res = yield call(api.getAlbum, payload);
+    yield put(getAlbumSuccess(res.data));
 }
 function* watchFetchArtistAlbum({ payload }) {
 
-    const res = yield call(spotify.getArtistAlbums, payload, {limit:50});
-    yield put(getArtistAlbumSuccess(res));
+    const res = yield call(api.getArtistAlbums, payload, { limit: 50 });
+    yield put(getArtistAlbumSuccess(res.data));
 
 }
-function* watchFollowArtist({payload}){
-    try{
-        yield call(spotify.followArtists,[payload]);
+function* watchFollowArtist({ payload }) {
+    try {
+        yield call(api.followArtists, [payload]);
         yield put(FollowArtistSuccess(payload));
     }
-    catch{
+    catch {
         yield put(FollowArtistFailed(payload));
     }
 }
-function* watchUnFollowArtist({payload}){
-    try{
-        yield call(spotify.unfollowArtists,[payload]);
+function* watchUnFollowArtist({ payload }) {
+    try {
+        yield call(api.unfollowArtists, [payload]);
         yield put(UnFollowArtistSuccess(payload));
     }
-    catch{
+    catch {
         yield put(UnFollowArtistFailed(payload));
     }
 }
-function* watchFetchSavedTracks(){
-    try{
-        const res=yield call(spotify.getMySavedTracks);
-        yield put(GetSavedTracksSuccess(res))
+function* watchFetchSavedTracks() {
+    try {
+        const res = yield call(api.getMySavedTracks);
+        yield put(GetSavedTracksSuccess(res.data))
     }
-    catch{
+    catch {
         yield put(GetSavedTracksFailed('error'))
     }
 }
-function* watchFetchSavedAlbums(){
-    try{
-        const res=yield call(spotify.getMySavedAlbums);
-        yield put(GetSavedALbumsSuccess(res))
+function* watchFetchSavedAlbums() {
+    try {
+        const res = yield call(api.getMySavedAlbums);
+        yield put(GetSavedALbumsSuccess(res.data))
     }
-    catch{
+    catch {
         yield put(GetSavedALbumsFailed('error'))
     }
 }
-function* watchFetchSavedShows(){
-    try{
-        const res=yield call(spotify.getMySavedShows);
-        yield put(GetSavedShowsSuccess(res));
+function* watchFetchSavedShows() {
+    try {
+        const res = yield call(api.getMySavedShows);
+        yield put(GetSavedShowsSuccess(res.data));
     }
-    catch{
+    catch {
         yield put(GetSavedShowsFailed('error'))
     }
+}
+function* watchFetchSavedEpisodes() {
+    try {
+        const res = yield call(api.getMySavedEpisodes);
+        console.log(res.data);
+        yield put(GetSavedEpisodesSuccess(res.data));
+    }
+    catch {
+        yield put(GetSavedEpisodesFailed('error'))
+    }
+}
+function* watchUploadImage({ payload }) {
+    const img=yield call(constants.getBase64,payload.data);
+    // const fd=new FormData();
+    // fd.append('image',payload.data);
+    const res=yield call(api.uploadPlaylistImage,payload.id,img)
 }
 function* rootSaga() {
     yield takeLatest(constants.GET_USER_INFO, watchFetchUserInfo);
@@ -249,5 +279,7 @@ function* rootSaga() {
     yield takeEvery(constants.GET_SAVED_TRACKS, watchFetchSavedTracks);
     yield takeEvery(constants.GET_SAVED_ALBUMS, watchFetchSavedAlbums);
     yield takeEvery(constants.GET_SAVED_SHOWS, watchFetchSavedShows);
+    yield takeEvery(constants.GET_SAVED_EPISODES, watchFetchSavedEpisodes);
+    yield takeEvery(constants.UPLOAD_PLAYLIST_IMAGE, watchUploadImage);
 }
 export default rootSaga;

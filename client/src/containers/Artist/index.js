@@ -35,7 +35,7 @@ function Artist(props) {
         followedArtists,
         FollowArtistAction,
         UnFollowArtistAction,
-        getArtistFollowedAction} = props;
+        getArtistFollowedAction } = props;
     const { items } = followedArtists, { id } = artist;
     let pathname = location.pathname.split('/');
     let match = pathname[pathname.length - 1];
@@ -120,11 +120,12 @@ function Artist(props) {
                 follow={FollowArtistAction}
                 unfollow={UnFollowArtistAction}
             />
-            {renderPlaylists()}
-            {renderAlbums()}
-            {renderSingle()}
-            {renderRelated()}
-
+            <div className="playlist-detail">
+                {renderPlaylists()}
+                {renderAlbums()}
+                {renderSingle()}
+                {renderRelated()}
+            </div>
         </div>
     );
 }
@@ -141,9 +142,9 @@ const mapStateToProps = state => {
 const mapDispatchToProps = (dispatch) => {
     return {
         getArtistAction: bindActionCreators(getArtist, dispatch),
-        FollowArtistAction: bindActionCreators(FollowArtist,dispatch),
-        UnFollowArtistAction: bindActionCreators(UnFollowArtist,dispatch),
-        getArtistFollowedAction: bindActionCreators(getArtistFollowed,dispatch)
+        FollowArtistAction: bindActionCreators(FollowArtist, dispatch),
+        UnFollowArtistAction: bindActionCreators(UnFollowArtist, dispatch),
+        getArtistFollowedAction: bindActionCreators(getArtistFollowed, dispatch)
     }
 }
 export default connect(mapStateToProps, mapDispatchToProps)(Artist);

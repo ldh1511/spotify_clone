@@ -5,10 +5,11 @@ CollectionCard.propTypes = {
     data: PropTypes.array
 };
 CollectionCard.defaultProps = {
-    data: []
+    data: [],
+    type:''
 }
 function CollectionCard(props) {
-    const { data } = props;
+    const { data, type } = props;
     const renderTracks = () => {
         let xhtml = null;
         let newData=data.slice(0,5);
@@ -25,10 +26,10 @@ function CollectionCard(props) {
         <div className="collection-card">
             <p className="collection-card--content">
                {renderTracks()}
-               ...
+               {data.length>0?'...':''}
             </p>
-            <p>Bài hát đã thích</p>
-            <span>56 bài hát đã thích</span>
+            <p>{type==='playlists'? 'Bài hát đã thích':'Tập của bạn'}</p>
+            <span>{data.length} {type==='playlists'?'bài hát đã thích':'tập đã thích'}</span>
         </div>
     );
 }

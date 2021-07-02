@@ -17,6 +17,7 @@ export const getUserInfoFailed=(data)=>{
     }
 }
 export const setToken=(token)=>{
+    console.log(token);
     return{
         type:constants.SET_USER_TOKEN,
         payload:token
@@ -414,5 +415,54 @@ export const GetSavedShowsFailed=(data)=>{
 export const GetSavedShows=()=>{
     return{
         type:constants.GET_SAVED_SHOWS
+    }
+}
+
+export const GetSavedEpisodesSuccess=(data)=>{
+    return{
+        type:constants.GET_SAVED_EPISODES_SUCCESS,
+        payload:data
+    }
+}
+export const GetSavedEpisodesFailed=(data)=>{
+    return{
+        type:constants.GET_SAVED_EPISODES_FAILED,
+        payload:data
+    }
+}
+export const GetSavedEpisodes=()=>{
+    return{
+        type:constants.GET_SAVED_EPISODES
+    }
+}
+export const OpenModal=()=>{
+    return{
+        type:constants.OPEN_MODAL
+    }
+}
+export const CloseModal=()=>{
+    return{
+        type:constants.CLOSE_MODAL
+    }
+}
+export const uploadPlaylistImage=(id, data)=>{
+    return{
+        type:constants.UPLOAD_PLAYLIST_IMAGE,
+        payload:{
+            id:id,
+            data:data
+        }
+    }
+}
+export const uploadPlaylistImage_Success=(data)=>{
+    return{
+        type:constants.UPLOAD_PLAYLIST_IMAGE_SUCCESS,
+        payload:data
+    }
+}
+export const uploadPlaylistImage_Failed=(data)=>{
+    return{
+        type:constants.UPLOAD_PLAYLIST_IMAGE_FAILED,
+        payload:data
     }
 }

@@ -3,6 +3,7 @@ import album from './album';
 import artist from './artist';
 import categories from './categories';
 import contentHome from './contentHome';
+import images from './images';
 import info from './info';
 import recentPlaylist from './recentPlaylist';
 import search from './search';
@@ -22,6 +23,7 @@ const rootReducer = combineReducers({
     search:search,
     artist:artist,
     album:album,
-    show:show
+    show:show,
+    images:images
 });
 export default rootReducer;

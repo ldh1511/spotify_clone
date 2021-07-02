@@ -92,3 +92,23 @@ export const GET_SAVED_ALBUMS_FAILED="GET_SAVED_ALBUMS_FAILED";
 export const GET_SAVED_SHOWS="GET_SAVED_SHOWS";
 export const GET_SAVED_SHOWS_SUCCESS="GET_SAVED_SHOWS_SUCCESS";
 export const GET_SAVED_SHOWS_FAILED="GET_SAVED_SHOWS_FAILED";
+
+export const GET_SAVED_EPISODES="GET_SAVED_EPISODES";
+export const GET_SAVED_EPISODES_SUCCESS="GET_SAVED_EPISODES_SUCCESS";
+export const GET_SAVED_EPISODES_FAILED="GET_SAVED_EPISODES_FAILED";
+
+export const OPEN_MODAL="OPEN_MODAL";
+export const CLOSE_MODAL="CLOSE_MODAL";
+
+export const UPLOAD_PLAYLIST_IMAGE="UPLOAD_PLAYLIST_IMAGE";
+export const UPLOAD_PLAYLIST_IMAGE_SUCCESS="UPLOAD_PLAYLIST_IMAGE_SUCCESS";
+export const UPLOAD_PLAYLIST_IMAGE_FAILED="UPLOAD_PLAYLIST_IMAGE_FAILED";
+
+export const  getBase64=(file)=>{
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = () => resolve(reader.result);
+      reader.onerror = error => reject(error);
+    });
+  }

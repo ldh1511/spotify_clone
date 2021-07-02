@@ -1,1 +1,1 @@
-export default API_ENDPOINT='https://api.spotify.com/'
+export const API_ENDPOINT='https://api.spotify.com'

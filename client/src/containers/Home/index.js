@@ -36,6 +36,7 @@ function Home(props) {
         getContentHomeAction()
         getArtistFollowedAction()
     }, [])
+    console.log(categoriesPlaylists)
     const renderCategoriesPlaylists = () => {
         let categoriesPlaylistsLimit = categoriesPlaylists.map(item => (
             item = item.playlists.items.filter((e, i) => i < 5)

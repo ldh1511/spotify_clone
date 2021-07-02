@@ -1,7 +1,8 @@
 import * as constants from '../../constants/actions'
 const uiInitialState = {
     showLoading: false,
-    showContentLoading: false
+    showContentLoading: false,
+    openModal:false
 }
 const ui = (state = uiInitialState, action) => {
     switch (action.type) {
@@ -24,6 +25,16 @@ const ui = (state = uiInitialState, action) => {
             return{
                 ...state,
                 showContentLoading:false
+            }
+        case constants.OPEN_MODAL:
+            return{
+                ...state,
+                openModal:true
+            }
+        case constants.CLOSE_MODAL:
+            return{
+                ...state,
+                openModal:false
             }
         default:
             return state

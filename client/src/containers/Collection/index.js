@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import CollectionCard from '../../components/CollectionCard';
 import CardItem from '../../components/CardItem';
 import './styles.css';
-import { getUserPlaylist, GetSavedTracks, getArtistFollowed, GetSavedALbums, GetSavedShows } from '../../redux/actions/info';
+import { getUserPlaylist, GetSavedTracks, getArtistFollowed, GetSavedALbums, GetSavedShows, GetSavedEpisodes } from '../../redux/actions/info';
 import { NavLink } from 'react-router-dom';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
@@ -12,6 +12,7 @@ Collection.propTypes = {
     id: PropTypes.string,
     getUserPlaylistsAction: PropTypes.func,
     getFollowedArtistsAction: PropTypes.func,
+    getSavedEpisodesAction: PropTypes.func,
     playlist: PropTypes.array,
     savedTracks: PropTypes.object
 };
@@ -21,7 +22,8 @@ Collection.defaultProps = {
     savedTracks: { items: [] },
     followedArtists: { items: [] },
     savedAlbums: { items: [] },
-    savedShows: { items: [] }
+    savedShows: { items: [] },
+    savedEpisodes: { items: [] },
 }
 function Collection(props) {
     const {
@@ -36,7 +38,9 @@ function Collection(props) {
         getSavedAlbumsAction,
         savedAlbums,
         getSavedShowsAction,
-        savedShows } = props;
+        savedShows,
+        getSavedEpisodesAction,
+        savedEpisodes } = props;
     const { items } = savedTracks;
     let pathname = location.pathname.split('/');
     let match = pathname[pathname.length - 1];
@@ -55,6 +59,7 @@ function Collection(props) {
                 break;
             case 'podcasts':
                 getSavedShowsAction();
+                getSavedEpisodesAction();
                 break;
             default:
                 break;
@@ -102,14 +107,21 @@ function Collection(props) {
         }
         return xhtml;
     }
+    const renderCollectionCard=()=>{
+        let xhtml=null;
+        let data=null;
+        data=match==='playlists'? items:savedEpisodes.items;
+        xhtml=<CollectionCard data={data} type={match}/>
+        return xhtml;
+    }
     return (
         <div className="collection">
             <CollectionMenu />
             <div className="collection-box">
                 <h2>{type}</h2>
                 <div className="collection-item">
-                    {match === 'playlists' || match === 'podcasts' ?
-                        <CollectionCard data={items} />
+                    {(match === 'playlists' && items.length>=0) || (match === 'podcasts' && savedEpisodes.items.length>=0) ?
+                        renderCollectionCard()
                         : <></>
                     }
                     {renderCardList()}
@@ -125,7 +137,8 @@ const mapStateToProps = (state, ownProps) => {
         savedTracks: state.tracks.savedTracks,
         followedArtists: state.artist.followedArtists,
         savedAlbums: state.album.savedAlbums,
-        savedShows: state.show.savedShows
+        savedShows: state.show.savedShows,
+        savedEpisodes: state.show.savedEpisodes,
     }
 }
 const mapDispatchToProps = (dispatch) => {
@@ -135,6 +148,7 @@ const mapDispatchToProps = (dispatch) => {
         getFollowedArtistsAction: bindActionCreators(getArtistFollowed, dispatch),
         getSavedAlbumsAction: bindActionCreators(GetSavedALbums, dispatch),
         getSavedShowsAction: bindActionCreators(GetSavedShows, dispatch),
+        getSavedEpisodesAction: bindActionCreators(GetSavedEpisodes, dispatch),
     }
 }
 export default connect(mapStateToProps, mapDispatchToProps)(Collection);
