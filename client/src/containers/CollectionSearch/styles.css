@@ -1,0 +1,19 @@
+.collection-search--top h2{
+    color: white;
+    padding-bottom: 20px;
+}
+.collection-search--top{
+    padding-top: 20px;
+}
+.collection-search--title{
+    display: flex;
+    align-items: center;
+    color: #b3b3b3;
+    cursor:context-menu;
+}
+.collection-search--title i{
+    margin-right: 15px;
+}
+.collection-search--title h3{
+    font-weight: 500;
+}

@@ -251,6 +251,7 @@ export const getMySavedEpisodes = (param = {}) => {
         params
     });
 }
+
 export const uploadPlaylistImage = (id, param = {}) => {
     let data = param;
     let token = localStorage.getItem('token');
@@ -258,6 +259,17 @@ export const uploadPlaylistImage = (id, param = {}) => {
         headers: {
             Authorization: 'Bearer ' + token,
             "content-type":'image/jpeg'
+        }
+    });
+}
+
+export const updatePlaylistDetail = (id, param = {}) => {
+    let data = param;
+    let token = localStorage.getItem('token');
+    return axiosServices.put(`${API_ENDPOINT}/v1/playlists/${id}`, data, {
+        headers: {
+            Authorization: 'Bearer ' + token,
+            "content-type":'application/json'
         }
     });
 }

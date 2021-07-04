@@ -1,14 +1,10 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import './styles.css'
 import { Search } from '../../redux/actions/info';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-SearchBar.propTypes = {
 
-};
-
-function SearchBar(props) {
+function CollectionSearchBar(props) {
     const { searchAction, type } = props;
     const handleOnChange = (e) => {
         const { value } = e.target;
@@ -38,4 +34,4 @@ const mapDispatchToProps = (dispatch) => {
         searchAction: bindActionCreators(Search, dispatch)
     }
 }
-export default connect(mapStateToProps, mapDispatchToProps)(SearchBar);
+export default connect(mapStateToProps, mapDispatchToProps)(CollectionSearchBar);

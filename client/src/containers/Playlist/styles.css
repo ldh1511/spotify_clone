@@ -21,6 +21,7 @@
 }
 .playlist-detail{
     background-color: #210c54;
-    padding:0 25px;
+    padding: 0 25px;
     background-image: linear-gradient(rgba(0,0,0,.6),#121212);
+    margin-bottom: 120px;
 }

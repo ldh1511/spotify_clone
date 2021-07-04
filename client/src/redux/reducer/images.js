@@ -1,5 +1,7 @@
 import * as constants from '../../constants/actions'
-const imagesInitialState = {}
+const imagesInitialState = {
+    currentImg:''
+}
 const images = (state = imagesInitialState, action) => {
     switch (action.type) {
         case constants.UPLOAD_PLAYLIST_IMAGE:
@@ -11,6 +13,11 @@ const images = (state = imagesInitialState, action) => {
             }
         case constants.UPLOAD_PLAYLIST_IMAGE_FAILED:
             return state
+        case constants.GET_CURRENT_IMG:
+            return{
+                ...state,
+                currentImg:action.payload
+            }
         default:
             return state
     }

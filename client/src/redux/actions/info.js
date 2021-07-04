@@ -466,3 +466,32 @@ export const uploadPlaylistImage_Failed=(data)=>{
         payload:data
     }
 }
+export const getCurrentImg=(img)=>{
+    return{
+        type:constants.GET_CURRENT_IMG,
+        payload:img
+    }
+}
+
+export const updatePlaylistDetail=(id,data)=>{
+    return{
+        type:constants.UPDATE_PLAYLIST_DETAIL,
+        payload:{
+            id:id,
+            data:data
+        }
+    }
+}
+
+export const updatePlaylistDetailSuccess=(data)=>{
+    return{
+        type:constants.UPDATE_PLAYLIST_DETAIL_SUCCESS,
+        payload:data
+    }
+}
+export const updatePlaylistDetailFailed=(data)=>{
+    return{
+        type:constants.UPDATE_PLAYLIST_DETAIL_FAILED,
+        payload:data
+    }
+}

@@ -91,7 +91,7 @@ function Search(props) {
     }
     return (
         <div className="search-container">
-            <SearchBar />
+            <SearchBar type="default-search"/>
             {renderSearchResult()}
         </div>
     );

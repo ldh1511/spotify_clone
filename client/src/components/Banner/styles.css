@@ -85,6 +85,10 @@
 .custom-img:hover svg {
   display: none;
 }
+.custom-img .custom-img--on,
+.custom-img:hover .custom-img--off {
+  display: none;
+}
 
 .custom-img:hover .custom-img--on {
   display: flex;

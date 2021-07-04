@@ -35,6 +35,8 @@ import {
     GetSavedShowsSuccess,
     GetSavedEpisodesSuccess,
     GetSavedEpisodesFailed,
+    updatePlaylistDetailSuccess,
+    updatePlaylistDetailFailed,
 } from '../redux/actions/info';
 import { hideContentLoading, hideLoading, showContentLoading, showLoading } from '../redux/actions/ui';
 function* watchFetchUserInfo() {
@@ -134,7 +136,7 @@ function* watchFetchCategories() {
 }
 function* Search({ payload }) {
     try {
-        const res = yield call(api.search, payload, ["album", "track", "artist", "playlist"], { limit: 50 });
+        const res = yield call(api.search, payload, ["album", "track", "artist", "playlist","show","episode"], { limit: 50, market:'VN' });
         yield put(SearchValue(res.data));
     }
     catch {
@@ -143,6 +145,8 @@ function* Search({ payload }) {
             artists: { items: [] },
             tracks: { items: [] },
             playlists: { items: [] },
+            show: { items: [] },
+            episode: { items: [] },
         }
         yield put(SearchValue(data));
     }
@@ -178,7 +182,13 @@ function* watchFetchArtist({ payload }) {
 }
 function* watchFetchAlbumTrack({ payload }) {
     try {
-        const res = yield all(payload.map(id => call(api.getAlbumTracks, id)))
+        let res;
+        if(typeof payload === 'array'){
+            res = yield all(payload.map(id => call(api.getAlbumTracks, id)))
+        }
+        else{
+            res=yield call(api.getAlbumTracks,payload);
+        }
         yield put(getAlbumTracksSuccess(res.data));
     }
     catch {
@@ -252,9 +262,17 @@ function* watchFetchSavedEpisodes() {
 }
 function* watchUploadImage({ payload }) {
     const img=yield call(constants.getBase64,payload.data);
-    // const fd=new FormData();
-    // fd.append('image',payload.data);
-    const res=yield call(api.uploadPlaylistImage,payload.id,img)
+    const res=yield call(api.uploadPlaylistImage,payload.id,img.split(',')[1])
+}
+function* watchUpdatePlaylistDetail({payload}){
+    try{
+        yield call(api.updatePlaylistDetail,payload.id,payload.data);
+        yield put(updatePlaylistDetailSuccess(payload.data))
+    }
+    catch{
+        yield put(updatePlaylistDetailFailed('error'))
+    }
+    
 }
 function* rootSaga() {
     yield takeLatest(constants.GET_USER_INFO, watchFetchUserInfo);
@@ -281,5 +299,6 @@ function* rootSaga() {
     yield takeEvery(constants.GET_SAVED_SHOWS, watchFetchSavedShows);
     yield takeEvery(constants.GET_SAVED_EPISODES, watchFetchSavedEpisodes);
     yield takeEvery(constants.UPLOAD_PLAYLIST_IMAGE, watchUploadImage);
+    yield takeEvery(constants.UPDATE_PLAYLIST_DETAIL, watchUpdatePlaylistDetail);
 }
 export default rootSaga;
