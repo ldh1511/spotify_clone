@@ -482,7 +482,6 @@ export const updatePlaylistDetail=(id,data)=>{
         }
     }
 }
-
 export const updatePlaylistDetailSuccess=(data)=>{
     return{
         type:constants.UPDATE_PLAYLIST_DETAIL_SUCCESS,
@@ -495,3 +494,68 @@ export const updatePlaylistDetailFailed=(data)=>{
         payload:data
     }
 }
+
+export const addItemToPlaylist=(id,uris, data)=>{
+    return{
+        type:constants.ADD_ITEM_TO_PLAYLIST,
+        payload:{
+            id:id,
+            uris:uris,
+            data:data
+        }
+    }
+}
+export const addItemToPlaylistSuccess=(data)=>{
+    return{
+        type:constants.ADD_ITEM_TO_PLAYLIST_SUCCESS,
+        payload:data
+    }
+}
+export const addItemToPlaylistFailed=(data)=>{
+    return{
+        type:constants.ADD_ITEM_TO_PLAYLIST_FAILED,
+        payload:data
+    }
+}
+
+export const SaveTracks=(ids,data)=>{
+    return{
+        type:constants.SAVE_TRACKS,
+        payload:{
+            ids:ids,
+            data:data
+        }
+    }
+}
+export const SaveTracksSuccess=(data)=>{
+    return{
+        type:constants.SAVE_TRACKS_SUCCESS,
+        payload:data
+    }
+}
+export const SaveTracksFailed=(data)=>{
+    return{
+        type:constants.SAVE_TRACKS_FAILED,
+        payload:data
+    }
+}
+
+export const RemoveFromTracks=(ids)=>{
+    return{
+        type:constants.REMOVE_FROM_TRACKS,
+        payload:ids
+    }
+}
+export const RemoveFromTracksSuccess=(data)=>{
+    return{
+        type:constants.REMOVE_FROM_TRACKS_SUCCESS,
+        payload:data
+    }
+}
+export const RemoveFromTracksFailed=(data)=>{
+    return{
+        type:constants.REMOVE_FROM_TRACKS_FAILED,
+        payload:data
+    }
+}
+

@@ -40,7 +40,7 @@ export const getPlaylist = (id) => {
         }
     });
 }
-export const getUserPlaylists = (id) => {
+export const getUserPlaylists = (id='') => {
     let token = localStorage.getItem('token');
     return axiosServices.get(`${API_ENDPOINT}/v1/users/${id}/playlists`, {
         headers: {
@@ -274,3 +274,40 @@ export const updatePlaylistDetail = (id, param = {}) => {
     });
 }
 
+export const addItemToPlaylist = (id,uris) => {
+    let token = localStorage.getItem('token');
+    return axiosServices.post(`${API_ENDPOINT}/v1/playlists/${id}/tracks`, null, {
+        headers: {
+            Authorization: 'Bearer ' + token,
+            "content-type":'application/json'
+        },
+        params:{
+            uris
+        }
+    });
+}
+
+export const saveTracks = (ids) => {
+    let token = localStorage.getItem('token');
+    return axiosServices.put(`${API_ENDPOINT}/v1/me/tracks`, null, {
+        headers: {
+            Authorization: 'Bearer ' + token,
+            "content-type":'application/json'
+        },
+        params:{
+            ids
+        }
+    });
+}
+export const removeFromTracks = (ids) => {
+    let token = localStorage.getItem('token');
+    return axiosServices.delete(`${API_ENDPOINT}/v1/me/tracks`, {
+        headers: {
+            Authorization: 'Bearer ' + token,
+            "content-type":'application/json'
+        },
+        params:{
+            ids
+        }
+    });
+}

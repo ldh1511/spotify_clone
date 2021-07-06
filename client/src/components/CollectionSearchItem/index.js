@@ -5,38 +5,38 @@ CollectionSearchItem.propTypes = {
     type: PropTypes.string
 };
 CollectionSearchItem.defaultProps = {
-    data:{
-        images:[{url:''}]
+    data: {
+        images: [{ url: '' }]
     }
 }
 function CollectionSearchItem(props) {
-    const {data, setLevelData, defaultimg } = props;
-    const {type, name, images, id}=data;
-    let newImage=images && images.length !==0? images : [{url:''}];
-    let albumImage=data.album && data.album.images && data.album.images.length !==0 ? data.album.images:[{url:defaultimg}]
-    const renderDescription=()=>{
+    const { data, setLevelData, defaultimg, addItem, idPlaylist } = props;
+    const { type, name, images, id, uri } = data;
+    let newImage = images && images.length !== 0 ? images : [{ url: '' }];
+    let albumImage = data.album && data.album.images && data.album.images.length !== 0 ? data.album.images : [{ url: defaultimg }]
+    const renderDescription = () => {
         let description = null;
-        if(type==='artist'){
-            description ='Nghệ sĩ'
+        if (type === 'artist') {
+            description = 'Nghệ sĩ'
         }
-        else if(type==='track'){
-            description =data.artists[0].name
+        else if (type === 'track') {
+            description = data.artists[0].name
         }
-        else if(type==='album'){
-            description ='Album'
+        else if (type === 'album') {
+            description = 'Album'
         }
-        else{
-            description =''
+        else {
+            description = ''
         }
         return description;
     }
-    const handleClick=(idData,typeData)=>{
+    const handleClick = (idData, typeData) => {
         switch (typeData) {
             case 'artist':
-                setLevelData(2,typeData,idData)
+                setLevelData(2, typeData, idData)
                 break;
             case 'album':
-                setLevelData(3,typeData, idData, newImage[0].url)
+                setLevelData(3, typeData, idData, newImage[0].url)
                 break;
             case 'track':
                 break;
@@ -45,9 +45,9 @@ function CollectionSearchItem(props) {
         }
     }
     return (
-        <div className="collection-search--item" onClick={() =>handleClick(id,type)}>
+        <div className="collection-search--item" onClick={() => handleClick(id, type)}>
             <div className="search-item--left">
-                <img alt="" src={type==='track'?albumImage[0].url:newImage[0].url}
+                <img alt="" src={type === 'track' ? albumImage[0].url : newImage[0].url}
                     className={type === "artist" ? "seach-item--artist" : ""}
                 ></img>
                 <div className="search-item--content">
@@ -56,12 +56,12 @@ function CollectionSearchItem(props) {
                 </div>
             </div>
             <div className="search-item--center">
-                <p>{type==='track' && data.album && data.album.name?data.album.name:''}</p>
+                <p>{type === 'track' && data.album && data.album.name ? data.album.name : ''}</p>
             </div>
             <div className="search-item--right">
                 {type !== "track" ?
                     <i className="fas fa-chevron-right"></i> :
-                    <button>Thêm</button>
+                    <button onClick={() => addItem(idPlaylist,uri, data)}>Thêm</button>
                 }
             </div>
         </div>

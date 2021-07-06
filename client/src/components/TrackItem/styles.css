@@ -1,9 +1,13 @@
 tr{
     display: grid;
-    grid-template-columns: 5% 40% 25% 25% 5%;
+    grid-template-columns: 5% 40% 25% 20% 10%;
     color: #b3b3b3;
     padding: 15px 0;
-    transition: all .4s ease-in-out;
+    transition: all .2s ease-in-out;
+    cursor:context-menu;
+}
+tr p{
+    margin-left:20px;
 }
 thead tr:first-child{
     border-bottom: 1px solid;
@@ -13,6 +17,12 @@ thead tr:first-child{
 tr:hover{
     background: hsla(0,0%,100%,.1);
     border-radius: 6px;
+}
+tr:hover .track-item--btn{
+    display:block
+}
+tr:hover .item-icon{
+    opacity:1
 }
 td{
     display: flex;
@@ -44,4 +54,15 @@ td{
 }
 .track-tr{
     padding:10px 0;
+}
+.track-item--btn{
+    display:none;
+    margin-left:20px
+}
+.item-icon{
+    opacity:0;
+}
+.item-icon.active{
+    color:#1DB954;
+    opacity:1;
 }

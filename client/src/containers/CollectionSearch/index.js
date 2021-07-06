@@ -5,7 +5,7 @@ import CollectionSearchBar from '../../components/CollectionSearchBar';
 import CollectionSearchList from '../../components/CollectionSearchList';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { getAlbumTracks, getArtist } from '../../redux/actions/info';
+import { getAlbumTracks, getArtist, addItemToPlaylist } from '../../redux/actions/info';
 CollectionSearch.propTypes = {
     sortResult: PropTypes.array
 };
@@ -20,14 +20,12 @@ CollectionSearch.defaultProps = {
     albumtracks: { items: [] }
 }
 function CollectionSearch(props) {
-    const { sortResult, searchResult, getArtistAction, topTracks, topAlbums, artistInfo, getAlbumTracksAction, albumtracks } = props;
+    const { sortResult, searchResult, getArtistAction, topTracks, topAlbums, artistInfo, getAlbumTracksAction, albumtracks, idPlaylist, addItemToPlaylistAction } = props;
     const { albums, artists, tracks } = searchResult;
     const [level, setLevel] = useState([0]);
     const [name, setName] = useState(['default']);
     const [defaultimg, setImg] = useState();
     const setLevelData = (idLevel, type, id, defaultImg) => {
-
-
         if (typeof idLevel === 'number') {
             setLevel([...level, idLevel])
             setName([...name, type])
@@ -43,7 +41,6 @@ function CollectionSearch(props) {
             getAlbumTracksAction(id);
             setImg(defaultImg)
         }
-
     }
     const renderName = () => {
         let titleName = null;
@@ -77,7 +74,7 @@ function CollectionSearch(props) {
         let xhtml = null;
         switch (level[level.length - 1]) {
             case 0:
-                xhtml = <CollectionSearchList data={sortResult.slice(0, 10)} setLevelData={setLevelData} level={level[level.length - 1]} />
+                xhtml = <CollectionSearchList data={sortResult.slice(0, 10)} setLevelData={setLevelData} level={level[level.length - 1]} addItem={addItemToPlaylistAction} idPlaylist={idPlaylist}/>
                 break;
             case 1:
                 xhtml = (<>
@@ -85,7 +82,7 @@ function CollectionSearch(props) {
                         <i className="fas fa-chevron-left"></i>
                         <h3>{renderName().title}</h3>
                     </div>
-                    <CollectionSearchList data={renderName().data} setLevelData={setLevelData} />
+                    <CollectionSearchList data={renderName().data} setLevelData={setLevelData} addItem={addItemToPlaylistAction} idPlaylist={idPlaylist}/>
                 </>)
                 break;
             case 2:
@@ -95,9 +92,9 @@ function CollectionSearch(props) {
                         <h3>{renderName().title}</h3>
                     </div>
                     <h3>Track</h3>
-                    <CollectionSearchList data={topTracks} setLevelData={setLevelData} />
+                    <CollectionSearchList data={topTracks} setLevelData={setLevelData} addItem={addItemToPlaylistAction} idPlaylist={idPlaylist}/>
                     <h3>Album</h3>
-                    <CollectionSearchList data={topAlbums.items.slice(0, 10)} setLevelData={setLevelData} />
+                    <CollectionSearchList data={topAlbums.items.slice(0, 10)} setLevelData={setLevelData} addItem={addItemToPlaylistAction} idPlaylist={idPlaylist}/>
                 </>)
                 break;
             case 3:
@@ -107,7 +104,7 @@ function CollectionSearch(props) {
                             <i className="fas fa-chevron-left"></i>
                             <h3>test</h3>
                         </div>
-                        <CollectionSearchList data={albumtracks.items} setLevelData={setLevelData} defaultimg={defaultimg} />
+                        <CollectionSearchList data={albumtracks.items} setLevelData={setLevelData} defaultimg={defaultimg} addItem={addItemToPlaylistAction} idPlaylist={idPlaylist}/>
                     </>
                 )
                 break;
@@ -131,7 +128,8 @@ function CollectionSearch(props) {
 const mapDispatchToProps = (dispatch) => {
     return {
         getArtistAction: bindActionCreators(getArtist, dispatch),
-        getAlbumTracksAction: bindActionCreators(getAlbumTracks, dispatch)
+        getAlbumTracksAction: bindActionCreators(getAlbumTracks, dispatch),
+        addItemToPlaylistAction: bindActionCreators(addItemToPlaylist, dispatch),
     }
 }
 const mapStateToProps = (state) => {

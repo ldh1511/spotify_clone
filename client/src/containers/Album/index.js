@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import './styles.css';
 import { bindActionCreators } from 'redux';
-import { getAlbum, getArtistAlbum } from '../../redux/actions/info';
+import { getAlbum, getArtistAlbum, GetSavedTracks } from '../../redux/actions/info';
 import { connect } from 'react-redux';
 import Banner from '../../components/Banner';
 import TrackTable from '../../components/TrackTable';
@@ -26,13 +26,13 @@ Album.defaultProps = {
     }
 }
 function Album(props) {
-    const { location, getAlbumAction, albumInfo, getArtistAlbumAction, relatedAlbum } = props;
+    const { location, getAlbumAction, albumInfo, getArtistAlbumAction, relatedAlbum, getSavedTracksAction, savedTracks } = props;
     const { images, name, tracks, type, artists, release_date, id } = albumInfo;
-
     let pathname = location.pathname.split('/');
     let match = pathname[pathname.length - 1];
     useEffect(() => {
         getAlbumAction(match);
+        getSavedTracksAction();
     }, [match])
     useEffect(() => {
         if (artists[0].id !== '') {
@@ -76,7 +76,7 @@ function Album(props) {
                 owner={getNameArtist(artists)}
                 type={type}
             />
-            <TrackTable data={tracks.items} note='album-track' />
+            <TrackTable data={tracks.items} note='album-track' savedTracks={savedTracks}/>
             {renderCardBlock()}
         </div>
     );
@@ -85,12 +85,14 @@ const mapStateToProps = (state) => {
     return {
         albumInfo: state.album.albumInfo,
         relatedAlbum: state.album.relatedAlbum,
+        savedTracks: state.tracks.savedTracks,
     }
 }
 const mapDispatchToProps = (dispatch) => {
     return {
         getAlbumAction: bindActionCreators(getAlbum, dispatch),
-        getArtistAlbumAction: bindActionCreators(getArtistAlbum, dispatch)
+        getArtistAlbumAction: bindActionCreators(getArtistAlbum, dispatch),
+        getSavedTracksAction: bindActionCreators(GetSavedTracks, dispatch),
     }
 }
 export default connect(mapStateToProps, mapDispatchToProps)(Album);

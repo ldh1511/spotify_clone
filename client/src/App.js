@@ -6,13 +6,13 @@ import { useEffect, useState } from 'react';
 import { getTokenFromUrl } from './spotify';
 import { BrowserRouter } from 'react-router-dom';
 import SpotifyWebApi from 'spotify-web-api-js';
-import { getUserInfo, setToken } from './redux/actions/info';
+import {getUserInfo, setToken } from './redux/actions/info';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { getToken } from './apis/info';
 const spotify = new SpotifyWebApi();
 function App(props) {
-  const { setTokenAction, getUserInfoAction } = props;
+  const { setTokenAction, getUserInfoAction} = props;
   const [token, setToken] = useState(null);
   window.location.hash="";
   useEffect(() => {

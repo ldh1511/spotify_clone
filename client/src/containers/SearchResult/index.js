@@ -119,12 +119,12 @@ function SearchResult(props) {
         </div>
     );
 }
-const mapStateToProps = (state, ownProps) => {
+const mapStateToProps = (state) => {
     return {
         search: state.search.result
     }
 }
-const mapDispatchToProps = (dispatch, ownProps) => {
+const mapDispatchToProps = (dispatch) => {
     return {
         SearchAlbumsAction: bindActionCreators(SearchAlbums, dispatch),
         SearchArtistsAction: bindActionCreators(SearchArtists, dispatch),

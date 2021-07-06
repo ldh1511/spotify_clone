@@ -2,7 +2,10 @@ import * as constants from '../../constants/actions'
 const uiInitialState = {
     showLoading: false,
     showContentLoading: false,
-    openModal:false
+    openModal:false,
+    openTrackMenu:false,
+    albumId:null,
+    artists:null
 }
 const ui = (state = uiInitialState, action) => {
     switch (action.type) {
@@ -35,6 +38,21 @@ const ui = (state = uiInitialState, action) => {
             return{
                 ...state,
                 openModal:false
+            }
+        case constants.OPEN_TRACK_MENU:
+            return {
+                ...state,
+                openTrackMenu:true,
+                albumId:action.payload.id,
+                artists:action.payload.artists.split(", ").slice(0,action.payload.artists.split(", ").length-1),
+                idArtists:action.payload.idArtists.split(", ").slice(0,action.payload.idArtists.split(", ").length-1),
+                idTracks:action.payload.idTracks,
+                dataTracks:action.payload.dataTracks
+            }
+        case constants.CLOSE_TRACK_MENU:
+            return{
+                ...state,
+                openTrackMenu:false
             }
         default:
             return state

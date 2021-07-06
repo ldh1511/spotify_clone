@@ -1,4 +1,4 @@
-import * as constants from '../../constants/actions'
+import * as constants from '../../constants/actions';
 const tracksInitialState = {
     tracksInPlaylist: []
 }
@@ -24,7 +24,6 @@ const tracks = (state = tracksInitialState, action) => {
         case constants.UPDATE_PLAYLIST_DETAIL:
             return state
         case constants.UPDATE_PLAYLIST_DETAIL_SUCCESS:
-            console.log(action.payload)
             return {
                 ...state,
                 playlistInfo: {
@@ -35,6 +34,31 @@ const tracks = (state = tracksInitialState, action) => {
             }
         case constants.UPDATE_PLAYLIST_DETAIL_FAILED:
             return state
+        case constants.ADD_ITEM_TO_PLAYLIST:
+            return state
+        case constants.ADD_ITEM_TO_PLAYLIST_SUCCESS:
+            return {
+                ...state,
+                tracksInPlaylist: [...state.tracksInPlaylist, action.payload]
+            }
+        case constants.ADD_ITEM_TO_PLAYLIST_FAILED:
+            return state
+        case constants.SAVE_TRACKS_SUCCESS:
+            return {
+                ...state,
+                savedTracks: {
+                    ...state.savedTracks,
+                    items: [...state.savedTracks.items, action.payload]
+                }
+            }
+        case constants.REMOVE_FROM_TRACKS_SUCCESS:
+            return{
+                ...state,
+                savedTracks: {
+                    ...state.savedTracks,
+                    items: state.savedTracks.items.filter(item=>item.track.id!==action.payload)
+                }
+            }
         default:
             return state
     }

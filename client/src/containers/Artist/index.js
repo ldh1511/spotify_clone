@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import './styles.css';
-import { FollowArtist, getArtist, getArtistFollowed, UnFollowArtist } from '../../redux/actions/info';
+import { FollowArtist, getArtist, getArtistFollowed, GetSavedTracks, UnFollowArtist } from '../../redux/actions/info';
 import TrackTable from '../../components/TrackTable';
 import CardBlock from '../../components/CardBlock';
 import Banner from '../../components/Banner';
@@ -19,6 +19,7 @@ Artist.defaultProps = {
     },
     topTracks: [],
     albums: { items: [] },
+    savedTracks: { items: [] },
     related: { artists: [] },
     singles: [],
     followedArtists: { items: [] }
@@ -35,22 +36,27 @@ function Artist(props) {
         followedArtists,
         FollowArtistAction,
         UnFollowArtistAction,
-        getArtistFollowedAction } = props;
+        getArtistFollowedAction,
+        savedTracks, getSavedTracksAction  } = props;
     const { items } = followedArtists, { id } = artist;
     let pathname = location.pathname.split('/');
     let match = pathname[pathname.length - 1];
     useEffect(() => {
         getArtistAction(match);
         getArtistFollowedAction();
+        getSavedTracksAction();
     }, [match])
     const renderPlaylists = () => {
         let xhtml = null;
-        xhtml = (
-            <>
-                <h2>famous</h2>
-                <TrackTable data={topTracks} name="tracks" type='track' />
-            </>
-        )
+        if(topTracks.length>0){
+            xhtml = (
+                <>
+                    <h2>famous</h2>
+                    <TrackTable data={topTracks} name="tracks" type='track' savedTracks={savedTracks}/>
+                </>
+            )
+        }
+        
         return xhtml;
     }
     const checkFollow = () => {
@@ -65,55 +71,66 @@ function Artist(props) {
         let xhtml = null;
         let data = albums.items.filter((item, i) => (item.album_type === 'album'));
         data = data.slice(0, 5);
-        xhtml = (
-            <CardBlock
-                name="albums"
-                type="album"
-                data={data}
-                match={match}
-                path='albums'
-                own='artist'
-            />
-        )
+        if(data.length>0){
+            xhtml = (
+                <CardBlock
+                    name="albums"
+                    type="album"
+                    data={data}
+                    match={match}
+                    path='albums'
+                    own='artist'
+                />
+            )
+        }
         return xhtml;
     }
     const renderSingle = () => {
         let xhtml = null;
         let data = singles.filter((item, i) => (item.album_type === 'single'));
         data = data.slice(0, 5);
-        xhtml = (
-            <CardBlock
-                name="singles"
-                type="album"
-                data={data}
-                match={match}
-                path='singles'
-                own='artist'
-
-            />
-        )
+        if(data.length>0){
+            xhtml = (
+                <CardBlock
+                    name="singles"
+                    type="album"
+                    data={data}
+                    match={match}
+                    path='singles'
+                    own='artist'
+    
+                />
+            )
+        }
+        
         return xhtml;
     }
     const renderRelated = () => {
         let xhtml = null;
         let data = related.artists.slice(0, 5);
-        xhtml = (
-            <CardBlock
-                name="related artists"
-                type='artist'
-                data={data}
-                match={match}
-                path='related-artists'
-                own='artist'
-            />
-        )
+        if(data.length>0){
+            xhtml = (
+                <CardBlock
+                    name="related artists"
+                    type='artist'
+                    data={data}
+                    match={match}
+                    path='related-artists'
+                    own='artist'
+                />
+            )
+        }
         return xhtml;
     }
     return (
         <div className="artists">
             <Banner
                 name={artist.name}
-                image={artist.images[0].url}
+                image={
+                    artist.images && artist.images[0] && artist.images[0].url ? 
+                    artist.images[0].url :
+                    ''
+                }
                 type="artist"
                 followed={checkFollow()}
                 id={id}
@@ -136,7 +153,8 @@ const mapStateToProps = state => {
         albums: state.artist.albums,
         related: state.artist.related,
         singles: state.artist.singles,
-        followedArtists: state.artist.followedArtists
+        followedArtists: state.artist.followedArtists,
+        savedTracks: state.tracks.savedTracks,
     }
 };
 const mapDispatchToProps = (dispatch) => {
@@ -144,7 +162,8 @@ const mapDispatchToProps = (dispatch) => {
         getArtistAction: bindActionCreators(getArtist, dispatch),
         FollowArtistAction: bindActionCreators(FollowArtist, dispatch),
         UnFollowArtistAction: bindActionCreators(UnFollowArtist, dispatch),
-        getArtistFollowedAction: bindActionCreators(getArtistFollowed, dispatch)
+        getArtistFollowedAction: bindActionCreators(getArtistFollowed, dispatch),
+        getSavedTracksAction: bindActionCreators(GetSavedTracks, dispatch),
     }
 }
 export default connect(mapStateToProps, mapDispatchToProps)(Artist);

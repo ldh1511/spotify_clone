@@ -1,11 +1,13 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import Banner from '../../components/Banner';
 import TrackTable from '../../components/TrackTable';
+import TrackMenu from '../../components/TrackMenu';
 import CollectionSearch from '../CollectionSearch';
 import Modal from '../../components/Modal';
-import { CloseModal, getCurrentImg, getTracksPlaylist, getUserInfo, OpenModal, updatePlaylistDetail, uploadPlaylistImage } from '../../redux/actions/info';
+import { CloseModal, getCurrentImg, GetSavedTracks, getTracksPlaylist, getUserInfo, OpenModal, RemoveFromTracks, SaveTracks, updatePlaylistDetail, uploadPlaylistImage } from '../../redux/actions/info';
+import { closeTrackMenu, openTrackMenu } from '../../redux/actions/ui';
 import './styles.css';
 import PropTypes from 'prop-types';
 
@@ -19,7 +21,7 @@ Playlist.propTypes = {
     UploadPlaylistImgAction: PropTypes.func,
     updatePlaylistDetailAction: PropTypes.func,
     playlistInfo: PropTypes.object,
-    location: PropTypes.string
+    location: PropTypes.object
 };
 Playlist.defaultProps = {
     tracksInPlaylist: [],
@@ -30,17 +32,26 @@ Playlist.defaultProps = {
             id: ''
         }
     },
-    id: ''
+    id: '',
+    savedTracks: { items: [] },
 }
 function Playlist(props) {
-    const { getTracksInPlaylist, location, tracksInPlaylist, playlistInfo, getUserInfoAction, id, OpenModalAction, CloseModalAction, stateModal, UploadPlaylistImgAction, getCurrentImgAction, currentImg, updatePlaylistDetailAction } = props;
-
+    const { getTracksInPlaylist,
+        location, tracksInPlaylist,
+        playlistInfo, getUserInfoAction,
+        id, OpenModalAction,
+        CloseModalAction, stateModal,
+        UploadPlaylistImgAction, getCurrentImgAction,
+        currentImg, updatePlaylistDetailAction,
+        openTrackMenuAction, getSavedTracksAction, savedTracks, SaveTracksAction,
+        removeFromTracksAction } = props;
     let pathname = location.pathname.split('/');
     let match = pathname[pathname.length - 1];
     useEffect(() => {
         getTracksInPlaylist(match);
-        getUserInfoAction()
-    }, [])
+        getUserInfoAction();
+        getSavedTracksAction();
+    }, [match]);
     return (
         <div className="playlist">
             <Banner
@@ -55,15 +66,14 @@ function Playlist(props) {
                 currentImg={currentImg}
             />
             <div className="playlist-detail">
-                {tracksInPlaylist.length > 0 ?
-                    <>
-                        <div className="playlist-btn">
-                            <button className="play-btn btn-active"><i className="fas fa-play"></i></button>
-                        </div>
-                        <TrackTable data={tracksInPlaylist} />
-                    </> :
-                    <CollectionSearch />
-                }
+                <TrackTable
+                    data={tracksInPlaylist}
+                    openTrackMenu={openTrackMenuAction} savedTracks={savedTracks}
+                    SaveTracksAction={SaveTracksAction}
+                    removeFromTrack={removeFromTracksAction}
+                />
+                {id === playlistInfo.owner.id ?  <CollectionSearch idPlaylist={match} /> :<></>}
+               
             </div>
             <Modal
                 check={stateModal}
@@ -76,6 +86,8 @@ function Playlist(props) {
                 description={playlistInfo.description}
                 update={updatePlaylistDetailAction}
             />
+            <TrackMenu />
+            
         </div>
     );
 }
@@ -85,7 +97,9 @@ const mapStateToProps = state => {
         playlistInfo: state.tracks.playlistInfo,
         id: state.info.id,
         stateModal: state.ui.openModal,
-        currentImg: state.images.currentImg
+        stateTrackMenu: state.ui.openTrackMenu,
+        currentImg: state.images.currentImg,
+        savedTracks: state.tracks.savedTracks,
     }
 }
 const mapDispatchToProps = (dispatch) => {
@@ -96,7 +110,12 @@ const mapDispatchToProps = (dispatch) => {
         CloseModalAction: bindActionCreators(CloseModal, dispatch),
         UploadPlaylistImgAction: bindActionCreators(uploadPlaylistImage, dispatch),
         getCurrentImgAction: bindActionCreators(getCurrentImg, dispatch),
-        updatePlaylistDetailAction: bindActionCreators(updatePlaylistDetail, dispatch)
+        updatePlaylistDetailAction: bindActionCreators(updatePlaylistDetail, dispatch),
+        openTrackMenuAction: bindActionCreators(openTrackMenu, dispatch),
+        closeTrackMenuAction: bindActionCreators(closeTrackMenu, dispatch),
+        getSavedTracksAction: bindActionCreators(GetSavedTracks, dispatch),
+        SaveTracksAction: bindActionCreators(SaveTracks, dispatch),
+        removeFromTracksAction: bindActionCreators(RemoveFromTracks, dispatch),
     }
 }
 export default connect(mapStateToProps, mapDispatchToProps)(Playlist);

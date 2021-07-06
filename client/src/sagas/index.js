@@ -1,4 +1,4 @@
-import { call, put, takeLatest, takeEvery, all } from 'redux-saga/effects';
+import { call, put, takeLatest, takeEvery, all, select } from 'redux-saga/effects';
 import * as constants from './../constants/actions';
 import * as api from '../apis/info';
 import {
@@ -37,6 +37,12 @@ import {
     GetSavedEpisodesFailed,
     updatePlaylistDetailSuccess,
     updatePlaylistDetailFailed,
+    addItemToPlaylistSuccess,
+    addItemToPlaylistFailed,
+    SaveTracksSuccess,
+    SaveTracksFailed,
+    RemoveFromTracksSuccess,
+    RemoveFromTracksFailed
 } from '../redux/actions/info';
 import { hideContentLoading, hideLoading, showContentLoading, showLoading } from '../redux/actions/ui';
 function* watchFetchUserInfo() {
@@ -136,19 +142,18 @@ function* watchFetchCategories() {
 }
 function* Search({ payload }) {
     try {
-        const res = yield call(api.search, payload, ["album", "track", "artist", "playlist","show","episode"], { limit: 50, market:'VN' });
+        const res = yield call(api.search, payload, ["album", "track", "artist", "playlist", "show", "episode"], { limit: 50, market: 'VN' });
         yield put(SearchValue(res.data));
     }
     catch {
-        const data = {
+        yield put(SearchValue({
             albums: { items: [] },
             artists: { items: [] },
             tracks: { items: [] },
             playlists: { items: [] },
-            show: { items: [] },
-            episode: { items: [] },
-        }
-        yield put(SearchValue(data));
+            shows: { items: [] },
+            episodes: { items: [] }
+        }));
     }
 }
 function* SearchAlbums({ payload }) {
@@ -183,13 +188,15 @@ function* watchFetchArtist({ payload }) {
 function* watchFetchAlbumTrack({ payload }) {
     try {
         let res;
-        if(typeof payload === 'array'){
+        if (typeof payload === 'object') {
             res = yield all(payload.map(id => call(api.getAlbumTracks, id)))
+            yield put(getAlbumTracksSuccess(res));
         }
-        else{
-            res=yield call(api.getAlbumTracks,payload);
+        else {
+            res = yield call(api.getAlbumTracks, payload);
+            yield put(getAlbumTracksSuccess(res.data));
         }
-        yield put(getAlbumTracksSuccess(res.data));
+       
     }
     catch {
         yield put(getAlbumFailed('error'));
@@ -225,7 +232,9 @@ function* watchUnFollowArtist({ payload }) {
 }
 function* watchFetchSavedTracks() {
     try {
-        const res = yield call(api.getMySavedTracks);
+        const res = yield call(api.getMySavedTracks, { limit: 50 });
+       // const dt= yield select(res);
+       const dt= yield call(api.getMySavedTracks, { limit: 50, offset: res.data.offset });       
         yield put(GetSavedTracksSuccess(res.data))
     }
     catch {
@@ -261,16 +270,57 @@ function* watchFetchSavedEpisodes() {
     }
 }
 function* watchUploadImage({ payload }) {
-    const img=yield call(constants.getBase64,payload.data);
-    const res=yield call(api.uploadPlaylistImage,payload.id,img.split(',')[1])
+    const img = yield call(constants.getBase64, payload.data);
+    yield call(api.uploadPlaylistImage, payload.id, img.split(',')[1])
 }
-function* watchUpdatePlaylistDetail({payload}){
-    try{
-        yield call(api.updatePlaylistDetail,payload.id,payload.data);
+function* watchUpdatePlaylistDetail({ payload }) {
+    try {
+        yield call(api.updatePlaylistDetail, payload.id, payload.data);
         yield put(updatePlaylistDetailSuccess(payload.data))
     }
-    catch{
+    catch {
         yield put(updatePlaylistDetailFailed('error'))
+    }
+}
+function* watchAddItemToPlaylist({ payload }) {
+    let uri = `${payload.uris}`;
+    function pad2(n) {
+        return (n < 10 ? '0' : '') + n;
+    }
+    let date = new Date();
+    let month = pad2(date.getMonth() + 1);
+    let day = pad2(date.getDate());
+    let year = date.getFullYear();
+    let formattedDate = year + "-" + month + "-" + day + "T" + date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds() + "Z";
+    let data = {
+        added_at: formattedDate,
+        track: payload.data
+    }
+    try {
+        yield call(api.addItemToPlaylist, payload.id, uri);
+        yield put(addItemToPlaylistSuccess(data))
+    }
+    catch {
+        yield put(addItemToPlaylistFailed('error'))
+    }
+}
+function* watchSaveTracks({ payload }) {
+    let ids = `${payload.ids}`;
+    try {
+        yield call(api.saveTracks, ids);
+        yield put(SaveTracksSuccess(payload.data))
+    }
+    catch {
+        yield put(SaveTracksFailed('error'))
+    }
+}
+function* watchRemoveFromTracks({payload}){
+    try{
+        yield call(api.removeFromTracks,payload);
+        yield put(RemoveFromTracksSuccess(payload));
+    }
+    catch{
+        yield put(RemoveFromTracksFailed('error'))
     }
     
 }
@@ -300,5 +350,8 @@ function* rootSaga() {
     yield takeEvery(constants.GET_SAVED_EPISODES, watchFetchSavedEpisodes);
     yield takeEvery(constants.UPLOAD_PLAYLIST_IMAGE, watchUploadImage);
     yield takeEvery(constants.UPDATE_PLAYLIST_DETAIL, watchUpdatePlaylistDetail);
+    yield takeEvery(constants.ADD_ITEM_TO_PLAYLIST, watchAddItemToPlaylist);
+    yield takeEvery(constants.SAVE_TRACKS, watchSaveTracks);
+    yield takeEvery(constants.REMOVE_FROM_TRACKS, watchRemoveFromTracks);
 }
 export default rootSaga;

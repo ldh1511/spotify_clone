@@ -24,9 +24,9 @@ function Albums(props) {
     const [list, setList] = useState(false);
     const { albums, name, getAlbumTracksAction, albumtracks, location, singles } = props;
     let { items } = albums;
+    console.log(albumtracks);
     items=items.filter(item=>item.album_type==='album');
     const pathname = location.pathname.split('/');
-    
     const match = pathname[pathname.length - 1];
     const [type, setType]=useState(match);
     const renderCardListTable = () => {
@@ -48,10 +48,9 @@ function Albums(props) {
             <div className="album-blocks">
                 {
                 type==='albums'?
-                albumtracks.map((item, i) => <AlbumBlock data={[item.items, items[i]]} />):
-                albumtracks.map((item, i) => <AlbumBlock data={[item.items, singles[i]]} />)}
+                albumtracks.map((item, i) => <AlbumBlock data={[item.data.items, items[i]]} />):
+                albumtracks.map((item, i) => <AlbumBlock data={[item.data.items, singles[i]]} />)}
             </div>
-
         )
         return xhtml;
     }

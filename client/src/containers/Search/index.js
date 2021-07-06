@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { getCategories } from '../../redux/actions/info';
+import { getCategories, GetSavedTracks } from '../../redux/actions/info';
 import './styles.css';
 import CategoriesList from '../../components/CategoriesList';
 import SearchBar from '../../components/SearchBar';
@@ -32,9 +32,10 @@ Search.defaultProps = {
     param: ''
 }
 function Search(props) {
-    const { getCategoriesAction, categories, search, param } = props;
+    const { getCategoriesAction, categories, search, param, savedTracks, getSavedTracksAction } = props;
     useEffect(() => {
         getCategoriesAction();
+        getSavedTracksAction();
     }, [])
     const renderSearchPlaylists = () => {
         const { playlists } = search;
@@ -50,7 +51,7 @@ function Search(props) {
         let xhtml = null;
         let data = tracks.items.slice(0,5);
         if (tracks.items.length > 0) {
-            xhtml = <CardBlock data={data} name="tracks" param={param} type='track'/>
+            xhtml = <CardBlock data={data} name="tracks" param={param} type='track' savedTracks={savedTracks}/>
         }
         return xhtml;
     }
@@ -100,12 +101,14 @@ const mapStateToProps = (state) => {
     return {
         categories: state.categories.categories,
         search: state.search.result,
-        param: state.search.param
+        param: state.search.param,
+        savedTracks: state.tracks.savedTracks,
     }
 };
 const mapDispatchToProps = (dispatch) => {
     return {
-        getCategoriesAction: bindActionCreators(getCategories, dispatch)
+        getCategoriesAction: bindActionCreators(getCategories, dispatch),
+        getSavedTracksAction: bindActionCreators(GetSavedTracks, dispatch),
     }
 }
 export default connect(mapStateToProps, mapDispatchToProps)(Search);

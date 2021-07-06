@@ -18,9 +18,17 @@ tr{
     transition: all .4s ease-in-out;
 }
 thead tr:first-child{
-    border-bottom: 1px solid;
+    background: hsla(0,0%,100%,.1);
     text-transform: uppercase;
     margin-bottom: 15px;
+    border-bottom:none !important;
+    border-radius: 7px;
+}
+thead tr:first-child th:last-child,
+thead tr:first-child th:first-child{
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 tr:hover{
     background: hsla(0,0%,100%,.1);
@@ -29,6 +37,9 @@ tr:hover{
 td{
     display: flex;
     align-items: center;
+}
+td:first-child{
+    justify-content: center;
 }
 .track-info{
     display:flex;
