@@ -20,6 +20,7 @@ import Albums from "../../containers/Albums";
 import Album from "../../containers/Album";
 import RelatedAlbums from "../../containers/RelatedAlbums";
 import Collection from "../../containers/Collection";
+import Podcast from "../../containers/Podcast";
 Dashboard.defaultProps = {
   info: ''
 }
@@ -39,6 +40,7 @@ function Dashboard(props) {
         <Switch>
           <Route exact path='/' component={Home} />
           <Route path='/playlist' component={Playlist} />
+          <Route path='/podcast' component={Podcast} />
           <Route path='/gene' component={Gene} />
           <Route path='/search' component={Search} />
           <Route
@@ -70,6 +72,7 @@ function Dashboard(props) {
                 <Route path={`${url}/albums`} component={Collection} />
                 <Route path={`${url}/podcasts`} component={Collection} />
                 <Route path={`${url}/artists`} component={Collection} />
+                <Route path={`${url}/tracks`} component={Playlist} />
               </>
             )}/>
         </Switch>

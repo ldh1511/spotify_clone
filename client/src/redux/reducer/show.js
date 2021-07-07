@@ -20,6 +20,16 @@ const show = (state = showInitialState, action) => {
             }
         case constants.GET_SAVED_EPISODES_FAILED:
             return state
+        case constants.GET_A_SHOW:
+            return state
+        case constants.GET_A_SHOW_SUCCESS:
+            return {
+                ...state,
+                showInfo:action.payload,
+                episodes:action.payload.episodes
+            }
+        case constants.GET_A_SHOW_FAILED:
+            return state
         default:
             return state
     }

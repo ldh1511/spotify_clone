@@ -51,9 +51,11 @@
 
 }
 .bot{
-    height: 215px;
+    height: 235px;
     overflow: scroll;
-    background: #2e2e2e;
+}
+.bot::-webkit-scrollbar-track {
+    background: #000;
 }
 .bot li{
     font-weight:200;

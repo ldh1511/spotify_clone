@@ -1,11 +1,12 @@
 .collection{
-    margin-top: 75px;
+    margin-top: 45px;
     width: 100%;
     height: 100%;
     background: #121212;
     color: white;
     padding: 0 25px;
     margin-bottom: 120px;
+    min-height: 100vh;
 }
 
 .collection-box{

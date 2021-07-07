@@ -559,3 +559,44 @@ export const RemoveFromTracksFailed=(data)=>{
     }
 }
 
+export const removeItemFromPlaylist=(id,uris, idTracks)=>{
+    return{
+        type:constants.REMOVE_ITEM_FROM_PLAYLIST,
+        payload:{
+            id:id,
+            uris:uris,
+            idTracks:idTracks
+        }
+    }
+}
+export const removeItemFromPlaylistSuccess=(data)=>{
+    return{
+        type:constants.REMOVE_ITEM_FROM_PLAYLIST_SUCCESS,
+        payload:data
+    }
+}
+export const removeItemFromPlaylistFailed=(data)=>{
+    return{
+        type:constants.REMOVE_FROM_TRACKS_FAILED,
+        payload:data
+    }
+}
+export const getShow=(id)=>{
+    return{
+        type:constants.GET_A_SHOW,
+        payload:id
+    }
+}
+export const getShowSuccess=(data)=>{
+    return{
+        type:constants.GET_A_SHOW_SUCCESS,
+        payload:data
+    }
+}
+export const getShowFailed=(data)=>{
+    return{
+        type:constants.GET_A_SHOW_FAILED,
+        payload:data
+    }
+}
+

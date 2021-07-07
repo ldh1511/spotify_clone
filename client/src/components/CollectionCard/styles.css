@@ -6,7 +6,9 @@
     margin-bottom: 20px;
     width: 400px;
     cursor: pointer;
-    position:relative;
+    position: relative;
+    text-decoration: none;
+    color: white;
 }
 
 .collection-card p{

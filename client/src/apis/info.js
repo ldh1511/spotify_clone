@@ -287,6 +287,20 @@ export const addItemToPlaylist = (id,uris) => {
     });
 }
 
+export const removeItemFromPlaylist = (id,data) => {
+    let tracks={"tracks":data}
+    let token = localStorage.getItem('token');
+
+    return axiosServices.delete(`${API_ENDPOINT}/v1/playlists/${id}/tracks`,{
+        headers: {
+            Authorization: 'Bearer ' + token,
+            "content-type":'application/json'
+        },
+        data:tracks
+        
+    });
+}
+
 export const saveTracks = (ids) => {
     let token = localStorage.getItem('token');
     return axiosServices.put(`${API_ENDPOINT}/v1/me/tracks`, null, {
@@ -308,6 +322,15 @@ export const removeFromTracks = (ids) => {
         },
         params:{
             ids
+        }
+    });
+}
+
+export const getShow = (id) => {
+    let token = localStorage.getItem('token');
+    return axiosServices.get(`${API_ENDPOINT}/v1/shows/${id}`, {
+        headers: {
+            Authorization: 'Bearer ' + token
         }
     });
 }

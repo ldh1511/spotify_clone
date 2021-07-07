@@ -1,0 +1,81 @@
+.podcast-container{
+    margin-top: 45px;
+    height: 100%;
+    position: relative;
+    margin-bottom: 120px;
+    background: #121212;
+}
+.podcast-list{
+    flex:2;
+}
+.podcast-list h2{
+    color: white;
+    padding-bottom: 20px;
+}
+.podcast-description{
+    flex:1;
+}
+.podcast-content{
+    padding:20px;
+    display: flex;
+    justify-content: space-between;
+}
+.podcast-item{
+    display: flex;
+    align-items: center;
+    padding: 20px;
+    border-top: 1px solid #b3b3b3;
+    width: 90%;
+    cursor: pointer;
+    transition: all .2s;
+}
+.podcast-item:hover{
+    background: #2e2e2e;
+}
+.podcast-list ul li:last-child{
+    border-bottom: 1px solid #b3b3b3;
+}
+.podcast-item img{
+    width: 120px;
+    height: 120px;
+    border-radius: 10px;
+    margin-right: 20px;
+}
+.podcast-item--detail h4{
+    color: white;
+    font-size: 1.2rem;
+    font-weight: 600;
+}
+.podcast-item--detail p{
+    color: #b3b3b3;
+    margin-top: 10px;
+}
+.podcast-item--btn{
+    display: flex;
+    align-items:center;
+    margin-top: 20px;
+}
+.podcast-item--btn p{
+    margin: 0!important;
+}
+.podcast-item--btn button{
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content:center;
+    margin-right: 20px;
+}
+.podcast-item--btn button i{
+    margin-left: 1px;
+}
+.podcast-description h2{
+    color: white;
+    margin-bottom: 10px;
+}
+.podcast-description p{
+    color: #b3b3b3;
+    line-height: 25px;
+}

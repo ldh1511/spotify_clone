@@ -1,4 +1,4 @@
-import { call, put, takeLatest, takeEvery, all, select } from 'redux-saga/effects';
+import { call, put, takeLatest, takeEvery, all } from 'redux-saga/effects';
 import * as constants from './../constants/actions';
 import * as api from '../apis/info';
 import {
@@ -42,14 +42,17 @@ import {
     SaveTracksSuccess,
     SaveTracksFailed,
     RemoveFromTracksSuccess,
-    RemoveFromTracksFailed
+    RemoveFromTracksFailed,
+    removeItemFromPlaylistFailed,
+    removeItemFromPlaylistSuccess,
+    getShowSuccess,
+    getShowFailed
 } from '../redux/actions/info';
 import { hideContentLoading, hideLoading, showContentLoading, showLoading } from '../redux/actions/ui';
 function* watchFetchUserInfo() {
     yield put(showLoading());
     try {
         const res = yield call(api.getMe);
-        console.log(res);
         yield put(getUserInfoSuccess(res.data));
     }
     catch {
@@ -93,7 +96,7 @@ function* watchFetchContentHome() {
         call(api.getCategories, { country: 'VN' }),
     ])
     const randCatArr = [];
-    for (let i = 0; i < 3; i++) {
+    for (let i = 0; i < 9; i++) {
         // lấy ngãu nhiên category
         const randCat = Math.floor(Math.random() * (categories.data.categories.items.length - 1));
         randCatArr.push(randCat);
@@ -110,7 +113,6 @@ function* watchFetchContentHome() {
         newRelatedArtists.push(item.data);
         return true;
     });
-    console.log(newTracks);
     const data = [relatedArtists, categories, newTracks];
     yield put(getContentHomeSuccess(data));
     yield put(hideContentLoading());
@@ -233,8 +235,7 @@ function* watchUnFollowArtist({ payload }) {
 function* watchFetchSavedTracks() {
     try {
         const res = yield call(api.getMySavedTracks, { limit: 50 });
-       // const dt= yield select(res);
-       const dt= yield call(api.getMySavedTracks, { limit: 50, offset: res.data.offset });       
+       // const dt= yield select(res);      
         yield put(GetSavedTracksSuccess(res.data))
     }
     catch {
@@ -262,7 +263,6 @@ function* watchFetchSavedShows() {
 function* watchFetchSavedEpisodes() {
     try {
         const res = yield call(api.getMySavedEpisodes);
-        console.log(res.data);
         yield put(GetSavedEpisodesSuccess(res.data));
     }
     catch {
@@ -322,7 +322,25 @@ function* watchRemoveFromTracks({payload}){
     catch{
         yield put(RemoveFromTracksFailed('error'))
     }
-    
+}
+function* watchRemoveItemFromPlaylist({payload}){
+    let data=[{"uri":payload.uris.track.uri}]
+    try{
+        yield call(api.removeItemFromPlaylist,payload.id,data);
+        yield put(removeItemFromPlaylistSuccess(payload))
+    }
+    catch{
+        yield put(removeItemFromPlaylistFailed('error'))
+    }   
+}
+function* watchFetchShow({payload}){
+    try{
+        const res=yield call(api.getShow,payload);
+        yield put(getShowSuccess(res.data))
+    }
+    catch{
+        yield put(getShowFailed('error'))
+    }
 }
 function* rootSaga() {
     yield takeLatest(constants.GET_USER_INFO, watchFetchUserInfo);
@@ -338,6 +356,7 @@ function* rootSaga() {
     yield takeLatest(constants.SEARCH_ARTISTS, SearchArtists);
     yield takeLatest(constants.SEARCH_PLAYLISTS, SearchPlaylists);
     yield takeLatest(constants.SEARCH_TRACKS, SearchTracks);
+    yield takeEvery(constants.GET_A_SHOW, watchFetchShow);
     yield takeLatest(constants.GET_ARTIST, watchFetchArtist);
     yield takeLatest(constants.GET_ALBUM_TRACK, watchFetchAlbumTrack);
     yield takeLatest(constants.GET_ALBUM, watchFetchAlbum);
@@ -353,5 +372,7 @@ function* rootSaga() {
     yield takeEvery(constants.ADD_ITEM_TO_PLAYLIST, watchAddItemToPlaylist);
     yield takeEvery(constants.SAVE_TRACKS, watchSaveTracks);
     yield takeEvery(constants.REMOVE_FROM_TRACKS, watchRemoveFromTracks);
+    yield takeEvery(constants.REMOVE_ITEM_FROM_PLAYLIST, watchRemoveItemFromPlaylist);
+    
 }
 export default rootSaga;

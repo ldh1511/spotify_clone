@@ -16,8 +16,8 @@ html,body{
 
 /* Track */
 ::-webkit-scrollbar-track {
-  background: #210c54;
-  background: linear-gradient(180deg, #210c54 0%, rgba(18,18,18,1) 90%);
+  background: #121212;
+  /* background: linear-gradient(180deg, #210c54 0%, rgba(18,18,18,1) 90%); */
 }
  
 /* Handle */

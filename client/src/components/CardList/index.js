@@ -7,7 +7,7 @@ CardItem.propTypes = {
     type: PropTypes.string,
 }
 CardItem.defaultProps = {
-    data: [],
+    data: [{images:[{url:''}]}],
     type:''
 }
 function CardList(props) {
@@ -15,7 +15,7 @@ function CardList(props) {
     const renderCardItem = () => {
         let xhtml = null;
         xhtml = data.map((item,i) => {
-            if (item.images.length !== 0 ) {
+            if (item && item.images && item.images.length !== 0 ) {
                 return (
                     < CardItem
                         key={item.id}

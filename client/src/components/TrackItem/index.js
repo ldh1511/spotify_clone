@@ -68,7 +68,6 @@ function TrackItem(props) {
                         onClick={() => openTrackMenu(albumId, name_artist, id_artist, id, data)}
                     ></i>
                 </td>
-
             </tr>)
         }
         return xhtml;

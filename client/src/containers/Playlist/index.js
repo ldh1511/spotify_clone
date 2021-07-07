@@ -34,6 +34,9 @@ Playlist.defaultProps = {
     },
     id: '',
     savedTracks: { items: [] },
+    info:{
+        display_name:''
+    }
 }
 function Playlist(props) {
     const { getTracksInPlaylist,
@@ -44,22 +47,24 @@ function Playlist(props) {
         UploadPlaylistImgAction, getCurrentImgAction,
         currentImg, updatePlaylistDetailAction,
         openTrackMenuAction, getSavedTracksAction, savedTracks, SaveTracksAction,
-        removeFromTracksAction } = props;
+        removeFromTracksAction, info } = props;
     let pathname = location.pathname.split('/');
     let match = pathname[pathname.length - 1];
     useEffect(() => {
-        getTracksInPlaylist(match);
+        if(match!=='tracks'){
+            getTracksInPlaylist(match);
+        }
         getUserInfoAction();
         getSavedTracksAction();
     }, [match]);
     return (
         <div className="playlist">
             <Banner
-                name={playlistInfo.name}
+                name={match!=='tracks'?playlistInfo.name:'Bài hát đã thích'}
                 image={playlistInfo.images[0] ? playlistInfo.images[0].url : ''}
                 description={playlistInfo.description}
-                owner={playlistInfo.owner.display_name}
-                type={playlistInfo.type}
+                owner={match!=='tracks'?playlistInfo.owner.display_name:info.display_name}
+                type={match!=='tracks'?playlistInfo.type:'playlist'}
                 custom={id === playlistInfo.owner.id ? true : false}
                 openModal={OpenModalAction}
                 getCurImg={getCurrentImgAction}
@@ -67,7 +72,7 @@ function Playlist(props) {
             />
             <div className="playlist-detail">
                 <TrackTable
-                    data={tracksInPlaylist}
+                    data={match!=='tracks'?tracksInPlaylist:savedTracks.items}
                     openTrackMenu={openTrackMenuAction} savedTracks={savedTracks}
                     SaveTracksAction={SaveTracksAction}
                     removeFromTrack={removeFromTracksAction}
@@ -100,6 +105,7 @@ const mapStateToProps = state => {
         stateTrackMenu: state.ui.openTrackMenu,
         currentImg: state.images.currentImg,
         savedTracks: state.tracks.savedTracks,
+        info:state.info
     }
 }
 const mapDispatchToProps = (dispatch) => {

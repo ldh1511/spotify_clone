@@ -43,6 +43,17 @@ const tracks = (state = tracksInitialState, action) => {
             }
         case constants.ADD_ITEM_TO_PLAYLIST_FAILED:
             return state
+        case constants.REMOVE_ITEM_FROM_PLAYLIST:
+            return state
+        case constants.REMOVE_ITEM_FROM_PLAYLIST_SUCCESS:
+            return {
+                ...state,
+                tracksInPlaylist:state.tracksInPlaylist.filter(item=>item.track.id!==action.payload.idTracks)
+            }
+            case constants.REMOVE_ITEM_FROM_PLAYLIST_FAILED:
+                return state
+        case constants.SAVE_TRACKS:
+            return state
         case constants.SAVE_TRACKS_SUCCESS:
             return {
                 ...state,
@@ -51,14 +62,20 @@ const tracks = (state = tracksInitialState, action) => {
                     items: [...state.savedTracks.items, action.payload]
                 }
             }
+        case constants.SAVE_TRACKS_FAILED:
+            return state
+        case constants.REMOVE_FROM_TRACKS:
+            return state
         case constants.REMOVE_FROM_TRACKS_SUCCESS:
-            return{
+            return {
                 ...state,
                 savedTracks: {
                     ...state.savedTracks,
-                    items: state.savedTracks.items.filter(item=>item.track.id!==action.payload)
+                    items: state.savedTracks.items.filter(item => item.track.id !== action.payload)
                 }
             }
+        case constants.REMOVE_FROM_TRACKS_FAILED:
+            return state
         default:
             return state
     }

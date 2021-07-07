@@ -2,7 +2,7 @@ nav{
     background: #210c54;
     display: flex;
     justify-content: space-between;
-    padding: 15px 20px;
+    padding: 0px 20px;
     position: fixed;
     width: inherit;
     z-index: 9;
@@ -11,7 +11,7 @@ nav{
     display: flex;
     justify-content: space-between;
     align-items: center;
-    width: 9%;
+    width: 7%;
 }
 .navbar-left button{
     width:35px;

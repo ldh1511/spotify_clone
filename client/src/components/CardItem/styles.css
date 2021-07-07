@@ -10,6 +10,7 @@
     cursor: pointer;
     transition: all .2s ease-in;
     position: relative;
+    overflow: hidden;
 }
 .card-item a{
     text-decoration: none;
