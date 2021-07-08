@@ -27,6 +27,7 @@ function CardList(props) {
                     />
                 )
             }
+            return true;
         })
         return xhtml;
     }

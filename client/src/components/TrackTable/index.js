@@ -18,12 +18,18 @@ function TrackTable(props) {
     const { data, note, openTrackMenu, savedTracks, SaveTracksAction, removeFromTrack } = props;
     const getNameOfArtist = (data) => {
         let result = "";
-        data.map(item => { result += `${item.name}, ` });
+        data.map(item => {
+            result += `${item.name}, `;
+            return true;
+        });
         return result
     }
     const getIdOfArtist = (data) => {
         let result = "";
-        data.map(item => { result += `${item.id}, ` });
+        data.map(item => {
+            result += `${item.id}, `;
+            return true;
+        });
         return result
     }
     const renderElement = () => {
@@ -40,10 +46,10 @@ function TrackTable(props) {
                         key={i}
                         i={i}
                         id={item.track.id}
-                        albumId={item.track.album.id}
-                        image={item.track.album.images[0].url}
+                        albumId={item.track.album && item.track.album.id ?item.track.album.id:''}
+                        image={item.track.album && item.track.album.images? item.track.album.images[0].url:''}
                         name_track={item.track.name}
-                        name_album={item.track.album.name}
+                        name_album={item.track.album ? item.track.album.name:''}
                         name_artist={getNameOfArtist(item.track.artists)}
                         id_artist={getIdOfArtist(item.track.artists)}
                         add_at={item.added_at.split('T')[0]}

@@ -64,7 +64,7 @@ function Collection(props) {
             default:
                 break;
         }
-
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [match])
     const renderCardList = () => {
         let xhtml = null, data = null;
@@ -107,11 +107,11 @@ function Collection(props) {
         }
         return xhtml;
     }
-    const renderCollectionCard=()=>{
-        let xhtml=null;
-        let data=null;
-        data=match==='playlists'? items:savedEpisodes.items;
-        xhtml=<CollectionCard data={data} type={match}/>
+    const renderCollectionCard = () => {
+        let xhtml = null;
+        let data = null;
+        data = match === 'playlists' ? items : savedEpisodes.items;
+        xhtml = <CollectionCard data={data} type={match} />
         return xhtml;
     }
     return (
@@ -120,7 +120,7 @@ function Collection(props) {
             <div className="collection-box">
                 <h2>{type}</h2>
                 <div className="collection-item">
-                    {(match === 'playlists' && items.length>=0) || (match === 'podcasts' && savedEpisodes.items.length>=0) ?
+                    {(match === 'playlists' && items.length >= 0) || (match === 'podcasts' && savedEpisodes.items.length >= 0) ?
                         renderCollectionCard()
                         : <></>
                     }

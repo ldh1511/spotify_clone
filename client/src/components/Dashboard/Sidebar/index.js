@@ -1,8 +1,11 @@
 import React from 'react';
 import './styles.css';
 import logo from '../../../assets/images/logo_spotify.jpg';
-import { PropTypes, defaultProps } from 'prop-types';
+import PropTypes from 'prop-types';
 import { NavLink } from 'react-router-dom';
+Sidebar.propTypes={
+    items: PropTypes.array,
+}
 Sidebar.defaultProps = {
     items: []
 }

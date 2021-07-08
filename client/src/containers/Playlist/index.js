@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import Banner from '../../components/Banner';
@@ -34,8 +34,8 @@ Playlist.defaultProps = {
     },
     id: '',
     savedTracks: { items: [] },
-    info:{
-        display_name:''
+    info: {
+        display_name: ''
     }
 }
 function Playlist(props) {
@@ -51,20 +51,34 @@ function Playlist(props) {
     let pathname = location.pathname.split('/');
     let match = pathname[pathname.length - 1];
     useEffect(() => {
-        if(match!=='tracks'){
+        if (match !== 'tracks') {
             getTracksInPlaylist(match);
         }
         getUserInfoAction();
         getSavedTracksAction();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [match]);
+    const getImage = () => {
+        if(match === 'tracks'){
+            return ''
+        }
+        else{
+            if(playlistInfo.images && playlistInfo.images[0]){
+                return playlistInfo.images[0].url
+            }
+            else{
+                return ''
+            }
+        }
+    }
     return (
         <div className="playlist">
             <Banner
-                name={match!=='tracks'?playlistInfo.name:'Bài hát đã thích'}
-                image={playlistInfo.images[0] ? playlistInfo.images[0].url : ''}
-                description={playlistInfo.description}
-                owner={match!=='tracks'?playlistInfo.owner.display_name:info.display_name}
-                type={match!=='tracks'?playlistInfo.type:'playlist'}
+                name={match !== 'tracks' ? playlistInfo.name : 'Bài hát đã thích'}
+                image={getImage()}
+                description={match !== 'tracks' ? playlistInfo.description:''}
+                owner={match !== 'tracks' ? playlistInfo.owner.display_name : info.display_name}
+                type={match !== 'tracks' ? playlistInfo.type : 'playlist'}
                 custom={id === playlistInfo.owner.id ? true : false}
                 openModal={OpenModalAction}
                 getCurImg={getCurrentImgAction}
@@ -72,13 +86,13 @@ function Playlist(props) {
             />
             <div className="playlist-detail">
                 <TrackTable
-                    data={match!=='tracks'?tracksInPlaylist:savedTracks.items}
+                    data={match !== 'tracks' ? tracksInPlaylist : savedTracks.items}
                     openTrackMenu={openTrackMenuAction} savedTracks={savedTracks}
                     SaveTracksAction={SaveTracksAction}
                     removeFromTrack={removeFromTracksAction}
                 />
-                {id === playlistInfo.owner.id ?  <CollectionSearch idPlaylist={match} /> :<></>}
-               
+                {id === playlistInfo.owner.id ? <CollectionSearch idPlaylist={match} /> : <></>}
+
             </div>
             <Modal
                 check={stateModal}
@@ -92,7 +106,7 @@ function Playlist(props) {
                 update={updatePlaylistDetailAction}
             />
             <TrackMenu />
-            
+
         </div>
     );
 }
@@ -105,7 +119,7 @@ const mapStateToProps = state => {
         stateTrackMenu: state.ui.openTrackMenu,
         currentImg: state.images.currentImg,
         savedTracks: state.tracks.savedTracks,
-        info:state.info
+        info: state.info
     }
 }
 const mapDispatchToProps = (dispatch) => {

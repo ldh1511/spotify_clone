@@ -7,13 +7,13 @@ import { SaveTracks, removeItemFromPlaylist } from '../../redux/actions/info';
 import { connect } from 'react-redux';
 import { NavLink } from 'react-router-dom';
 TrackMenu.propTypes = {
-
+    idArtists: PropTypes.array
 };
 TrackMenu.defaultProps = {
     idArtists: [],
     nameArtists: [],
     playlist: [],
-    currentPlaylist:{}
+    currentPlaylist: {}
 }
 function TrackMenu(props) {
     const { stateTrackMenu, closeTrackMenu,
@@ -39,7 +39,7 @@ function TrackMenu(props) {
         SaveTracksAction(idTracks, dataTracks);
         closeTrackMenu();
     }
-    const handleRemoveTrack=()=>{
+    const handleRemoveTrack = () => {
         removeTrackAction(currentPlaylist.id, dataTracks, idTracks);
         closeTrackMenu();
     }
@@ -47,23 +47,19 @@ function TrackMenu(props) {
         <div className={stateTrackMenu === true ? "track-menu" : "track-menu hidden"}>
             <i className="fas fa-times" onClick={() => closeTrackMenu()}></i>
             <ul>
-                {check.length>0?
-                <li onClick={() => handleRemoveTrack()}>Xóa khỏi danh sách phát này</li>
-                :
-                <></> 
+                {check.length > 0 ?
+                    <li onClick={() => handleRemoveTrack()}>Xóa khỏi danh sách phát này</li>
+                    : <></>
                 }
                 <li onClick={() => handleSaveTrack()}>Lưu vào Bài hát đã thích của bạn</li>
                 <li onClick={() => closeTrackMenu()}><NavLink to={`/album/${albumId}`}>Chuyển tới album</NavLink></li>
                 <li onClick={() => closeTrackMenu()}>
-                    {idArtists.length===1?
-                    <NavLink to={`/artist/${idArtists[0]}`}>Chuyển tới nghệ sĩ</NavLink>
-                    :
-                    'Chuyển tới nghệ sĩ'
+                    {idArtists.length === 1 ?
+                        <NavLink to={`/artist/${idArtists[0]}`}>Chuyển tới nghệ sĩ</NavLink>
+                        : 'Chuyển tới nghệ sĩ'
                     }
-                    
                     {renderSubMenu()}
                 </li>
-                <li onClick={() => closeTrackMenu()}>test</li>
             </ul>
         </div>
     );
@@ -84,7 +80,7 @@ const mapDispatchToProps = (dispatch) => {
     return {
         closeTrackMenu: bindActionCreators(closeTrackMenu, dispatch),
         SaveTracksAction: bindActionCreators(SaveTracks, dispatch),
-        removeTrackAction:bindActionCreators(removeItemFromPlaylist,dispatch)
+        removeTrackAction: bindActionCreators(removeItemFromPlaylist, dispatch)
     }
 }
 export default connect(mapStateToProps, mapDispatchToProps)(TrackMenu);

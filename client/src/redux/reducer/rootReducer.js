@@ -5,6 +5,7 @@ import categories from './categories';
 import contentHome from './contentHome';
 import images from './images';
 import info from './info';
+import login from './login';
 import recentPlaylist from './recentPlaylist';
 import search from './search';
 import show from './show';
@@ -13,6 +14,7 @@ import ui from './ui';
 import userPlaylists from './userplaylists';
 
 const rootReducer = combineReducers({
+    login:login,
     ui:ui,
     info:info,
     playlist:userPlaylists,

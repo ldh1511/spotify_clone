@@ -36,6 +36,7 @@ function Search(props) {
     useEffect(() => {
         getCategoriesAction();
         getSavedTracksAction();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
     const renderSearchPlaylists = () => {
         const { playlists } = search;

@@ -26,7 +26,6 @@ function Home(props) {
         getRecentPlaylistAcion,
         getContentHomeAction,
         recentlyPlaylist,
-        relatedArtists,
         categories,
         categoriesPlaylists,
         getArtistFollowedAction
@@ -35,8 +34,8 @@ function Home(props) {
         getRecentPlaylistAcion()
         getContentHomeAction()
         getArtistFollowedAction()
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
-    console.log(categoriesPlaylists)
     const renderCategoriesPlaylists = () => {
         let categoriesPlaylistsLimit = categoriesPlaylists.map(item => (
             item = item.playlists.items.filter((e, i) => i < 5)

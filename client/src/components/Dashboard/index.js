@@ -14,29 +14,30 @@ import Gene from "../../containers/Gene";
 import Search from "../../containers/Search";
 import SearchResult from "../../containers/SearchResult";
 import Artist from "../../containers/Artist";
-import Test from "../test";
 import RelatedArtists from "../../containers/RelatedArtists";
 import Albums from "../../containers/Albums";
 import Album from "../../containers/Album";
 import RelatedAlbums from "../../containers/RelatedAlbums";
 import Collection from "../../containers/Collection";
 import Podcast from "../../containers/Podcast";
+import { logout } from "../../redux/actions/ui";
 Dashboard.defaultProps = {
   info: ''
 }
 function Dashboard(props) {
-  const { getUserPlaylistAction, info, playlist } = props;
+  const { getUserPlaylistAction, info, playlist, logoutAction } = props;
   useEffect(() => {
     if (info.id) {
       getUserPlaylistAction(info.id)
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [info])
   return (
     <div className="dashboard">
       <Sidebar items={playlist.items} />
       <div className="dashboard-content">
         <ContentLoading />
-        <Header images={info.images} name={info.display_name} />
+        <Header images={info.images} name={info.display_name} logoutAction={logoutAction}/>
         <Switch>
           <Route exact path='/' component={Home} />
           <Route path='/playlist' component={Playlist} />
@@ -89,7 +90,8 @@ const mapStateToProps = state => {
 }
 const mapDispatchToProps = dispatch => {
   return {
-    getUserPlaylistAction: bindActionCreators(getUserPlaylist, dispatch)
+    getUserPlaylistAction: bindActionCreators(getUserPlaylist, dispatch),
+    logoutAction: bindActionCreators(logout, dispatch), 
   }
 }
 export default connect(mapStateToProps, mapDispatchToProps)(Dashboard);

@@ -45,6 +45,7 @@ function Artist(props) {
         getArtistAction(match);
         getArtistFollowedAction();
         getSavedTracksAction();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [match])
     const renderPlaylists = () => {
         let xhtml = null;
@@ -56,7 +57,6 @@ function Artist(props) {
                 </>
             )
         }
-        
         return xhtml;
     }
     const checkFollow = () => {

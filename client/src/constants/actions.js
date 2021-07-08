@@ -133,6 +133,8 @@ export const GET_A_SHOW="GET_A_SHOW";
 export const GET_A_SHOW_SUCCESS="GET_A_SHOW_SUCCESS";
 export const GET_A_SHOW_FAILED="GET_A_SHOW_FAILED";
 
+export const LOGIN="LOGIN";
+export const LOGOUT="LOGOUT";
 // function constants
 export const  getBase64=(file)=>{
     return new Promise((resolve, reject) => {

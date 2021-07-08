@@ -5,7 +5,7 @@ import { Search } from '../../redux/actions/info';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 SearchBar.propTypes = {
-
+    searchAction:PropTypes.func,
 };
 
 function SearchBar(props) {

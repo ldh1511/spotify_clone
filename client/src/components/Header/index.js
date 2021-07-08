@@ -10,8 +10,11 @@ Header.defaultProps = {
   name: ''
 }
 function Header(props) {
-  const { images, name } = props;
+  const { images, name, logoutAction } = props;
   const history = useHistory();
+  const handleLogout=()=>{
+    logoutAction();
+  }
   return (
     <nav>
       <div className="navbar-left">
@@ -25,7 +28,7 @@ function Header(props) {
           <ul>
             <li>Tài khoản</li>
             <li>Hồ sơ</li>
-            <li>Đăng xuất</li>
+            <li onClick={()=>handleLogout()}>Đăng xuất</li>
           </ul>
         </div>
       </div>

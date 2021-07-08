@@ -4,47 +4,57 @@ import Dashboard from './components/Dashboard';
 import GLobalLoading from './components/GlobalLoading';
 import { useEffect, useState } from 'react';
 import { getTokenFromUrl } from './spotify';
-import { BrowserRouter } from 'react-router-dom';
-import SpotifyWebApi from 'spotify-web-api-js';
-import {getUserInfo, setToken } from './redux/actions/info';
+import { getUserInfo, setToken } from './redux/actions/info';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { getToken } from './apis/info';
-const spotify = new SpotifyWebApi();
+import { login } from './redux/actions/ui';
 function App(props) {
-  const { setTokenAction, getUserInfoAction} = props;
-  const [token, setToken] = useState(null);
-  window.location.hash="";
+  const { getUserInfoAction, loginToken, loginAction } = props;
+  // const [token, setToken] = useState(null);
+  const curToken = localStorage.getItem('token');
   useEffect(() => {
-    const curToken = localStorage.getItem('token');
     if (!curToken) {
-      const hash = getTokenFromUrl();
-      const code = hash;
+      const code = getTokenFromUrl();
       const setTokenActions = async () => {
         let res = await getToken(code);
-        setTokenAction(res.data.access_token);
+        // setAccessTokenAction(res.data.access_token);
+        localStorage.setItem('token',res.data.access_token);
+        loginAction(res.data.access_token);
+        window.history.pushState({}, null, "/");
       }
       setTokenActions();
+      getUserInfoAction();
     }
-    setToken(curToken);
-    getUserInfoAction();
-  }, [])
+    else{
+      loginAction(curToken);
+      getUserInfoAction();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  },[loginToken] )
   return (
     <div className="App">
-      {token ? (
+      {loginToken !== null ?
         <>
           <GLobalLoading />
           <Dashboard />
         </>
-      ) : (<Login />)}
+        :
+        <Login />
+      }
     </div>
   )
 }
-const mapStateToProps = null
+const mapStateToProps = (state)=>{
+  return{
+    loginToken:state.login.loginToken
+  }
+}
 const mapDispatchToProps = dispatch => {
   return {
-    setTokenAction: bindActionCreators(setToken, dispatch),
-    getUserInfoAction: bindActionCreators(getUserInfo, dispatch),
+    setAccessTokenAction: bindActionCreators(setToken, dispatch),
+    getUserInfoAction: bindActionCreators(getUserInfo, dispatch), 
+    loginAction: bindActionCreators(login, dispatch), 
   }
 }
 export default connect(mapStateToProps, mapDispatchToProps)(App);

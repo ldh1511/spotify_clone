@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import './styles.css';
 Modal.propTypes = {
-
+    check:PropTypes.bool
 };
 
 function Modal(props) {

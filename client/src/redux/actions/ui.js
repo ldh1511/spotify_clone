@@ -36,3 +36,14 @@ export const closeTrackMenu=()=>{
         type:constants.CLOSE_TRACK_MENU
     }
 }
+export const login=(token)=>{
+    return{
+        type:constants.LOGIN,
+        payload:token
+    }
+}
+export const logout=()=>{
+    return{
+        type:constants.LOGOUT
+    }
+}

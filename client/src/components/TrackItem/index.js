@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import './styles.css';
 TrackItem.propTypes = {
-
+    name_track:PropTypes.string
 };
 
 function TrackItem(props) {

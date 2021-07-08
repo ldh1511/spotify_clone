@@ -33,17 +33,20 @@ function Album(props) {
     useEffect(() => {
         getAlbumAction(match);
         getSavedTracksAction();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [match])
     useEffect(() => {
         if (artists[0].id !== '') {
             getArtistAlbumAction(artists[0].id);
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [artists])
     const getNameArtist = (arr) => {
         let artist_name = '';
         if (arr.length > 1) {
             arr.map(item => {
                 artist_name += `${item.name} `
+                return true;
             })
         }
         else {

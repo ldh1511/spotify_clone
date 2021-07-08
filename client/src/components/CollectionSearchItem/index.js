@@ -12,6 +12,7 @@ CollectionSearchItem.defaultProps = {
 function CollectionSearchItem(props) {
     const { data, setLevelData, defaultimg, addItem, idPlaylist } = props;
     const { type, name, images, id, uri } = data;
+    console.log(data);
     let newImage = images && images.length !== 0 ? images : [{ url: '' }];
     let albumImage = data.album && data.album.images && data.album.images.length !== 0 ? data.album.images : [{ url: defaultimg }]
     const renderDescription = () => {
@@ -36,7 +37,7 @@ function CollectionSearchItem(props) {
                 setLevelData(2, typeData, idData)
                 break;
             case 'album':
-                setLevelData(3, typeData, idData, newImage[0].url)
+                setLevelData(3, typeData, idData, newImage[0].url,name)
                 break;
             case 'track':
                 break;

@@ -25,7 +25,8 @@ function CollectionSearch(props) {
     const [level, setLevel] = useState([0]);
     const [name, setName] = useState(['default']);
     const [defaultimg, setImg] = useState();
-    const setLevelData = (idLevel, type, id, defaultImg) => {
+    const [titleName, setTitleName]=useState(null)
+    const setLevelData = (idLevel, type, id, defaultImg, titleName) => {
         if (typeof idLevel === 'number') {
             setLevel([...level, idLevel])
             setName([...name, type])
@@ -39,12 +40,14 @@ function CollectionSearch(props) {
         }
         if (id && idLevel === 3) {
             getAlbumTracksAction(id);
-            setImg(defaultImg)
+            setImg(defaultImg);
+            setTitleName(titleName);
         }
     }
     const renderName = () => {
         let titleName = null;
         let data = null;
+        console.log(name);
         switch (name[name.length - 1]) {
             case 'all-artist':
                 titleName = 'Xem tất cả nghệ sĩ'
@@ -102,7 +105,7 @@ function CollectionSearch(props) {
                     <>
                         <div className="collection-search--title" onClick={() => setLevelData('back', null, null)}>
                             <i className="fas fa-chevron-left"></i>
-                            <h3>test</h3>
+                            <h3>{titleName}</h3>
                         </div>
                         <CollectionSearchList data={albumtracks.items} setLevelData={setLevelData} defaultimg={defaultimg} addItem={addItemToPlaylistAction} idPlaylist={idPlaylist}/>
                     </>

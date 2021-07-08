@@ -39,8 +39,10 @@ function Albums(props) {
         let data=type==='albums'? items:singles;
         data.map((item) => {
             idArr.push(item.id)
+            return true;
         })
         getAlbumTracksAction(idArr)
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [type])
     const renderCardList = () => {
         let xhtml = null;
