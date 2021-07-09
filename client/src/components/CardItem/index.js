@@ -21,7 +21,7 @@ function CardItem(props) {
             <NavLink to={`/${type}/${id}`}>
                 <div
                     className="card-item-top"
-                    style={type === 'artist' ? { borderRadius: '50%' } : { borderRadius: '4px' }}
+                    style={type === 'artist' ? { borderRadius: '50%' } : { borderRadius: '10px' }}
                 >
                     {image !== '' ?
                         <img alt="" src={image} ></img>

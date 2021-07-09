@@ -25,7 +25,7 @@ export const getToken = (param) => {
 }
 export const getRecentlyPlaylistTrack = () => {
     let token = localStorage.getItem('token');
-    return axiosServices.get(`${API_ENDPOINT}/v1/me/player/currently-playing`, {
+    return axiosServices.get(`${API_ENDPOINT}/v1/me/player/recently-played`, {
         headers: {
             Authorization: 'Bearer ' + token
         }

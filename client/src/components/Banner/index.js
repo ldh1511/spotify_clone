@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
+import { useColor } from 'color-thief-react'
 import './styles.css';
+
 Banner.propTypes = {
     name: PropTypes.string,
     description: PropTypes.string,
@@ -16,12 +18,22 @@ function Banner(props) {
         type, followed,
         id, follow,
         unfollow, custom,
-        openModal, getCurImg, currentImg } = props;
+        openModal, getCurImg, currentImg,
+        getPredominantColor, predominantColor } = props;
     const [followState, setFollowState] = useState(followed);
-    console.log(image);
+    let crossOrigin = "Anonymous";
+    const { data, loading, error } = useColor(image, 'hex', { crossOrigin });
     useEffect(() => {
         setFollowState(followed);
     }, [followed])
+    useEffect(() => {
+        if (image !== '' && data !== undefined) {
+            getPredominantColor(data)
+        }
+        else{
+            getPredominantColor('#333333')
+        }
+    }, [data])
     const handleFollow = (stateFollow) => {
         if (stateFollow === true) {
             unfollow(id)
@@ -37,10 +49,10 @@ function Banner(props) {
         getCurImg(image);
     }
     return (
-        <div className="banner-top">
+        <div className="banner-top" style={{ backgroundColor: `${predominantColor}` }}>
             <div
                 className="banner-img"
-                style={type === 'artist' ? { borderRadius: '50%' } : { borderRadius: '4px' }}
+                style={type === 'artist' ? { borderRadius: '50%' } : { borderRadius: '25px' }}
             >
                 {custom !== true ?
                     <>
@@ -55,7 +67,7 @@ function Banner(props) {
                         {image === '' ?
                             <>
                                 <svg className="custom-img--off" height="128" role="img" width="128" viewBox="-20 -25 100 100"
-                                data-testid="card-image-fallback"><path d="M16 7.494v28.362A8.986 8.986 0 0 0 9 32.5c-4.962 0-9 4.038-9 9s4.038 9 9 9 9-4.038 9-9V9.113l30-6.378v27.031a8.983 8.983 0 0 0-7-3.356c-4.962 0-9 4.038-9 9 0 4.963 4.038 9 9 9s9-4.037 9-9V.266L16 7.494zM9 48.5c-3.86 0-7-3.14-7-7s3.14-7 7-7 7 3.14 7 7c0 3.859-3.141 7-7 7zm32-6.09c-3.86 0-7-3.14-7-7 0-3.859 3.14-7 7-7s7 3.141 7 7c0 3.861-3.141 7-7 7z " fill="currentColor" fillRule="evenodd"></path>
+                                    data-testid="card-image-fallback"><path d="M16 7.494v28.362A8.986 8.986 0 0 0 9 32.5c-4.962 0-9 4.038-9 9s4.038 9 9 9 9-4.038 9-9V9.113l30-6.378v27.031a8.983 8.983 0 0 0-7-3.356c-4.962 0-9 4.038-9 9 0 4.963 4.038 9 9 9s9-4.037 9-9V.266L16 7.494zM9 48.5c-3.86 0-7-3.14-7-7s3.14-7 7-7 7 3.14 7 7c0 3.859-3.141 7-7 7zm32-6.09c-3.86 0-7-3.14-7-7 0-3.859 3.14-7 7-7s7 3.141 7 7c0 3.861-3.141 7-7 7z " fill="currentColor" fillRule="evenodd"></path>
                                 </svg>
                                 <div className="custom-img--on">
                                     <i className="fas fa-pencil-alt"></i>
@@ -89,7 +101,6 @@ function Banner(props) {
                     :
                     <></>
                 }
-
             </div>
         </div>
     );

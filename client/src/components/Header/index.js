@@ -10,13 +10,13 @@ Header.defaultProps = {
   name: ''
 }
 function Header(props) {
-  const { images, name, logoutAction } = props;
+  const { images, name, logoutAction, predominantColor } = props;
   const history = useHistory();
   const handleLogout=()=>{
     logoutAction();
   }
   return (
-    <nav>
+    <nav >
       <div className="navbar-left">
         <button onClick={() => history.goBack()}><i className="fas fa-chevron-left"></i></button>
         <button><i className="fas fa-chevron-right"></i></button>

@@ -5,7 +5,7 @@ import CollectionSearchBar from '../../components/CollectionSearchBar';
 import CollectionSearchList from '../../components/CollectionSearchList';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { getAlbumTracks, getArtist, addItemToPlaylist } from '../../redux/actions/info';
+import { getAlbumTracks, getArtist, addItemToPlaylist, getAlbum } from '../../redux/actions/info';
 CollectionSearch.propTypes = {
     sortResult: PropTypes.array
 };
@@ -17,10 +17,13 @@ CollectionSearch.defaultProps = {
     artistInfo: {
         name: ''
     },
-    albumtracks: { items: [] }
+    albumtracks: { items: [] },
+    album:{albumInfo:{
+        images:[{url:''}]
+    }}
 }
 function CollectionSearch(props) {
-    const { sortResult, searchResult, getArtistAction, topTracks, topAlbums, artistInfo, getAlbumTracksAction, albumtracks, idPlaylist, addItemToPlaylistAction } = props;
+    const { sortResult, searchResult, getArtistAction, topTracks, topAlbums, artistInfo, getAlbumTracksAction, albumtracks, idPlaylist, addItemToPlaylistAction, getAlbumAction, album } = props;
     const { albums, artists, tracks } = searchResult;
     const [level, setLevel] = useState([0]);
     const [name, setName] = useState(['default']);
@@ -39,15 +42,16 @@ function CollectionSearch(props) {
             getArtistAction(id);
         }
         if (id && idLevel === 3) {
+            getAlbumAction(id);
             getAlbumTracksAction(id);
             setImg(defaultImg);
             setTitleName(titleName);
+            
         }
     }
     const renderName = () => {
         let titleName = null;
         let data = null;
-        console.log(name);
         switch (name[name.length - 1]) {
             case 'all-artist':
                 titleName = 'Xem tất cả nghệ sĩ'
@@ -107,7 +111,7 @@ function CollectionSearch(props) {
                             <i className="fas fa-chevron-left"></i>
                             <h3>{titleName}</h3>
                         </div>
-                        <CollectionSearchList data={albumtracks.items} setLevelData={setLevelData} defaultimg={defaultimg} addItem={addItemToPlaylistAction} idPlaylist={idPlaylist}/>
+                        <CollectionSearchList data={albumtracks.items} setLevelData={setLevelData} defaultimg={defaultimg} addItem={addItemToPlaylistAction} idPlaylist={idPlaylist} albumInfo={album.albumInfo} />
                     </>
                 )
                 break;
@@ -133,6 +137,7 @@ const mapDispatchToProps = (dispatch) => {
         getArtistAction: bindActionCreators(getArtist, dispatch),
         getAlbumTracksAction: bindActionCreators(getAlbumTracks, dispatch),
         addItemToPlaylistAction: bindActionCreators(addItemToPlaylist, dispatch),
+        getAlbumAction: bindActionCreators(getAlbum, dispatch),
     }
 }
 const mapStateToProps = (state) => {
@@ -142,7 +147,8 @@ const mapStateToProps = (state) => {
         topTracks: state.artist.topTracks,
         topAlbums: state.artist.albums,
         artistInfo: state.artist.artistInfo,
-        albumtracks: state.artist.albumtracks
+        albumtracks: state.artist.albumtracks,
+        album: state.album,
     }
 }
 export default connect(mapStateToProps, mapDispatchToProps)(CollectionSearch);

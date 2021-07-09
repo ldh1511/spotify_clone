@@ -14,7 +14,7 @@ tr{
     display: grid;
     grid-template-columns: 5% 40% 25% 25% 5%;
     color: #b3b3b3;
-    padding: 15px 0;
+    padding: 10px 0 !important;
     transition: all .4s ease-in-out;
 }
 thead tr:first-child{
@@ -22,7 +22,7 @@ thead tr:first-child{
     text-transform: uppercase;
     margin-bottom: 15px;
     border-bottom:none !important;
-    border-radius: 7px;
+    border-radius: 10px;
 }
 thead tr:first-child th:last-child,
 thead tr:first-child th:first-child{
@@ -32,7 +32,7 @@ thead tr:first-child th:first-child{
 }
 tr:hover{
     background: hsla(0,0%,100%,.1);
-    border-radius: 6px;
+    border-radius: 10px !important;
 }
 td{
     display: flex;
@@ -50,7 +50,7 @@ td:first-child{
     width: 50px;
     height:50px;
     display:block;
-    border-radius:4px
+    border-radius:9px !important;
 }
 .track-info-right{
     margin-left: 10px;

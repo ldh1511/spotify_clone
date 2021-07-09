@@ -11,7 +11,7 @@ TrackTable.defaultProps = {
     data: [],
     note: null,
     savedTracks: {
-        items: [{ track: 'test' }]
+        items: [{ track: '' }]
     }
 }
 function TrackTable(props) {
@@ -38,7 +38,7 @@ function TrackTable(props) {
             xhtml = data.map((item, i) => {
                 let checked = false;
                 let check = savedTracks.items.filter(
-                    track => (track.track.id === item.id) || (item.track && track.track.id === item.track.id)
+                    track => (track.track &&track.track.id === item.id) || (item.track && track.track.id === item.track.id)
                 );
                 if (check.length > 0) { checked = true }
                 return (<>{item.track ?

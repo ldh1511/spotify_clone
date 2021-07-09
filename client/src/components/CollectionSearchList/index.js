@@ -9,7 +9,7 @@ CollectionSearchList.defaultProps = {
     data:[]
 }
 function CollectionSearchList(props) {
-    const { data, setLevelData, level, defaultimg, addItem, idPlaylist } = props;
+    const { data, setLevelData, level, defaultimg, addItem, idPlaylist, albumInfo } = props;
     const renderItem = () => {
         let xhtml = null;
         xhtml = data.map(item => (
@@ -20,6 +20,7 @@ function CollectionSearchList(props) {
                 defaultimg={defaultimg}
                 addItem={addItem}
                 idPlaylist={idPlaylist}
+                albumInfo={albumInfo}
             />)
         )
         return xhtml

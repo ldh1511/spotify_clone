@@ -71,18 +71,27 @@ function* watchFetchUserPlaylist({ payload }) {
     }
 }
 function* watchFetchRecentPlaylist() {
+
     try {
         const res = yield call(api.getRecentlyPlaylistTrack);
-        let idPlaylist = []
-        res.data.items.map((item) => {
-            let id = item.context.uri;
-            id = id.split(':')[2]
-            idPlaylist.push(id);
-            return true;
+        let idPlaylist = [];
+        let datas = res.data.items;
+        datas.map((item) => {
+            if (item.context !== null) {
+                let id = item.context.uri;
+                id = id.split(':')[2];
+                idPlaylist.push(id);
+                return true;
+            }
         })
         idPlaylist = Array.from(new Set(idPlaylist));
-        const resp = yield all(idPlaylist.map(item => call(api.getPlaylist, item)));
-        yield put(getRecentPlaylistSuccess(resp.data));
+         const resp = yield all(idPlaylist.map(item => call(api.getPlaylist, item)));
+         let newData=[];
+         resp.map(item=>{
+            newData.push(item.data);
+            return true;
+         })
+        yield put(getRecentPlaylistSuccess(newData));
     }
     catch {
         yield put(getRecentPlaylistFailed('error'))
@@ -198,7 +207,7 @@ function* watchFetchAlbumTrack({ payload }) {
             res = yield call(api.getAlbumTracks, payload);
             yield put(getAlbumTracksSuccess(res.data));
         }
-       
+
     }
     catch {
         yield put(getAlbumFailed('error'));
@@ -235,7 +244,7 @@ function* watchUnFollowArtist({ payload }) {
 function* watchFetchSavedTracks() {
     try {
         const res = yield call(api.getMySavedTracks, { limit: 50 });
-       // const dt= yield select(res);      
+        // const dt= yield select(res);      
         yield put(GetSavedTracksSuccess(res.data))
     }
     catch {
@@ -283,22 +292,22 @@ function* watchUpdatePlaylistDetail({ payload }) {
     }
 }
 function* watchAddItemToPlaylist({ payload }) {
+    const { data } = payload;
     let uri = `${payload.uris}`;
-    function pad2(n) {
-        return (n < 10 ? '0' : '') + n;
+    let item = null;
+    if (data.track === undefined) {
+        item = {
+            added_at: constants.getFormattedDate(),
+            data
+        }
     }
-    let date = new Date();
-    let month = pad2(date.getMonth() + 1);
-    let day = pad2(date.getDate());
-    let year = date.getFullYear();
-    let formattedDate = year + "-" + month + "-" + day + "T" + date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds() + "Z";
-    let data = {
-        added_at: formattedDate,
-        track: payload.data
+    item = {
+        added_at: constants.getFormattedDate(),
+        track: data
     }
     try {
         yield call(api.addItemToPlaylist, payload.id, uri);
-        yield put(addItemToPlaylistSuccess(data))
+        yield put(addItemToPlaylistSuccess(item))
     }
     catch {
         yield put(addItemToPlaylistFailed('error'))
@@ -306,6 +315,9 @@ function* watchAddItemToPlaylist({ payload }) {
 }
 function* watchSaveTracks({ payload }) {
     let ids = `${payload.ids}`;
+    if (payload.data.added_at === undefined) {
+        payload.data = { ...payload.data, added_at: constants.getFormattedDate() }
+    }
     try {
         yield call(api.saveTracks, ids);
         yield put(SaveTracksSuccess(payload.data))
@@ -314,31 +326,31 @@ function* watchSaveTracks({ payload }) {
         yield put(SaveTracksFailed('error'))
     }
 }
-function* watchRemoveFromTracks({payload}){
-    try{
-        yield call(api.removeFromTracks,payload);
+function* watchRemoveFromTracks({ payload }) {
+    try {
+        yield call(api.removeFromTracks, payload);
         yield put(RemoveFromTracksSuccess(payload));
     }
-    catch{
+    catch {
         yield put(RemoveFromTracksFailed('error'))
     }
 }
-function* watchRemoveItemFromPlaylist({payload}){
-    let data=[{"uri":payload.uris.track.uri}]
-    try{
-        yield call(api.removeItemFromPlaylist,payload.id,data);
+function* watchRemoveItemFromPlaylist({ payload }) {
+    let data = [{ "uri": payload.uris.track.uri }]
+    try {
+        yield call(api.removeItemFromPlaylist, payload.id, data);
         yield put(removeItemFromPlaylistSuccess(payload))
     }
-    catch{
+    catch {
         yield put(removeItemFromPlaylistFailed('error'))
-    }   
+    }
 }
-function* watchFetchShow({payload}){
-    try{
-        const res=yield call(api.getShow,payload);
+function* watchFetchShow({ payload }) {
+    try {
+        const res = yield call(api.getShow, payload);
         yield put(getShowSuccess(res.data))
     }
-    catch{
+    catch {
         yield put(getShowFailed('error'))
     }
 }
@@ -373,6 +385,6 @@ function* rootSaga() {
     yield takeEvery(constants.SAVE_TRACKS, watchSaveTracks);
     yield takeEvery(constants.REMOVE_FROM_TRACKS, watchRemoveFromTracks);
     yield takeEvery(constants.REMOVE_ITEM_FROM_PLAYLIST, watchRemoveItemFromPlaylist);
-    
+
 }
 export default rootSaga;

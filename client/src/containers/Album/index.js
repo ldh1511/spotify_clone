@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import './styles.css';
 import { bindActionCreators } from 'redux';
-import { getAlbum, getArtistAlbum, GetSavedTracks } from '../../redux/actions/info';
+import { getAlbum, getArtistAlbum, GetSavedTracks, getPredominantColor } from '../../redux/actions/info';
 import { connect } from 'react-redux';
 import Banner from '../../components/Banner';
 import TrackTable from '../../components/TrackTable';
@@ -26,7 +26,12 @@ Album.defaultProps = {
     }
 }
 function Album(props) {
-    const { location, getAlbumAction, albumInfo, getArtistAlbumAction, relatedAlbum, getSavedTracksAction, savedTracks } = props;
+    const { location, 
+        getAlbumAction, 
+        albumInfo, getArtistAlbumAction, 
+        relatedAlbum, getSavedTracksAction, 
+        savedTracks, getPredominantColorAction,
+        predominantColor } = props;
     const { images, name, tracks, type, artists, release_date, id } = albumInfo;
     let pathname = location.pathname.split('/');
     let match = pathname[pathname.length - 1];
@@ -78,6 +83,8 @@ function Album(props) {
                 description={release_date.split('-')[0]}
                 owner={getNameArtist(artists)}
                 type={type}
+                getPredominantColor={getPredominantColorAction}
+                predominantColor={predominantColor}
             />
             <TrackTable data={tracks.items} note='album-track' savedTracks={savedTracks}/>
             {renderCardBlock()}
@@ -89,6 +96,7 @@ const mapStateToProps = (state) => {
         albumInfo: state.album.albumInfo,
         relatedAlbum: state.album.relatedAlbum,
         savedTracks: state.tracks.savedTracks,
+        predominantColor:state.ui.predominantColor
     }
 }
 const mapDispatchToProps = (dispatch) => {
@@ -96,6 +104,7 @@ const mapDispatchToProps = (dispatch) => {
         getAlbumAction: bindActionCreators(getAlbum, dispatch),
         getArtistAlbumAction: bindActionCreators(getArtistAlbum, dispatch),
         getSavedTracksAction: bindActionCreators(GetSavedTracks, dispatch),
+        getPredominantColorAction:bindActionCreators(getPredominantColor, dispatch),
     }
 }
 export default connect(mapStateToProps, mapDispatchToProps)(Album);

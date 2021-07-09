@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { getCategories, GetSavedTracks } from '../../redux/actions/info';
+import { getCategories, GetSavedTracks, RemoveFromTracks, SaveTracks } from '../../redux/actions/info';
 import './styles.css';
 import CategoriesList from '../../components/CategoriesList';
 import SearchBar from '../../components/SearchBar';
@@ -32,7 +32,12 @@ Search.defaultProps = {
     param: ''
 }
 function Search(props) {
-    const { getCategoriesAction, categories, search, param, savedTracks, getSavedTracksAction } = props;
+    const { getCategoriesAction, 
+        categories, search, 
+        param, savedTracks, 
+        getSavedTracksAction, SaveTracksAction,
+        removeFromTracksAction
+     } = props;
     useEffect(() => {
         getCategoriesAction();
         getSavedTracksAction();
@@ -52,7 +57,12 @@ function Search(props) {
         let xhtml = null;
         let data = tracks.items.slice(0,5);
         if (tracks.items.length > 0) {
-            xhtml = <CardBlock data={data} name="tracks" param={param} type='track' savedTracks={savedTracks}/>
+            xhtml = <CardBlock data={data} name="tracks" 
+            param={param} type='track' 
+            savedTracks={savedTracks}
+            SaveTracksAction={SaveTracksAction}
+            removeFromTrack={removeFromTracksAction}
+            />
         }
         return xhtml;
     }
@@ -110,6 +120,8 @@ const mapDispatchToProps = (dispatch) => {
     return {
         getCategoriesAction: bindActionCreators(getCategories, dispatch),
         getSavedTracksAction: bindActionCreators(GetSavedTracks, dispatch),
+        SaveTracksAction: bindActionCreators(SaveTracks, dispatch),
+        removeFromTracksAction: bindActionCreators(RemoveFromTracks, dispatch),
     }
 }
 export default connect(mapStateToProps, mapDispatchToProps)(Search);

@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import './styles.css';
-import { FollowArtist, getArtist, getArtistFollowed, GetSavedTracks, UnFollowArtist } from '../../redux/actions/info';
+import { FollowArtist, getArtist, getArtistFollowed, GetSavedTracks, UnFollowArtist, getPredominantColor } from '../../redux/actions/info';
 import TrackTable from '../../components/TrackTable';
 import CardBlock from '../../components/CardBlock';
 import Banner from '../../components/Banner';
@@ -37,7 +37,8 @@ function Artist(props) {
         FollowArtistAction,
         UnFollowArtistAction,
         getArtistFollowedAction,
-        savedTracks, getSavedTracksAction  } = props;
+        savedTracks, getSavedTracksAction,
+        getPredominantColorAction, predominantColor  } = props;
     const { items } = followedArtists, { id } = artist;
     let pathname = location.pathname.split('/');
     let match = pathname[pathname.length - 1];
@@ -136,6 +137,8 @@ function Artist(props) {
                 id={id}
                 follow={FollowArtistAction}
                 unfollow={UnFollowArtistAction}
+                getPredominantColor={getPredominantColorAction}
+                predominantColor={predominantColor}
             />
             <div className="playlist-detail">
                 {renderPlaylists()}
@@ -155,6 +158,7 @@ const mapStateToProps = state => {
         singles: state.artist.singles,
         followedArtists: state.artist.followedArtists,
         savedTracks: state.tracks.savedTracks,
+        predominantColor:state.ui.predominantColor
     }
 };
 const mapDispatchToProps = (dispatch) => {
@@ -164,6 +168,7 @@ const mapDispatchToProps = (dispatch) => {
         UnFollowArtistAction: bindActionCreators(UnFollowArtist, dispatch),
         getArtistFollowedAction: bindActionCreators(getArtistFollowed, dispatch),
         getSavedTracksAction: bindActionCreators(GetSavedTracks, dispatch),
+        getPredominantColorAction:bindActionCreators(getPredominantColor, dispatch),
     }
 }
 export default connect(mapStateToProps, mapDispatchToProps)(Artist);

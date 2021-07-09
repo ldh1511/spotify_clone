@@ -5,7 +5,9 @@ const uiInitialState = {
     openModal:false,
     openTrackMenu:false,
     albumId:null,
-    artists:null
+    artists:null,
+    predominantColor:'#121212',
+    test:null
 }
 const ui = (state = uiInitialState, action) => {
     switch (action.type) {
@@ -53,6 +55,11 @@ const ui = (state = uiInitialState, action) => {
             return{
                 ...state,
                 openTrackMenu:false
+            }
+        case constants.GET_PREDOMINANT_COLOR:
+            return{
+                ...state,
+                predominantColor:action.payload
             }
         default:
             return state

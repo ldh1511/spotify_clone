@@ -6,7 +6,7 @@ import TrackTable from '../../components/TrackTable';
 import TrackMenu from '../../components/TrackMenu';
 import CollectionSearch from '../CollectionSearch';
 import Modal from '../../components/Modal';
-import { CloseModal, getCurrentImg, GetSavedTracks, getTracksPlaylist, getUserInfo, OpenModal, RemoveFromTracks, SaveTracks, updatePlaylistDetail, uploadPlaylistImage } from '../../redux/actions/info';
+import { CloseModal, getCurrentImg, GetSavedTracks, getTracksPlaylist, getUserInfo, OpenModal, RemoveFromTracks, SaveTracks, updatePlaylistDetail, uploadPlaylistImage, getPredominantColor } from '../../redux/actions/info';
 import { closeTrackMenu, openTrackMenu } from '../../redux/actions/ui';
 import './styles.css';
 import PropTypes from 'prop-types';
@@ -47,7 +47,8 @@ function Playlist(props) {
         UploadPlaylistImgAction, getCurrentImgAction,
         currentImg, updatePlaylistDetailAction,
         openTrackMenuAction, getSavedTracksAction, savedTracks, SaveTracksAction,
-        removeFromTracksAction, info } = props;
+        removeFromTracksAction, info,
+        getPredominantColorAction, predominantColor } = props;
     let pathname = location.pathname.split('/');
     let match = pathname[pathname.length - 1];
     useEffect(() => {
@@ -83,6 +84,8 @@ function Playlist(props) {
                 openModal={OpenModalAction}
                 getCurImg={getCurrentImgAction}
                 currentImg={currentImg}
+                getPredominantColor={getPredominantColorAction}
+                predominantColor={predominantColor}
             />
             <div className="playlist-detail">
                 <TrackTable
@@ -119,7 +122,8 @@ const mapStateToProps = state => {
         stateTrackMenu: state.ui.openTrackMenu,
         currentImg: state.images.currentImg,
         savedTracks: state.tracks.savedTracks,
-        info: state.info
+        info: state.info,
+        predominantColor:state.ui.predominantColor
     }
 }
 const mapDispatchToProps = (dispatch) => {
@@ -136,6 +140,7 @@ const mapDispatchToProps = (dispatch) => {
         getSavedTracksAction: bindActionCreators(GetSavedTracks, dispatch),
         SaveTracksAction: bindActionCreators(SaveTracks, dispatch),
         removeFromTracksAction: bindActionCreators(RemoveFromTracks, dispatch),
+        getPredominantColorAction:bindActionCreators(getPredominantColor, dispatch), 
     }
 }
 export default connect(mapStateToProps, mapDispatchToProps)(Playlist);

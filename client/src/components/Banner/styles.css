@@ -4,6 +4,7 @@
     padding: 20px 25px;
     background-image: linear-gradient(transparent,#121212);
     background-color: #210c54;
+    padding-top:75px;
 }
 .banner-img{
     width: 240px;
@@ -13,6 +14,8 @@
     position:relative;
     background:#333;
     box-shadow: 0 4px 60px rgb(0 0 0 / 50%);
+    min-width: 240px;
+    min-height: 240px;
 }
 .banner-img svg{
     color:#b3b3b3;

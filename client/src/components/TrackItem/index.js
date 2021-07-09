@@ -2,16 +2,23 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import './styles.css';
 TrackItem.propTypes = {
-    name_track:PropTypes.string
+    name_track: PropTypes.string
 };
 
 function TrackItem(props) {
-    const { i, name_track, add_at, duration, image, name_artist, name_album, note, openTrackMenu, albumId, id_artist, id, checked, SaveTracksAction, data, removeFromTrack } = props;
-    const handleSaveTrack=(checkState, idTrack, dataTrack)=>{
-        if(checkState===false){
-            SaveTracksAction(idTrack,dataTrack)
+    const { i, name_track, add_at,
+        duration, image, name_artist,
+        name_album, note, openTrackMenu,
+        albumId, id_artist, id, checked,
+        SaveTracksAction, data, removeFromTrack } = props;
+
+    const handleSaveTrack = (checkState, idTrack, dataTrack) => {
+        let curData = dataTrack.track === undefined ?
+            { track: dataTrack } : dataTrack
+        if (checkState === false) {
+            SaveTracksAction(idTrack, curData)
         }
-        else{
+        else {
             removeFromTrack(idTrack)
         }
     }
@@ -28,9 +35,10 @@ function TrackItem(props) {
                     </div>
                 </td>
                 <td>
-                <i className={checked===true?`fas fa-heart item-icon active`:`far fa-heart item-icon`}></i>
+                    <i className={checked === true ? `fas fa-heart item-icon active` : `far fa-heart item-icon`}
+                        onClick={() => handleSaveTrack(checked, id, data)}
+                    ></i>
                     <p>{duration}</p>
-
                 </td>
             </tr>)
         } else if (note === 'album-track') {
@@ -44,7 +52,6 @@ function TrackItem(props) {
                 <td>
                     <i className={checked === true ? `fas fa-heart item-icon active` : `far fa-heart item-icon`}></i>
                     <p>{duration}</p>
-
                 </td>
             </tr>)
         } else {
@@ -61,7 +68,7 @@ function TrackItem(props) {
                 <td>{add_at}</td>
                 <td>
                     <i className={checked === true ? `fas fa-heart item-icon active` : `far fa-heart item-icon`}
-                    onClick={()=>handleSaveTrack(checked,id,data)}
+                        onClick={() => handleSaveTrack(checked, id, data)}
                     ></i>
                     <p>{duration}</p>
                     <i className="fas fa-ellipsis-h track-item--btn"

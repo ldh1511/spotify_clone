@@ -600,3 +600,9 @@ export const getShowFailed=(data)=>{
     }
 }
 
+export const getPredominantColor=(color)=>{
+    return{
+        type:constants.GET_PREDOMINANT_COLOR,
+        payload:color
+    }
+}

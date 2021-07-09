@@ -25,7 +25,7 @@ Dashboard.defaultProps = {
   info: ''
 }
 function Dashboard(props) {
-  const { getUserPlaylistAction, info, playlist, logoutAction } = props;
+  const { getUserPlaylistAction, info, playlist, logoutAction, predominantColor } = props;
   useEffect(() => {
     if (info.id) {
       getUserPlaylistAction(info.id)
@@ -37,7 +37,10 @@ function Dashboard(props) {
       <Sidebar items={playlist.items} />
       <div className="dashboard-content">
         <ContentLoading />
-        <Header images={info.images} name={info.display_name} logoutAction={logoutAction}/>
+        <Header 
+        images={info.images} name={info.display_name} logoutAction={logoutAction}
+        predominantColor={predominantColor}
+        />
         <Switch>
           <Route exact path='/' component={Home} />
           <Route path='/playlist' component={Playlist} />
@@ -85,13 +88,15 @@ function Dashboard(props) {
 const mapStateToProps = state => {
   return {
     info: state.info,
-    playlist: state.playlist
+    playlist: state.playlist,
+    predominantColor:state.ui.predominantColor
   }
 }
 const mapDispatchToProps = dispatch => {
   return {
     getUserPlaylistAction: bindActionCreators(getUserPlaylist, dispatch),
     logoutAction: bindActionCreators(logout, dispatch), 
+
   }
 }
 export default connect(mapStateToProps, mapDispatchToProps)(Dashboard);

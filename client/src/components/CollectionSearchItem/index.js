@@ -10,9 +10,8 @@ CollectionSearchItem.defaultProps = {
     }
 }
 function CollectionSearchItem(props) {
-    const { data, setLevelData, defaultimg, addItem, idPlaylist } = props;
+    const { data, setLevelData, defaultimg, addItem, idPlaylist, albumInfo } = props;
     const { type, name, images, id, uri } = data;
-    console.log(data);
     let newImage = images && images.length !== 0 ? images : [{ url: '' }];
     let albumImage = data.album && data.album.images && data.album.images.length !== 0 ? data.album.images : [{ url: defaultimg }]
     const renderDescription = () => {
@@ -45,6 +44,21 @@ function CollectionSearchItem(props) {
                 break;
         }
     }
+    const handleAddItem=()=>{
+        let newData =data;
+        console.log(data);
+        if(data.album===undefined ){
+            newData={
+                ...newData,
+                album:albumInfo
+            }
+            addItem(idPlaylist,uri, newData)
+        }
+        else{
+            addItem(idPlaylist,uri, data);
+            
+        }
+    }
     return (
         <div className="collection-search--item" onClick={() => handleClick(id, type)}>
             <div className="search-item--left">
@@ -62,7 +76,7 @@ function CollectionSearchItem(props) {
             <div className="search-item--right">
                 {type !== "track" ?
                     <i className="fas fa-chevron-right"></i> :
-                    <button onClick={() => addItem(idPlaylist,uri, data)}>Thêm</button>
+                    <button onClick={() => handleAddItem()}>Thêm</button>
                 }
             </div>
         </div>

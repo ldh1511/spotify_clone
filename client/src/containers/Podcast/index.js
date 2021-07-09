@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import './styles.css';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { getShow } from '../../redux/actions/info';
+import { getShow, getPredominantColor } from '../../redux/actions/info';
 import Banner from '../../components/Banner';
 import PodcastList from'../../components/PodcastList';
 import PodcastDescription from'../../components/PodcastDescription';
@@ -19,7 +19,9 @@ Podcast.defaultProps = {
     episodes:{items:[]}
 }
 function Podcast(props) {
-    const {location, getShowAction, showInfo, episodes}=props;
+    const {location, getShowAction, 
+        showInfo, episodes, 
+        getPredominantColorAction, predominantColor}=props;
     let pathname = location.pathname.split('/');
     let match = pathname[pathname.length - 1];
     useEffect(() => {
@@ -35,6 +37,8 @@ function Podcast(props) {
                 owner={showInfo.publisher}
                 type={showInfo.type}
                 custom={false}
+                getPredominantColor={getPredominantColorAction}
+                predominantColor={predominantColor}
             />
             <div className="podcast-content">
                 <PodcastList data={episodes.items}/>
@@ -45,13 +49,15 @@ function Podcast(props) {
 }
 const mapDispatchToProps =(dispatch) => {
     return{
-        getShowAction:bindActionCreators(getShow,dispatch)
+        getShowAction:bindActionCreators(getShow,dispatch),
+        getPredominantColorAction:bindActionCreators(getPredominantColor, dispatch),
     }
 };
 const mapStateToProps = (state)=>{
     return{
         showInfo:state.show.showInfo,
         episodes:state.show.episodes,
+        predominantColor:state.ui.predominantColor
     }
 };
 export default connect(mapStateToProps, mapDispatchToProps)(Podcast);
