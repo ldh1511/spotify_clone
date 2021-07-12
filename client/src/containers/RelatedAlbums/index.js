@@ -14,7 +14,6 @@ RelatedAlbums.defaultProps = {
 function RelatedAlbums(props) {
     const {relatedAlbum}=props;
     const {items}=relatedAlbum;
-    console.log(items);
     const renderCardList = () => {
         let xhtml = null;
         let newItems=items.filter(item=>item.album_type==='album');

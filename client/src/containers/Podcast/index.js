@@ -26,8 +26,7 @@ function Podcast(props) {
     let match = pathname[pathname.length - 1];
     useEffect(() => {
         getShowAction(match);
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    },[match])
+    },[match,getShowAction])
     return (
         <div className="podcast-container">
             <Banner

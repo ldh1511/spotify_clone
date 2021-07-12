@@ -21,8 +21,7 @@ function Gene(props) {
     let match = pathname[pathname.length - 1];
     useEffect(() => {
         getCategoryAction(match);
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [])
+    }, [getCategoryAction,match])
     const renderCardList=()=>{
         let xhtml=null;
         xhtml=<CardList data={categoryPlaylist} type='playlist'/>

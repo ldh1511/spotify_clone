@@ -1,11 +1,11 @@
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 import './styles.css';
 import CollectionSearchBar from '../../components/CollectionSearchBar';
 import CollectionSearchList from '../../components/CollectionSearchList';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { getAlbumTracks, getArtist, addItemToPlaylist, getAlbum } from '../../redux/actions/info';
+import { getAlbumTracks, getArtist, addItemToPlaylist, getAlbum, Search } from '../../redux/actions/info';
 CollectionSearch.propTypes = {
     sortResult: PropTypes.array
 };
@@ -22,13 +22,15 @@ CollectionSearch.defaultProps = {
         images:[{url:''}]
     }}
 }
+
 function CollectionSearch(props) {
-    const { sortResult, searchResult, getArtistAction, topTracks, topAlbums, artistInfo, getAlbumTracksAction, albumtracks, idPlaylist, addItemToPlaylistAction, getAlbumAction, album } = props;
+    const { sortResult, searchResult, getArtistAction, topTracks, topAlbums, artistInfo, getAlbumTracksAction, albumtracks, idPlaylist, addItemToPlaylistAction, getAlbumAction, album, param, searchAction } = props;
     const { albums, artists, tracks } = searchResult;
     const [level, setLevel] = useState([0]);
     const [name, setName] = useState(['default']);
     const [defaultimg, setImg] = useState();
-    const [titleName, setTitleName]=useState(null)
+    const [titleName, setTitleName]=useState(null);
+
     const setLevelData = (idLevel, type, id, defaultImg, titleName) => {
         if (typeof idLevel === 'number') {
             setLevel([...level, idLevel])
@@ -46,7 +48,6 @@ function CollectionSearch(props) {
             getAlbumTracksAction(id);
             setImg(defaultImg);
             setTitleName(titleName);
-            
         }
     }
     const renderName = () => {
@@ -138,6 +139,7 @@ const mapDispatchToProps = (dispatch) => {
         getAlbumTracksAction: bindActionCreators(getAlbumTracks, dispatch),
         addItemToPlaylistAction: bindActionCreators(addItemToPlaylist, dispatch),
         getAlbumAction: bindActionCreators(getAlbum, dispatch),
+        searchAction: bindActionCreators(Search, dispatch)
     }
 }
 const mapStateToProps = (state) => {
@@ -149,6 +151,7 @@ const mapStateToProps = (state) => {
         artistInfo: state.artist.artistInfo,
         albumtracks: state.artist.albumtracks,
         album: state.album,
+        param:state.search.param
     }
 }
 export default connect(mapStateToProps, mapDispatchToProps)(CollectionSearch);

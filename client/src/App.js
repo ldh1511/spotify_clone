@@ -2,7 +2,7 @@ import './App.css';
 import Login from './containers/Login';
 import Dashboard from './components/Dashboard';
 import GLobalLoading from './components/GlobalLoading';
-import { useEffect, useState } from 'react';
+import React,{ useEffect } from 'react';
 import { getTokenFromUrl } from './spotify';
 import { getUserInfo, setToken } from './redux/actions/info';
 import { bindActionCreators } from 'redux';
@@ -11,14 +11,13 @@ import { getToken } from './apis/info';
 import { login } from './redux/actions/ui';
 function App(props) {
   const { getUserInfoAction, loginToken, loginAction } = props;
-  // const [token, setToken] = useState(null);
   const curToken = localStorage.getItem('token');
-  useEffect(() => {
+  useEffect(() => { 
+    
     if (!curToken) {
       const code = getTokenFromUrl();
       const setTokenActions = async () => {
         let res = await getToken(code);
-        // setAccessTokenAction(res.data.access_token);
         localStorage.setItem('token',res.data.access_token);
         loginAction(res.data.access_token);
         window.history.pushState({}, null, "/");
@@ -30,8 +29,8 @@ function App(props) {
       loginAction(curToken);
       getUserInfoAction();
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  },[loginToken] )
+    
+  },[loginToken,getUserInfoAction,curToken,loginAction] )
   return (
     <div className="App">
       {loginToken !== null ?

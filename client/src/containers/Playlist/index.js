@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import Banner from '../../components/Banner';
@@ -6,7 +6,7 @@ import TrackTable from '../../components/TrackTable';
 import TrackMenu from '../../components/TrackMenu';
 import CollectionSearch from '../CollectionSearch';
 import Modal from '../../components/Modal';
-import { CloseModal, getCurrentImg, GetSavedTracks, getTracksPlaylist, getUserInfo, OpenModal, RemoveFromTracks, SaveTracks, updatePlaylistDetail, uploadPlaylistImage, getPredominantColor } from '../../redux/actions/info';
+import { CloseModal, getCurrentImg, GetSavedTracks, getTracksPlaylist, getUserInfo, OpenModal, RemoveFromTracks, SaveTracks, updatePlaylistDetail, uploadPlaylistImage, getPredominantColor, Search } from '../../redux/actions/info';
 import { closeTrackMenu, openTrackMenu } from '../../redux/actions/ui';
 import './styles.css';
 import PropTypes from 'prop-types';
@@ -48,7 +48,7 @@ function Playlist(props) {
         currentImg, updatePlaylistDetailAction,
         openTrackMenuAction, getSavedTracksAction, savedTracks, SaveTracksAction,
         removeFromTracksAction, info,
-        getPredominantColorAction, predominantColor } = props;
+        getPredominantColorAction, predominantColor, searchAction } = props;
     let pathname = location.pathname.split('/');
     let match = pathname[pathname.length - 1];
     useEffect(() => {
@@ -57,27 +57,41 @@ function Playlist(props) {
         }
         getUserInfoAction();
         getSavedTracksAction();
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [match]);
+    }, [match, getTracksInPlaylist, getUserInfoAction, getSavedTracksAction]);
+    const wrapperRef = useRef(null);
+    function useOutsideAlerter(ref) {
+        useEffect(() => {
+            function handleClickOutside(event) {
+                if (ref.current && !ref.current.contains(event.target)) {
+                    searchAction('');
+                }
+            }
+            document.addEventListener("mousedown", handleClickOutside);
+            return () => {
+                document.removeEventListener("mousedown", handleClickOutside);
+            };
+        }, [ref]);
+    }
+    useOutsideAlerter(wrapperRef);
     const getImage = () => {
-        if(match === 'tracks'){
+        if (match === 'tracks') {
             return ''
         }
-        else{
-            if(playlistInfo.images && playlistInfo.images[0]){
+        else {
+            if (playlistInfo.images && playlistInfo.images[0]) {
                 return playlistInfo.images[0].url
             }
-            else{
+            else {
                 return ''
             }
         }
     }
     return (
-        <div className="playlist">
+        <div ref={wrapperRef} className="playlist">
             <Banner
                 name={match !== 'tracks' ? playlistInfo.name : 'Bài hát đã thích'}
                 image={getImage()}
-                description={match !== 'tracks' ? playlistInfo.description:''}
+                description={match !== 'tracks' ? playlistInfo.description : ''}
                 owner={match !== 'tracks' ? playlistInfo.owner.display_name : info.display_name}
                 type={match !== 'tracks' ? playlistInfo.type : 'playlist'}
                 custom={id === playlistInfo.owner.id ? true : false}
@@ -123,7 +137,8 @@ const mapStateToProps = state => {
         currentImg: state.images.currentImg,
         savedTracks: state.tracks.savedTracks,
         info: state.info,
-        predominantColor:state.ui.predominantColor
+        predominantColor: state.ui.predominantColor,
+        param:state.search.param
     }
 }
 const mapDispatchToProps = (dispatch) => {
@@ -140,7 +155,8 @@ const mapDispatchToProps = (dispatch) => {
         getSavedTracksAction: bindActionCreators(GetSavedTracks, dispatch),
         SaveTracksAction: bindActionCreators(SaveTracks, dispatch),
         removeFromTracksAction: bindActionCreators(RemoveFromTracks, dispatch),
-        getPredominantColorAction:bindActionCreators(getPredominantColor, dispatch), 
+        getPredominantColorAction: bindActionCreators(getPredominantColor, dispatch),
+        searchAction: bindActionCreators(Search, dispatch)
     }
 }
 export default connect(mapStateToProps, mapDispatchToProps)(Playlist);

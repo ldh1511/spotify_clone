@@ -31,17 +31,15 @@ function Home(props) {
         getArtistFollowedAction
     } = props;
     useEffect(() => {
-        getRecentPlaylistAcion()
-        getContentHomeAction()
-        getArtistFollowedAction()
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [])
+        getRecentPlaylistAcion();
+        getContentHomeAction();
+        getArtistFollowedAction();
+    }, [getRecentPlaylistAcion,getContentHomeAction,getArtistFollowedAction])
     const renderCategoriesPlaylists = () => {
         let categoriesPlaylistsLimit = categoriesPlaylists.map(item => (
             item = item.playlists.items.filter((e, i) => i < 5)
         ))
         let xhtml = null;
-
         xhtml = categories.map((item, i) => (
             <CardBlock
                 key={item.id}

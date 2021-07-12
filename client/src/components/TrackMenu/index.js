@@ -1,9 +1,9 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 import './styles.css';
 import { bindActionCreators } from 'redux';
 import { closeTrackMenu } from '../../redux/actions/ui';
-import { SaveTracks, removeItemFromPlaylist } from '../../redux/actions/info';
+import { SaveTracks, removeItemFromPlaylist, RemoveFromTracks } from '../../redux/actions/info';
 import { connect } from 'react-redux';
 import { NavLink } from 'react-router-dom';
 TrackMenu.propTypes = {
@@ -13,15 +13,34 @@ TrackMenu.defaultProps = {
     idArtists: [],
     nameArtists: [],
     playlist: [],
-    currentPlaylist: {}
+    currentPlaylist: {},
+    savedTracks: { items: [] }
 }
 function TrackMenu(props) {
     const { stateTrackMenu, closeTrackMenu,
         albumId, nameArtists,
         idArtists, SaveTracksAction,
         idTracks, dataTracks, playlist, currentPlaylist,
-        removeTrackAction } = props;
+        removeTrackAction, savedTracks,
+        removeFromTracksAction } = props;
     let check = playlist.filter(item => item.id && item.id === currentPlaylist.id);
+    let savedTrackCheck = savedTracks.items.filter(item => item.track.id === idTracks);
+
+    function useOutsideAlerter(ref) {
+        useEffect(() => {
+            function handleClickOutside(event) {
+                if (ref.current && !ref.current.contains(event.target) && stateTrackMenu === true) {
+                    closeTrackMenu();
+                }
+            }
+            document.addEventListener("mousedown", handleClickOutside);
+            return () => {
+                document.removeEventListener("mousedown", handleClickOutside);
+            };
+        }, [ref, stateTrackMenu]);
+    }
+    const wrapperRef = useRef(null);
+    useOutsideAlerter(wrapperRef);
     const renderSubMenu = () => {
         let xhtml = null;
         if (idArtists.length > 1) {
@@ -43,15 +62,25 @@ function TrackMenu(props) {
         removeTrackAction(currentPlaylist.id, dataTracks, idTracks);
         closeTrackMenu();
     }
+    const handleRemoveSavedTrack=()=>{
+        removeFromTracksAction(idTracks);
+        closeTrackMenu();
+    }
     return (
-        <div className={stateTrackMenu === true ? "track-menu" : "track-menu hidden"}>
+        <div ref={wrapperRef} className={stateTrackMenu === true ? "track-menu" : "track-menu hidden"}>
             <i className="fas fa-times" onClick={() => closeTrackMenu()}></i>
             <ul>
                 {check.length > 0 ?
                     <li onClick={() => handleRemoveTrack()}>Xóa khỏi danh sách phát này</li>
                     : <></>
                 }
-                <li onClick={() => handleSaveTrack()}>Lưu vào Bài hát đã thích của bạn</li>
+                {savedTrackCheck.length === 0 ?
+                    <li onClick={() => handleSaveTrack()}>Lưu vào Bài hát đã thích của bạn</li>
+                    :
+                    <li onClick={() => handleRemoveSavedTrack()}>
+                        Xóa khỏi Bài hát đã thích của bạn
+                    </li>
+                }
                 <li onClick={() => closeTrackMenu()}><NavLink to={`/album/${albumId}`}>Chuyển tới album</NavLink></li>
                 <li onClick={() => closeTrackMenu()}>
                     {idArtists.length === 1 ?
@@ -73,14 +102,16 @@ const mapStateToProps = (state) => {
         idTracks: state.ui.idTracks,
         dataTracks: state.ui.dataTracks,
         playlist: state.playlist.items,
-        currentPlaylist: state.tracks.playlistInfo
+        currentPlaylist: state.tracks.playlistInfo,
+        savedTracks: state.tracks.savedTracks
     }
 }
 const mapDispatchToProps = (dispatch) => {
     return {
         closeTrackMenu: bindActionCreators(closeTrackMenu, dispatch),
         SaveTracksAction: bindActionCreators(SaveTracks, dispatch),
-        removeTrackAction: bindActionCreators(removeItemFromPlaylist, dispatch)
+        removeTrackAction: bindActionCreators(removeItemFromPlaylist, dispatch),
+        removeFromTracksAction: bindActionCreators(RemoveFromTracks, dispatch),
     }
 }
 export default connect(mapStateToProps, mapDispatchToProps)(TrackMenu);

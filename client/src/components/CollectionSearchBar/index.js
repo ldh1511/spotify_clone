@@ -5,12 +5,10 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
 function CollectionSearchBar(props) {
-    const { searchAction, type } = props;
+    const { searchAction, type, param } = props;
     const handleOnChange = (e) => {
         const { value } = e.target;
-       // if (value != '') {
             searchAction(value.substring().toLowerCase())
-        //}
     }
     return (
         <div className={type==="default-search"?"search-bar":"search-bar--collection"}>
@@ -19,6 +17,7 @@ function CollectionSearchBar(props) {
                 type="text"
                 className="form-control"
                 name="search-bar"
+                value={param}
                 placeholder={
                     type==="default-search"?"Artist, Song or Podcast":"Tìm bài hát và tập podcast"
                 }
@@ -28,7 +27,11 @@ function CollectionSearchBar(props) {
         </div>
     );
 }
-const mapStateToProps = null;
+const mapStateToProps = (state)=>{
+    return{
+        param:state.search.param
+    }
+};
 const mapDispatchToProps = (dispatch) => {
     return {
         searchAction: bindActionCreators(Search, dispatch)

@@ -81,16 +81,16 @@ function* watchFetchRecentPlaylist() {
                 let id = item.context.uri;
                 id = id.split(':')[2];
                 idPlaylist.push(id);
-                return true;
             }
+            return true;
         })
         idPlaylist = Array.from(new Set(idPlaylist));
-         const resp = yield all(idPlaylist.map(item => call(api.getPlaylist, item)));
-         let newData=[];
-         resp.map(item=>{
+        const resp = yield all(idPlaylist.map(item => call(api.getPlaylist, item)));
+        let newData = [];
+        resp.map(item => {
             newData.push(item.data);
             return true;
-         })
+        })
         yield put(getRecentPlaylistSuccess(newData));
     }
     catch {
@@ -152,11 +152,23 @@ function* watchFetchCategories() {
     yield put(hideContentLoading());
 }
 function* Search({ payload }) {
-    try {
-        const res = yield call(api.search, payload, ["album", "track", "artist", "playlist", "show", "episode"], { limit: 50, market: 'VN' });
-        yield put(SearchValue(res.data));
+    if (payload !== '') {
+        try {
+            const res = yield call(api.search, payload, ["album", "track", "artist", "playlist", "show", "episode"], { limit: 50, market: 'VN' });
+            yield put(SearchValue(res.data));
+        }
+        catch {
+            yield put(SearchValue({
+                albums: { items: [] },
+                artists: { items: [] },
+                tracks: { items: [] },
+                playlists: { items: [] },
+                shows: { items: [] },
+                episodes: { items: [] }
+            }));
+        }
     }
-    catch {
+    else{
         yield put(SearchValue({
             albums: { items: [] },
             artists: { items: [] },

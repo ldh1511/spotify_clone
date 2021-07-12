@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useCallback, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import CollectionCard from '../../components/CollectionCard';
 import CardItem from '../../components/CardItem';
@@ -45,8 +45,7 @@ function Collection(props) {
     let pathname = location.pathname.split('/');
     let match = pathname[pathname.length - 1];
     let type = match.split('').slice(0, match.length - 1).join('');
-    useEffect(() => {
-        getUserPlaylistsAction(id);
+    const getData = (match) => {
         switch (match) {
             case 'playlists':
                 getSavedTracksAction();
@@ -64,8 +63,14 @@ function Collection(props) {
             default:
                 break;
         }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [match])
+    }
+    const test=useCallback(()=>{
+        getData(match);
+    },[match])
+    useEffect(() => {
+        getUserPlaylistsAction(id);
+        test();
+    }, [test,match,id,getUserPlaylistsAction])
     const renderCardList = () => {
         let xhtml = null, data = null;
         switch (match) {

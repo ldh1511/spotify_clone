@@ -15,5 +15,9 @@
     margin-right: 15px;
 }
 .collection-search--title h3{
-    font-weight: 500;
+    font-weight: 500 !important;
+}
+.collection-search--result h3{
+    color:white;
+    font-weight: 600;
 }

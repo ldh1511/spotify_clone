@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState  } from 'react';
 import PropTypes from 'prop-types';
 import './styles.css';
 Modal.propTypes = {
-    check:PropTypes.bool
+    check: PropTypes.bool
 };
 
 function Modal(props) {
@@ -22,6 +22,21 @@ function Modal(props) {
             description: description
         })
     }, [name, description])
+    function useOutsideAlerter(ref) {
+        useEffect(() => {
+            function handleClickOutside(event) {
+                if (ref.current && !ref.current.contains(event.target) && check===true) {
+                    closeModal();
+                }
+            }
+            document.addEventListener("mousedown", handleClickOutside);
+            return () => {
+                document.removeEventListener("mousedown", handleClickOutside);
+            };
+        }, [ref,check]);
+    }
+    const wrapperRef = useRef(null);
+    useOutsideAlerter(wrapperRef);
     const handleSelectImg = (event) => {
         setImg(event.target.files[0]);
         setImgSrc(URL.createObjectURL(event.target.files[0]))
@@ -41,7 +56,7 @@ function Modal(props) {
         setData({ ...data, [name]: value })
     }
     return (
-        <div className={check === true ? 'modal-container modal-active' : 'modal-container'}>
+        <div ref={wrapperRef} className={check === true ? 'modal-container modal-active' : 'modal-container'}>
             <div className='modal'>
                 <div className="modal-top">
                     <h2>Edit details</h2>

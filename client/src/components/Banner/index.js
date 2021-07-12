@@ -22,18 +22,18 @@ function Banner(props) {
         getPredominantColor, predominantColor } = props;
     const [followState, setFollowState] = useState(followed);
     let crossOrigin = "Anonymous";
-    const { data, loading, error } = useColor(image, 'hex', { crossOrigin });
+    const { data } = useColor(image, 'hex', { crossOrigin });
     useEffect(() => {
         setFollowState(followed);
     }, [followed])
     useEffect(() => {
         if (image !== '' && data !== undefined) {
-            getPredominantColor(data)
+            getPredominantColor(data);
         }
         else{
-            getPredominantColor('#333333')
+            getPredominantColor('#333333');
         }
-    }, [data])
+    }, [data,getPredominantColor,image])
     const handleFollow = (stateFollow) => {
         if (stateFollow === true) {
             unfollow(id)

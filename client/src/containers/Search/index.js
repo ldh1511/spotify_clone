@@ -1,8 +1,8 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { getCategories, GetSavedTracks, RemoveFromTracks, SaveTracks } from '../../redux/actions/info';
+import { getCategories, GetSavedTracks, RemoveFromTracks, SaveTracks, Search } from '../../redux/actions/info';
 import './styles.css';
 import CategoriesList from '../../components/CategoriesList';
 import SearchBar from '../../components/SearchBar';
@@ -16,37 +16,43 @@ Search.propTypes = {
 Search.defaultProps = {
     categories: [],
     search: {
-        albums: {
-            items: []
-        },
-        artists: {
-            items: []
-        },
-        playlists: {
-            items: []
-        },
-        tracks: {
-            items: []
-        }
+        albums: { items: [] },
+        artists: { items: [] },
+        playlists: { items: [] },
+        tracks: { items: [] }
     },
     param: ''
 }
-function Search(props) {
-    const { getCategoriesAction, 
-        categories, search, 
-        param, savedTracks, 
+function SearchPage(props) {
+    const { getCategoriesAction,
+        categories, search,
+        param, savedTracks,
         getSavedTracksAction, SaveTracksAction,
-        removeFromTracksAction
-     } = props;
+        removeFromTracksAction, searchAction
+    } = props;
+    const wrapperRef = useRef(null);
+    function useOutsideAlerter(ref) {
+        useEffect(() => {
+            function handleClickOutside(event) {
+                if (ref.current && !ref.current.contains(event.target)) {
+                    if (param !== '') {searchAction('')}
+                }
+            }
+            document.addEventListener("mousedown", handleClickOutside);
+            return () => {
+                document.removeEventListener("mousedown", handleClickOutside);
+            };
+        }, [ref]);
+    }
+    useOutsideAlerter(wrapperRef);
     useEffect(() => {
         getCategoriesAction();
         getSavedTracksAction();
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [])
+    }, [getCategoriesAction, getSavedTracksAction])
     const renderSearchPlaylists = () => {
         const { playlists } = search;
         let xhtml = null;
-        let data = playlists.items.slice(0,5);
+        let data = playlists.items.slice(0, 5);
         if (playlists.items.length > 0) {
             xhtml = <CardBlock data={data} name="playlists" param={param} type='playlist' />
         }
@@ -55,13 +61,13 @@ function Search(props) {
     const renderSearchTracks = () => {
         const { tracks } = search;
         let xhtml = null;
-        let data = tracks.items.slice(0,5);
+        let data = tracks.items.slice(0, 5);
         if (tracks.items.length > 0) {
-            xhtml = <CardBlock data={data} name="tracks" 
-            param={param} type='track' 
-            savedTracks={savedTracks}
-            SaveTracksAction={SaveTracksAction}
-            removeFromTrack={removeFromTracksAction}
+            xhtml = <CardBlock data={data} name="tracks"
+                param={param} type='track'
+                savedTracks={savedTracks}
+                SaveTracksAction={SaveTracksAction}
+                removeFromTrack={removeFromTracksAction}
             />
         }
         return xhtml;
@@ -69,7 +75,7 @@ function Search(props) {
     const renderSearchAlbums = () => {
         const { albums } = search;
         let xhtml = null;
-        let data = albums.items.slice(0,5);
+        let data = albums.items.slice(0, 5);
         if (albums.items.length > 0) {
             xhtml = <CardBlock data={data} name="albums" param={param} type='album' />
         }
@@ -78,7 +84,7 @@ function Search(props) {
     const renderSearchArtists = () => {
         const { artists } = search;
         let xhtml = null;
-        let data = artists.items.slice(0,5);
+        let data = artists.items.slice(0, 5);
         if (artists.items.length > 0) {
             xhtml = <CardBlock data={data} name="artists" param={param} type='artist' />
         }
@@ -102,8 +108,8 @@ function Search(props) {
         return xhtml;
     }
     return (
-        <div className="search-container">
-            <SearchBar type="default-search"/>
+        <div ref={wrapperRef} className="search-container">
+            <SearchBar type="default-search" />
             {renderSearchResult()}
         </div>
     );
@@ -122,6 +128,7 @@ const mapDispatchToProps = (dispatch) => {
         getSavedTracksAction: bindActionCreators(GetSavedTracks, dispatch),
         SaveTracksAction: bindActionCreators(SaveTracks, dispatch),
         removeFromTracksAction: bindActionCreators(RemoveFromTracks, dispatch),
+        searchAction: bindActionCreators(Search, dispatch)
     }
 }
-export default connect(mapStateToProps, mapDispatchToProps)(Search);
+export default connect(mapStateToProps, mapDispatchToProps)(SearchPage);
