@@ -606,3 +606,13 @@ export const getPredominantColor=(color)=>{
         payload:color
     }
 }
+
+export const getPreviewUrl=(track,listTracks)=>{
+    return{
+        type:constants.GET_PREVIEW_URL,
+        payload:{
+            track:track,
+            listTracks:listTracks
+        }
+    }
+}

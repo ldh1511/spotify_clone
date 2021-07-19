@@ -25,7 +25,7 @@ Dashboard.defaultProps = {
   info: ''
 }
 function Dashboard(props) {
-  const { getUserPlaylistAction, info, playlist, logoutAction, predominantColor } = props;
+  const { getUserPlaylistAction, info, playlist, logoutAction, predominantColor, music } = props;
   useEffect(() => {
     if (info.id) {
       getUserPlaylistAction(info.id)
@@ -81,7 +81,12 @@ function Dashboard(props) {
             )}/>
         </Switch>
       </div>
-      <Footer />
+      <Footer 
+      currentTrack={music.currentTrack} 
+      preview_url={music.preview_url} 
+      list_url={music.listUrl}
+      list_data={music.listData}
+      />
     </div>
   );
 };
@@ -89,7 +94,8 @@ const mapStateToProps = state => {
   return {
     info: state.info,
     playlist: state.playlist,
-    predominantColor:state.ui.predominantColor
+    predominantColor:state.ui.predominantColor,
+    music:state.music
   }
 }
 const mapDispatchToProps = dispatch => {

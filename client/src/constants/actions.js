@@ -136,7 +136,11 @@ export const GET_A_SHOW_FAILED = "GET_A_SHOW_FAILED";
 export const LOGIN = "LOGIN";
 export const LOGOUT = "LOGOUT";
 
-export const GET_PREDOMINANT_COLOR="GET_PREDOMINANT_COLOR"
+export const GET_PREDOMINANT_COLOR="GET_PREDOMINANT_COLOR";
+
+export const GET_PREVIEW_URL="GET_PREVIEW_URL";
+
+
 // function constants
 export const getBase64 = (file) => {
   return new Promise((resolve, reject) => {
@@ -156,4 +160,12 @@ export const getFormattedDate = () => {
   let year = date.getFullYear();
   let formattedDate = year + "-" + month + "-" + day + "T" + date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds() + "Z";
   return formattedDate;
+}
+export const getNameOfArtist = (data) => {
+  let result = "";
+  data.map(item => {
+      result += `${item.name}, `;
+      return true;
+  });
+  return result
 }

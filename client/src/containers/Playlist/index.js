@@ -6,11 +6,10 @@ import TrackTable from '../../components/TrackTable';
 import TrackMenu from '../../components/TrackMenu';
 import CollectionSearch from '../CollectionSearch';
 import Modal from '../../components/Modal';
-import { CloseModal, getCurrentImg, GetSavedTracks, getTracksPlaylist, getUserInfo, OpenModal, RemoveFromTracks, SaveTracks, updatePlaylistDetail, uploadPlaylistImage, getPredominantColor, Search } from '../../redux/actions/info';
+import { CloseModal, getCurrentImg, GetSavedTracks, getTracksPlaylist, getUserInfo, OpenModal, RemoveFromTracks, SaveTracks, updatePlaylistDetail, uploadPlaylistImage, getPredominantColor, Search, getPreviewUrl } from '../../redux/actions/info';
 import { closeTrackMenu, openTrackMenu } from '../../redux/actions/ui';
 import './styles.css';
 import PropTypes from 'prop-types';
-
 Playlist.propTypes = {
     tracksInPlaylist: PropTypes.array,
     getTracksInPlaylist: PropTypes.func,
@@ -48,7 +47,8 @@ function Playlist(props) {
         currentImg, updatePlaylistDetailAction,
         openTrackMenuAction, getSavedTracksAction, savedTracks, SaveTracksAction,
         removeFromTracksAction, info,
-        getPredominantColorAction, predominantColor, searchAction } = props;
+        getPredominantColorAction, predominantColor, searchAction,
+        getPreviewUrlAction } = props;
     let pathname = location.pathname.split('/');
     let match = pathname[pathname.length - 1];
     useEffect(() => {
@@ -62,9 +62,7 @@ function Playlist(props) {
     function useOutsideAlerter(ref) {
         useEffect(() => {
             function handleClickOutside(event) {
-                if (ref.current && !ref.current.contains(event.target)) {
-                    searchAction('');
-                }
+                if (ref.current && !ref.current.contains(event.target)) { searchAction(''); }
             }
             document.addEventListener("mousedown", handleClickOutside);
             return () => {
@@ -86,6 +84,7 @@ function Playlist(props) {
             }
         }
     }
+
     return (
         <div ref={wrapperRef} className="playlist">
             <Banner
@@ -107,6 +106,7 @@ function Playlist(props) {
                     openTrackMenu={openTrackMenuAction} savedTracks={savedTracks}
                     SaveTracksAction={SaveTracksAction}
                     removeFromTrack={removeFromTracksAction}
+                    getPreviewUrl={getPreviewUrlAction}
                 />
                 {id === playlistInfo.owner.id ? <CollectionSearch idPlaylist={match} /> : <></>}
 
@@ -138,7 +138,7 @@ const mapStateToProps = state => {
         savedTracks: state.tracks.savedTracks,
         info: state.info,
         predominantColor: state.ui.predominantColor,
-        param:state.search.param
+        param: state.search.param
     }
 }
 const mapDispatchToProps = (dispatch) => {
@@ -156,7 +156,8 @@ const mapDispatchToProps = (dispatch) => {
         SaveTracksAction: bindActionCreators(SaveTracks, dispatch),
         removeFromTracksAction: bindActionCreators(RemoveFromTracks, dispatch),
         getPredominantColorAction: bindActionCreators(getPredominantColor, dispatch),
-        searchAction: bindActionCreators(Search, dispatch)
+        searchAction: bindActionCreators(Search, dispatch),
+        getPreviewUrlAction: bindActionCreators(getPreviewUrl, dispatch)
     }
 }
 export default connect(mapStateToProps, mapDispatchToProps)(Playlist);

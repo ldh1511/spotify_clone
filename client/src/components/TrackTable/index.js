@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import './styles.css'
 import TrackItem from '../TrackItem';
+import { getNameOfArtist } from '../../constants/actions';
 const convert = 0.000016667;
 
 TrackTable.propTypes = {
@@ -15,15 +16,8 @@ TrackTable.defaultProps = {
     }
 }
 function TrackTable(props) {
-    const { data, note, openTrackMenu, savedTracks, SaveTracksAction, removeFromTrack } = props;
-    const getNameOfArtist = (data) => {
-        let result = "";
-        data.map(item => {
-            result += `${item.name}, `;
-            return true;
-        });
-        return result
-    }
+    const { data, note, openTrackMenu, savedTracks, SaveTracksAction, removeFromTrack,
+        getPreviewUrl } = props;
     const getIdOfArtist = (data) => {
         let result = "";
         data.map(item => {
@@ -61,6 +55,8 @@ function TrackTable(props) {
                         SaveTracksAction={SaveTracksAction}
                         removeFromTrack={removeFromTrack}
                         data={item}
+                        getPreviewUrl={getPreviewUrl}
+                        listTracks={data}
                     />) :
                     (<TrackItem
                         key={i}
@@ -79,6 +75,8 @@ function TrackTable(props) {
                         SaveTracksAction={SaveTracksAction}
                         removeFromTrack={removeFromTrack}
                         data={item}
+                        getPreviewUrl={getPreviewUrl}
+                        listTracks={data}
                     />)
                 }
                 </>)

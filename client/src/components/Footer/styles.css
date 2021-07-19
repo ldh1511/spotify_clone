@@ -24,7 +24,8 @@
     flex-direction: column;
     margin-left: 20px;
     align-items: center;
-    justify-content:center;
+    justify-content: center;
+    min-width: fit-content;
 }
 .footer-left--content h4{
     font-weight: 500;
@@ -84,6 +85,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    border: none;
 }
 .icon-play i{
     margin:0;
