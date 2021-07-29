@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { getCategory } from '../../redux/actions/info';
+import { getCategory, getPreviewUrl, getTracksPlaylist } from '../../redux/actions/info';
 import CardList from'./../../components/CardList';
 import PropTypes from 'prop-types';
 import './styles.css';
@@ -16,7 +16,8 @@ Gene.defaultProps = {
     categoryPlaylist: []
 }
 function Gene(props) {
-    const { location, getCategoryAction, categoryInfo, categoryPlaylist } = props;
+    const { location, getCategoryAction, categoryInfo, categoryPlaylist,
+        getTracksInPlaylistAction, getPreviewUrlAction, tracks } = props;
     let pathname = location.pathname.split('/');
     let match = pathname[pathname.length - 1];
     useEffect(() => {
@@ -24,7 +25,13 @@ function Gene(props) {
     }, [getCategoryAction,match])
     const renderCardList=()=>{
         let xhtml=null;
-        xhtml=<CardList data={categoryPlaylist} type='playlist'/>
+        xhtml=(<CardList 
+            data={categoryPlaylist} 
+            type='playlist'
+            getTracksInPlaylist={getTracksInPlaylistAction}
+            getPreviewUrl={getPreviewUrlAction}
+            tracks={tracks}
+            />)
         return xhtml;
     }
     return (
@@ -42,13 +49,16 @@ function Gene(props) {
 }
 const mapDispatchToProps = (dispatch, ownProps) => {
     return {
-        getCategoryAction: bindActionCreators(getCategory, dispatch)
+        getCategoryAction: bindActionCreators(getCategory, dispatch),
+        getTracksInPlaylistAction: bindActionCreators(getTracksPlaylist, dispatch),
+        getPreviewUrlAction: bindActionCreators(getPreviewUrl, dispatch)
     }
 }
 const mapStateToProps = state => {
     return {
         categoryInfo: state.categories.categoryInfo,
         categoryPlaylist: state.categories.categoryPlaylist,
+        tracks:state.tracks
     }
 };
 export default connect(mapStateToProps, mapDispatchToProps)(Gene);

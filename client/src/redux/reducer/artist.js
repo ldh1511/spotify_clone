@@ -6,11 +6,12 @@ const artist = (state = artistInitialState, action) => {
             return state
         case constants.GET_ARTIST_SUCCESS:
             let singles=action.payload[2].items.filter(item=>item.album_type==='single');
+            let albums=action.payload[2].items.filter(item=>item.album_type==='album');
             return {
                 ...state,
                 artistInfo:action.payload[0],
                 topTracks:action.payload[1].tracks,
-                albums:action.payload[2],
+                albums:albums,
                 singles:singles,
                 related:action.payload[3],
             }

@@ -9,11 +9,17 @@ CardBlock.defaultProps = {
 }
 function CardBlock(props) {
     const { name, data, id, param, type, match, path, own, savedTracks, SaveTracksAction,
-        removeFromTrack } = props;
+        removeFromTrack, getTracksInPlaylist, tracks, getPreviewUrl } = props;
     const renderCardList = () => {
         let xhtml = null;
         if (type !== 'track') {
-            xhtml = <CardList data={data} type={type} />
+            xhtml = (<CardList 
+                data={data} 
+                type={type} 
+                getTracksInPlaylist={getTracksInPlaylist}
+                tracks={tracks}
+                getPreviewUrl={getPreviewUrl}
+                />)
         }
         else {
             xhtml = <TrackTable

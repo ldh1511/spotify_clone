@@ -12,13 +12,14 @@ const music = (state = musicInitialState, action) => {
                 listData.push(item.track);
                 return true;
             })
-            console.log(listData);
+            let index=listData.findIndex(item=>item.name===data.track.track.name);
             return {
                 ...state,
                 preview_url:data.track.track.preview_url,
                 currentTrack:data.track,
                 listUrl:listUrl,
-                listData:listData
+                listData:listData,
+                currentIndex:index
             }
         default:
             return state

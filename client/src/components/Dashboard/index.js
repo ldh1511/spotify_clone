@@ -8,7 +8,7 @@ import './styles.css'
 import { Switch, Route } from "react-router-dom";
 import { connect } from 'react-redux';
 import { bindActionCreators } from "redux";
-import { getUserPlaylist } from "../../redux/actions/info";
+import { addNotification, getUserPlaylist, hideNotification } from "../../redux/actions/info";
 import Playlist from "../../containers/Playlist";
 import Gene from "../../containers/Gene";
 import Search from "../../containers/Search";
@@ -21,11 +21,15 @@ import RelatedAlbums from "../../containers/RelatedAlbums";
 import Collection from "../../containers/Collection";
 import Podcast from "../../containers/Podcast";
 import { logout } from "../../redux/actions/ui";
+import Notification from '../Notification';
 Dashboard.defaultProps = {
-  info: ''
+  info: '',
 }
 function Dashboard(props) {
-  const { getUserPlaylistAction, info, playlist, logoutAction, predominantColor, music } = props;
+  const { getUserPlaylistAction, info, 
+    playlist, logoutAction, 
+    predominantColor, music,
+    addNotificationAction, hideNotificationAction } = props;
   useEffect(() => {
     if (info.id) {
       getUserPlaylistAction(info.id)
@@ -35,6 +39,7 @@ function Dashboard(props) {
   return (
     <div className="dashboard">
       <Sidebar items={playlist.items} />
+      <Notification/>
       <div className="dashboard-content">
         <ContentLoading />
         <Header 
@@ -86,6 +91,9 @@ function Dashboard(props) {
       preview_url={music.preview_url} 
       list_url={music.listUrl}
       list_data={music.listData}
+      cur_index={music.currentIndex}
+      addNoti={addNotificationAction}
+      hideNoti={hideNotificationAction}
       />
     </div>
   );
@@ -95,14 +103,15 @@ const mapStateToProps = state => {
     info: state.info,
     playlist: state.playlist,
     predominantColor:state.ui.predominantColor,
-    music:state.music
+    music:state.music,
   }
 }
 const mapDispatchToProps = dispatch => {
   return {
     getUserPlaylistAction: bindActionCreators(getUserPlaylist, dispatch),
     logoutAction: bindActionCreators(logout, dispatch), 
-
+    addNotificationAction: bindActionCreators(addNotification, dispatch), 
+    hideNotificationAction: bindActionCreators(hideNotification, dispatch), 
   }
 }
 export default connect(mapStateToProps, mapDispatchToProps)(Dashboard);

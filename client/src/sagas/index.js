@@ -1,4 +1,4 @@
-import { call, put, takeLatest, takeEvery, all } from 'redux-saga/effects';
+import { call, put, takeLatest, takeEvery, all, delay } from 'redux-saga/effects';
 import * as constants from './../constants/actions';
 import * as api from '../apis/info';
 import {
@@ -46,19 +46,21 @@ import {
     removeItemFromPlaylistFailed,
     removeItemFromPlaylistSuccess,
     getShowSuccess,
-    getShowFailed
+    getShowFailed,
+    addNotification,
+    hideNotification
 } from '../redux/actions/info';
 import { hideContentLoading, hideLoading, showContentLoading, showLoading } from '../redux/actions/ui';
 function* watchFetchUserInfo() {
-    yield put(showLoading());
     try {
+        yield put(showLoading());
         const res = yield call(api.getMe);
         yield put(getUserInfoSuccess(res.data));
+        yield put(hideLoading());
     }
     catch {
         yield put(getUserInfoFailed('error'))
     }
-    yield put(hideLoading());
 }
 function* watchFetchUserPlaylist({ payload }) {
     try {
@@ -239,6 +241,9 @@ function* watchFollowArtist({ payload }) {
     try {
         yield call(api.followArtists, [payload]);
         yield put(FollowArtistSuccess(payload));
+        yield put(addNotification('Followed !'));
+        yield delay(2000);
+        yield put(hideNotification());
     }
     catch {
         yield put(FollowArtistFailed(payload));
@@ -248,6 +253,9 @@ function* watchUnFollowArtist({ payload }) {
     try {
         yield call(api.unfollowArtists, [payload]);
         yield put(UnFollowArtistSuccess(payload));
+        yield put(addNotification('Unfollowed !'));
+        yield delay(2000);
+        yield put(hideNotification());
     }
     catch {
         yield put(UnFollowArtistFailed(payload));
@@ -256,7 +264,6 @@ function* watchUnFollowArtist({ payload }) {
 function* watchFetchSavedTracks() {
     try {
         const res = yield call(api.getMySavedTracks, { limit: 50 });
-        // const dt= yield select(res);      
         yield put(GetSavedTracksSuccess(res.data))
     }
     catch {
@@ -319,7 +326,10 @@ function* watchAddItemToPlaylist({ payload }) {
     }
     try {
         yield call(api.addItemToPlaylist, payload.id, uri);
-        yield put(addItemToPlaylistSuccess(item))
+        yield put(addItemToPlaylistSuccess(item));
+        yield put(addNotification('Added track to playlist !'));
+        yield delay(2000);
+        yield put(hideNotification());
     }
     catch {
         yield put(addItemToPlaylistFailed('error'))
@@ -332,7 +342,10 @@ function* watchSaveTracks({ payload }) {
     }
     try {
         yield call(api.saveTracks, ids);
-        yield put(SaveTracksSuccess(payload.data))
+        yield put(SaveTracksSuccess(payload.data));
+        yield put(addNotification('Added to saved tracks !'));
+        yield delay(2000);
+        yield put(hideNotification());
     }
     catch {
         yield put(SaveTracksFailed('error'))
@@ -342,6 +355,9 @@ function* watchRemoveFromTracks({ payload }) {
     try {
         yield call(api.removeFromTracks, payload);
         yield put(RemoveFromTracksSuccess(payload));
+        yield put(addNotification('Removed from saved tracks !'));
+        yield delay(2000);
+        yield put(hideNotification());
     }
     catch {
         yield put(RemoveFromTracksFailed('error'))
@@ -352,6 +368,9 @@ function* watchRemoveItemFromPlaylist({ payload }) {
     try {
         yield call(api.removeItemFromPlaylist, payload.id, data);
         yield put(removeItemFromPlaylistSuccess(payload))
+        yield put(addNotification('Removed track to playlist !'));
+        yield delay(2000);
+        yield put(hideNotification());
     }
     catch {
         yield put(removeItemFromPlaylistFailed('error'))

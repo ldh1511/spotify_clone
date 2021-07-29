@@ -25,20 +25,51 @@ Footer.defaultProps = {
             duration_ms: 0
         }
     ],
+    cur_index: 0
 }
 
 function Footer(props) {
-    const { list_url, list_data } = props;
+    const { list_url, list_data, cur_index, addNoti, hideNoti } = props;
     const audioRef = useRef();
-    const [audioIndex, setAudioIndex] = useState(0);
+    const [audioIndex, setAudioIndex] = useState(cur_index);
     const [currentTime, setCurrentTime] = useState(0);
     const [duration, setDuration] = useState(0);
     const [isPlay, setPlay] = useState(false);
+    useEffect(() => {
+        setAudioIndex(cur_index)
+    }, [cur_index])
+    useEffect(() => {
+        if (duration===currentTime && list_url.length>0 && duration>0 && currentTime>0) {
+            setAudioIndex(a=>{
+                if(a+1>list_url.length-1){
+                    return 0
+                }
+                else{
+                    return a+1
+                }
+            })
+        }
+    }, [currentTime,duration, list_url])
+    useEffect(() =>{
+        if(list_url[audioIndex]===null && audioIndex){
+            addNoti(`${list_data[audioIndex].name} has no preview, move to next track`);
+            setTimeout(()=>{
+                hideNoti();
+            },2000)
+            setAudioIndex(a=>{
+                if(a+1>list_url.length-1){
+                    return 0
+                }
+                else{
+                    return a+1
+                }
+            })
+        }
+    },[audioIndex,list_url])
     const handleLoadedData = () => {
         setDuration(audioRef.current.duration);
         if (isPlay) audioRef.current.play();
     };
-
     const handlePausePlayClick = () => {
         if (isPlay) {
             audioRef.current.pause();
@@ -57,7 +88,7 @@ function Footer(props) {
         }
     };
     return (
-        <div className="footer">
+        <div className="footer" style={list_url.length>0?{display:'grid'}:{display:'none'}}>
             <div className="footer-left">
                 <img alt="" src={list_data[audioIndex].album.images[0].url} />
                 <div className="footer-left--content">
@@ -72,7 +103,7 @@ function Footer(props) {
                 <div className="footer-center--top">
                     <i className="far fa-heart"></i>
                     <i className="fas fa-step-backward"
-                        onClick={() => setAudioIndex((audioIndex - 1) % list_url.length)}
+                        onClick={() => setAudioIndex((audioIndex - 1))}
                     ></i>
                     <button className="icon-play" onClick={handlePausePlayClick}>
                         {isPlay ?
@@ -81,7 +112,7 @@ function Footer(props) {
                         }
                     </button>
                     <i className="fas fa-step-forward"
-                        onClick={() => setAudioIndex((audioIndex + 1) % list_url.length)}
+                        onClick={() => setAudioIndex((audioIndex + 1))}
                     ></i>
                     <i className="fas fa-sync-alt"></i>
                 </div>
@@ -110,7 +141,6 @@ function Footer(props) {
                         }}
                     />
                 </div>
-
             </div>
             <div className="footer-right">
                 <div className="volum-box">

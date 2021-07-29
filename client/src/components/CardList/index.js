@@ -11,7 +11,7 @@ CardItem.defaultProps = {
     type:''
 }
 function CardList(props) {
-    const { data, type } = props;
+    const { data, type, getTracksInPlaylist, tracks, getPreviewUrl } = props;
     const renderCardItem = () => {
         let xhtml = null;
         xhtml = data.map((item,i) => {
@@ -24,6 +24,9 @@ function CardList(props) {
                         description={item.description}
                         id={item.id}
                         type={type}
+                        getTracksInPlaylist={getTracksInPlaylist}
+                        tracks={tracks}
+                        getPreviewUrl={getPreviewUrl}
                     />
                 )
             }

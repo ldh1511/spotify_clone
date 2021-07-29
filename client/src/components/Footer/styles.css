@@ -8,6 +8,7 @@
     padding: 10px;
     display: grid;
     grid-template-columns: 20% 60% 20%;
+    z-index: 9;
 }
 .footer-left{
     display:flex;

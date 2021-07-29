@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import './styles.css';
-import { SearchAlbums, SearchArtists, SearchPlaylists, SearchTracks } from '../../redux/actions/info';
+import { RemoveFromTracks, SaveTracks, SearchAlbums, SearchArtists, SearchPlaylists, SearchTracks } from '../../redux/actions/info';
 import TrackTable from '../../components/TrackTable';
 import CardList from '../../components/CardList';
 import { bindActionCreators } from 'redux';
@@ -21,7 +21,10 @@ function SearchResult(props) {
         SearchArtistsAction,
         SearchTracksAction,
         SearchPlaylistsAction,
-        search
+        search,
+        SaveTracksAction,
+        removeFromTracksAction, 
+        savedTracks
     } = props;
     let pathname = location.pathname.split('/');
     let param = pathname[pathname.length - 2];
@@ -89,7 +92,10 @@ function SearchResult(props) {
         if (typeSearch !== 'tracks') {
             xhtml = (
                 <>
-                    <CardList data={data} type={typeSearch.substring(0, typeSearch.length - 1)} />
+                    <CardList 
+                    data={data} 
+                    type={typeSearch.substring(0, typeSearch.length - 1)} 
+                    />
                     <p
                         onClick={() => handleClick(data.length, total, type)}
                         className="see-more--btn">
@@ -101,7 +107,15 @@ function SearchResult(props) {
         else {
             xhtml = (
                 <>
-                    <TrackTable data={data} name="tracks" param={param} type='track' />
+                    <TrackTable 
+                    data={data} 
+                    name="tracks" 
+                    param={param} 
+                    type='track'
+                    SaveTracksAction={SaveTracksAction}
+                    removeFromTrack={removeFromTracksAction}
+                    savedTracks={savedTracks} 
+                    />
                     <p
                         onClick={() => handleClick(data.length, total, type)}
                         className="see-more--btn">
@@ -121,7 +135,8 @@ function SearchResult(props) {
 }
 const mapStateToProps = (state) => {
     return {
-        search: state.search.result
+        search: state.search.result,
+        savedTracks: state.tracks.savedTracks,
     }
 }
 const mapDispatchToProps = (dispatch) => {
@@ -130,6 +145,8 @@ const mapDispatchToProps = (dispatch) => {
         SearchArtistsAction: bindActionCreators(SearchArtists, dispatch),
         SearchPlaylistsAction: bindActionCreators(SearchPlaylists, dispatch),
         SearchTracksAction: bindActionCreators(SearchTracks, dispatch),
+        SaveTracksAction: bindActionCreators(SaveTracks, dispatch),
+        removeFromTracksAction: bindActionCreators(RemoveFromTracks, dispatch),
     }
 }
 export default connect(mapStateToProps, mapDispatchToProps)(SearchResult);

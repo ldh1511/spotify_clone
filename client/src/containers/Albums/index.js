@@ -4,7 +4,7 @@ import './styles.css';
 import { connect } from 'react-redux';
 import CardList from '../../components/CardList';
 import AlbumBlock from '../../components/AlbumBlock';
-import { getAlbumTracks } from '../../redux/actions/info';
+import { getAlbumTracks, RemoveFromTracks, SaveTracks } from '../../redux/actions/info';
 import { bindActionCreators } from 'redux';
 import { useHistory } from 'react-router';
 Albums.propTypes = {
@@ -13,27 +13,31 @@ Albums.propTypes = {
     albumtracks: PropTypes.array
 };
 Albums.defaultProps = {
-    albums: {
-        items: []
-    },
+    albums: [],
     albumtracks: [],
     singles: []
 }
 function Albums(props) {
     const history = useHistory();
     const [list, setList] = useState(false);
-    const { albums, name, getAlbumTracksAction, albumtracks, location, singles } = props;
-    let { items } = albums;
-    items = items.filter(item => item.album_type === 'album');
+    const {
+        albums, name, getAlbumTracksAction, albumtracks, location, singles,
+        SaveTracksAction, removeFromTracksAction, savedTracks
+    } = props;
     const pathname = location.pathname.split('/');
     const match = pathname[pathname.length - 1];
     const [type, setType] = useState(match);
     const renderCardListTable = () => {
         let xhtml = null;
-        xhtml = <CardList data={type === 'albums' ? items : singles} type='album' />
+        xhtml = (
+            <CardList
+                data={type === 'albums' ? albums : singles}
+                type='album'
+            />
+        )
         return xhtml;
     }
-    let data = type === 'albums' ? albums.items : singles;
+    let data = type === 'albums' ? albums : singles;
     useEffect(() => {
         const getData = () => {
             let idArr = [];
@@ -44,15 +48,28 @@ function Albums(props) {
             return idArr
         }
         getAlbumTracksAction(getData())
-    }, [type,getAlbumTracksAction,data])
+    }, [type, getAlbumTracksAction, data])
     const renderCardList = () => {
         let xhtml = null;
         xhtml = (
             <div className="album-blocks">
-                {
-                    type === 'albums' ?
-                        albumtracks.map((item, i) => <AlbumBlock data={[item.data.items, items[i]]} />) :
-                        albumtracks.map((item, i) => <AlbumBlock data={[item.data.items, singles[i]]} />)}
+                {type === 'albums' ?
+                    albumtracks.map((item, i) => (
+                        <AlbumBlock
+                            data={[item.data.items, albums[i]]}
+                            SaveTracksAction={SaveTracksAction}
+                            removeFromTrack={removeFromTracksAction}
+                            savedTracks={savedTracks}
+                        />
+                    )) :
+                    albumtracks.map((item, i) => (
+                        <AlbumBlock
+                            data={[item.data.items, singles[i]]}
+                            SaveTracksAction={SaveTracksAction}
+                            removeFromTrack={removeFromTracksAction}
+                            savedTracks={savedTracks}
+                        />))
+                }
             </div>
         )
         return xhtml;
@@ -93,12 +110,15 @@ const mapStateToProps = (state) => {
         albums: state.artist.albums,
         singles: state.artist.singles,
         name: state.artist.artistInfo.name,
-        albumtracks: state.artist.albumtracks
+        albumtracks: state.artist.albumtracks,
+        savedTracks: state.tracks.savedTracks,
     }
 }
 const mapDispatchToProps = (dispatch) => {
     return {
-        getAlbumTracksAction: bindActionCreators(getAlbumTracks, dispatch)
+        getAlbumTracksAction: bindActionCreators(getAlbumTracks, dispatch),
+        SaveTracksAction: bindActionCreators(SaveTracks, dispatch),
+        removeFromTracksAction: bindActionCreators(RemoveFromTracks, dispatch),
     }
 }
 export default connect(mapStateToProps, mapDispatchToProps)(Albums);

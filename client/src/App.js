@@ -13,7 +13,6 @@ function App(props) {
   const { getUserInfoAction, loginToken, loginAction } = props;
   const curToken = localStorage.getItem('token');
   useEffect(() => { 
-    
     if (!curToken) {
       const code = getTokenFromUrl();
       const setTokenActions = async () => {

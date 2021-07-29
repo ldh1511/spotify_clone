@@ -616,3 +616,34 @@ export const getPreviewUrl=(track,listTracks)=>{
         }
     }
 }
+export const addNotification=(content)=>{
+    return{
+        type:constants.ADD_NOTIFICATION,
+        payload:content
+    }
+}
+export const hideNotification=()=>{
+    return{
+        type:constants.HIDE_NOTIFICATION,
+        payload:''
+    }
+}
+
+export const saveAlbums=(id)=>{
+    return{
+        type:constants.SAVE_ALBUMS,
+        payload:id
+    }
+}
+export const saveAlbumsSuccess=(data)=>{
+    return{
+        type:constants.SAVE_ALBUMS_SUCCESS,
+        payload:data
+    }
+}
+export const saveAlbumsFailed=(data)=>{
+    return{
+        type:constants.SAVE_ALBUMS_FAILED,
+        payload:data
+    }
+}

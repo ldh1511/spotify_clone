@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import './styles.css';
+import { NavLink } from 'react-router-dom';
 AlbumBlockHeader.propTypes = {
     data:PropTypes.object,
 };
@@ -12,13 +13,13 @@ AlbumBlockHeader.defaultProps = {
 }
 function AlbumBlockHeader(props) {
     const {data}=props;
-    const {name, release_date, album_type, total_tracks, images}=data;
+    const {name, release_date, album_type, total_tracks, images, id}=data;
     return (
         <div className="album-block--header">
             <img alt="" src={images[0].url} />
             <div className="album-block-title">
                 <div className="album-block-title--top">
-                    <h2>{name}</h2>
+                    <NavLink to={`/album/${id}`}><h2>{name}</h2></NavLink>
                     <ul>
                         <li>{album_type}</li>|
                         <li>{release_date.split('-')[0]}</li>|

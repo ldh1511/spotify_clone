@@ -334,3 +334,16 @@ export const getShow = (id) => {
         }
     });
 }
+
+export const saveAlbums = (ids) => {
+    let token = localStorage.getItem('token');
+    return axiosServices.put(`${API_ENDPOINT}/v1/me/albums`, null, {
+        headers: {
+            Authorization: 'Bearer ' + token,
+            "content-type":'application/json'
+        },
+        params:{
+            ids
+        }
+    });
+}

@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import './styles.css';
-import { FollowArtist, getArtist, getArtistFollowed, GetSavedTracks, UnFollowArtist, getPredominantColor } from '../../redux/actions/info';
+import { FollowArtist, getArtist, getArtistFollowed, GetSavedTracks, UnFollowArtist, getPredominantColor, SaveTracks, RemoveFromTracks } from '../../redux/actions/info';
 import TrackTable from '../../components/TrackTable';
 import CardBlock from '../../components/CardBlock';
 import Banner from '../../components/Banner';
@@ -18,7 +18,7 @@ Artist.defaultProps = {
         images: [{ url: '' }],
     },
     topTracks: [],
-    albums: { items: [] },
+    albums: [],
     savedTracks: { items: [] },
     related: { artists: [] },
     singles: [],
@@ -38,7 +38,9 @@ function Artist(props) {
         UnFollowArtistAction,
         getArtistFollowedAction,
         savedTracks, getSavedTracksAction,
-        getPredominantColorAction, predominantColor  } = props;
+        getPredominantColorAction, predominantColor,
+        SaveTracksAction, removeFromTracksAction
+      } = props;
     const { items } = followedArtists, { id } = artist;
     let pathname = location.pathname.split('/');
     let match = pathname[pathname.length - 1];
@@ -53,7 +55,14 @@ function Artist(props) {
             xhtml = (
                 <>
                     <h2>famous</h2>
-                    <TrackTable data={topTracks} name="tracks" type='track' savedTracks={savedTracks}/>
+                    <TrackTable 
+                    data={topTracks} 
+                    name="tracks" 
+                    type='track' 
+                    savedTracks={savedTracks}
+                    SaveTracksAction={SaveTracksAction}
+                    removeFromTrack={removeFromTracksAction}
+                    />
                 </>
             )
         }
@@ -69,7 +78,7 @@ function Artist(props) {
     }
     const renderAlbums = () => {
         let xhtml = null;
-        let data = albums.items.filter((item, i) => (item.album_type === 'album'));
+        let data = albums;
         data = data.slice(0, 5);
         if(data.length>0){
             xhtml = (
@@ -87,7 +96,7 @@ function Artist(props) {
     }
     const renderSingle = () => {
         let xhtml = null;
-        let data = singles.filter((item, i) => (item.album_type === 'single'));
+        let data = singles;
         data = data.slice(0, 5);
         if(data.length>0){
             xhtml = (
@@ -98,7 +107,6 @@ function Artist(props) {
                     match={match}
                     path='singles'
                     own='artist'
-    
                 />
             )
         }
@@ -168,6 +176,8 @@ const mapDispatchToProps = (dispatch) => {
         getArtistFollowedAction: bindActionCreators(getArtistFollowed, dispatch),
         getSavedTracksAction: bindActionCreators(GetSavedTracks, dispatch),
         getPredominantColorAction:bindActionCreators(getPredominantColor, dispatch),
+        SaveTracksAction: bindActionCreators(SaveTracks, dispatch),
+        removeFromTracksAction: bindActionCreators(RemoveFromTracks, dispatch),
     }
 }
 export default connect(mapStateToProps, mapDispatchToProps)(Artist);

@@ -20,6 +20,10 @@
     display:flex;
     flex-direction: column;
 }
+.album-block-title--top a{
+    text-decoration: none !important;
+    color:#b3b3b3;
+}
 .album-block-title--top h2{
     font-size: 2rem;
     font-weight: 700;

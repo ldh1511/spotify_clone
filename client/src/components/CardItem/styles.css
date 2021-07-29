@@ -58,6 +58,9 @@
     font-size: 0.9rem;
     color: #bbbbbb;
 }
+.card-item .play-btn{
+    z-index:9;
+}
 .card-item:hover .play-btn{
     display: block;
 }

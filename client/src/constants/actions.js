@@ -140,6 +140,12 @@ export const GET_PREDOMINANT_COLOR="GET_PREDOMINANT_COLOR";
 
 export const GET_PREVIEW_URL="GET_PREVIEW_URL";
 
+export const ADD_NOTIFICATION= "ADD_NOTIFICATION";
+export const HIDE_NOTIFICATION= "HIDE_NOTIFICATION";
+
+export const SAVE_ALBUMS = "SAVE_ALBUMS";
+export const SAVE_ALBUMS_SUCCESS = "SAVE_ALBUMS_SUCCESS";
+export const SAVE_ALBUMS_FAILED = "SAVE_ALBUMS_FAILED";
 
 // function constants
 export const getBase64 = (file) => {

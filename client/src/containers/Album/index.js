@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import './styles.css';
 import { bindActionCreators } from 'redux';
-import { getAlbum, getArtistAlbum, GetSavedTracks, getPredominantColor } from '../../redux/actions/info';
+import { getAlbum, getArtistAlbum, GetSavedTracks, getPredominantColor, SaveTracks, RemoveFromTracks } from '../../redux/actions/info';
 import { connect } from 'react-redux';
 import Banner from '../../components/Banner';
 import TrackTable from '../../components/TrackTable';
@@ -31,7 +31,8 @@ function Album(props) {
         albumInfo, getArtistAlbumAction, 
         relatedAlbum, getSavedTracksAction, 
         savedTracks, getPredominantColorAction,
-        predominantColor } = props;
+        predominantColor,
+        SaveTracksAction, removeFromTracksAction } = props;
     const { images, name, tracks, type, artists, release_date, id } = albumInfo;
     let pathname = location.pathname.split('/');
     let match = pathname[pathname.length - 1];
@@ -84,7 +85,13 @@ function Album(props) {
                 getPredominantColor={getPredominantColorAction}
                 predominantColor={predominantColor}
             />
-            <TrackTable data={tracks.items} note='album-track' savedTracks={savedTracks}/>
+            <TrackTable 
+            data={tracks.items} 
+            note='album-track' 
+            savedTracks={savedTracks}
+            SaveTracksAction={SaveTracksAction}
+            removeFromTrack={removeFromTracksAction}
+            />
             {renderCardBlock()}
         </div>
     );
@@ -103,6 +110,8 @@ const mapDispatchToProps = (dispatch) => {
         getArtistAlbumAction: bindActionCreators(getArtistAlbum, dispatch),
         getSavedTracksAction: bindActionCreators(GetSavedTracks, dispatch),
         getPredominantColorAction:bindActionCreators(getPredominantColor, dispatch),
+        SaveTracksAction: bindActionCreators(SaveTracks, dispatch),
+        removeFromTracksAction: bindActionCreators(RemoveFromTracks, dispatch),
     }
 }
 export default connect(mapStateToProps, mapDispatchToProps)(Album);

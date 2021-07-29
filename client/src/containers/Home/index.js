@@ -4,7 +4,7 @@ import CurrentList from '../../components/CurrentList';
 import CardBlock from '../../components/CardBlock';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { getArtistFollowed, getContentHome, getRecentPlaylist } from '../../redux/actions/info';
+import { getArtistFollowed, getContentHome, getPreviewUrl, getRecentPlaylist, getTracksPlaylist } from '../../redux/actions/info';
 import PropTypes from 'prop-types';
 Home.propTypes = {
     recentlyPlaylist: PropTypes.array,
@@ -28,7 +28,9 @@ function Home(props) {
         recentlyPlaylist,
         categories,
         categoriesPlaylists,
-        getArtistFollowedAction
+        getArtistFollowedAction,
+        getTracksInPlaylistAction,
+        tracks, getPreviewUrlAction
     } = props;
     useEffect(() => {
         getRecentPlaylistAcion();
@@ -47,6 +49,9 @@ function Home(props) {
                 name={item.name}
                 id={item.id}
                 type='playlist'
+                getTracksInPlaylist={getTracksInPlaylistAction}
+                tracks={tracks}
+                getPreviewUrl={getPreviewUrlAction}
             />
         ))
         return xhtml
@@ -82,6 +87,8 @@ const mapDispatchToProps = dispatch => {
         getRecentPlaylistAcion: bindActionCreators(getRecentPlaylist, dispatch),
         getContentHomeAction: bindActionCreators(getContentHome, dispatch),
         getArtistFollowedAction: bindActionCreators(getArtistFollowed, dispatch),
+        getTracksInPlaylistAction: bindActionCreators(getTracksPlaylist, dispatch),
+        getPreviewUrlAction: bindActionCreators(getPreviewUrl, dispatch)
     }
 }
 const mapStateToProps = state => {
@@ -91,6 +98,7 @@ const mapStateToProps = state => {
         relatedArtists: state.contentHome.relatedArtists,
         categories: state.contentHome.categories,
         categoriesPlaylists: state.contentHome.categoriesPlaylists,
+        tracks:state.tracks
     }
 }
 export default connect(mapStateToProps, mapDispatchToProps)(Home);

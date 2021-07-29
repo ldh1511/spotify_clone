@@ -107,6 +107,7 @@ function Playlist(props) {
                     SaveTracksAction={SaveTracksAction}
                     removeFromTrack={removeFromTracksAction}
                     getPreviewUrl={getPreviewUrlAction}
+                    
                 />
                 {id === playlistInfo.owner.id ? <CollectionSearch idPlaylist={match} /> : <></>}
 
