@@ -10,7 +10,13 @@ import { connect } from 'react-redux';
 import { getToken } from './apis/info';
 import { login } from './redux/actions/ui';
 function App(props) {
-  const { getUserInfoAction, loginToken, loginAction, info } = props;
+  const { getUserInfoAction, loginToken, loginAction } = props;
+  const runLogoutTimer=(timer)=>{
+    setTimeout(()=>{
+      localStorage.removeItem('token');
+      loginAction("");
+    },timer)
+  }
   const curToken = localStorage.getItem('token');
   useEffect(() => { 
     if (!curToken) {
@@ -18,6 +24,7 @@ function App(props) {
       const setTokenActions = async () => {
         let res = await getToken(code);
         localStorage.setItem('token',res.data.access_token);
+        runLogoutTimer(res.data.expires_in*1000);
         loginAction(res.data.access_token);
         window.history.pushState({}, null, "/");
       }
@@ -29,14 +36,9 @@ function App(props) {
       getUserInfoAction();
     }
   },[loginToken,getUserInfoAction,curToken,loginAction] )
-  useEffect(()=>{
-    if(info.status && info.status===401){
-      localStorage.removeItem('token');
-    }
-  },[info])
   return (
     <div className="App">
-      {loginToken !== null ?
+      {loginToken && loginToken !== null ?
         <>
           <GLobalLoading />
           <Dashboard />
