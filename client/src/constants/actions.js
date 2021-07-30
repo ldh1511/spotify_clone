@@ -147,6 +147,10 @@ export const SAVE_ALBUMS = "SAVE_ALBUMS";
 export const SAVE_ALBUMS_SUCCESS = "SAVE_ALBUMS_SUCCESS";
 export const SAVE_ALBUMS_FAILED = "SAVE_ALBUMS_FAILED";
 
+export const REMOVE_ALBUMS = "REMOVE_ALBUMS";
+export const REMOVE_ALBUMS_SUCCESS = "REMOVE_ALBUMS_SUCCESS";
+export const REMOVE_ALBUMS_FAILED = "REMOVE_ALBUMS_FAILED";
+
 // function constants
 export const getBase64 = (file) => {
   return new Promise((resolve, reject) => {

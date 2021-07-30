@@ -10,7 +10,7 @@ import { connect } from 'react-redux';
 import { getToken } from './apis/info';
 import { login } from './redux/actions/ui';
 function App(props) {
-  const { getUserInfoAction, loginToken, loginAction } = props;
+  const { getUserInfoAction, loginToken, loginAction, info } = props;
   const curToken = localStorage.getItem('token');
   useEffect(() => { 
     if (!curToken) {
@@ -28,8 +28,12 @@ function App(props) {
       loginAction(curToken);
       getUserInfoAction();
     }
-    
   },[loginToken,getUserInfoAction,curToken,loginAction] )
+  useEffect(()=>{
+    if(info.status && info.status===401){
+      localStorage.removeItem('token');
+    }
+  },[info])
   return (
     <div className="App">
       {loginToken !== null ?
@@ -45,7 +49,8 @@ function App(props) {
 }
 const mapStateToProps = (state)=>{
   return{
-    loginToken:state.login.loginToken
+    loginToken:state.login.loginToken,
+    info:state.info
   }
 }
 const mapDispatchToProps = dispatch => {

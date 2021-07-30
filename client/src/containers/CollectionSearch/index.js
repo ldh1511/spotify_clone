@@ -18,9 +18,11 @@ CollectionSearch.defaultProps = {
         name: ''
     },
     albumtracks: { items: [] },
-    album:{albumInfo:{
-        images:[{url:''}]
-    }}
+    album: {
+        albumInfo: {
+            images: [{ url: '' }]
+        }
+    }
 }
 
 function CollectionSearch(props) {
@@ -29,16 +31,15 @@ function CollectionSearch(props) {
     const [level, setLevel] = useState([0]);
     const [name, setName] = useState(['default']);
     const [defaultimg, setImg] = useState();
-    const [titleName, setTitleName]=useState(null);
-
+    const [titleName, setTitleName] = useState(null);
     const setLevelData = (idLevel, type, id, defaultImg, titleName) => {
         if (typeof idLevel === 'number') {
             setLevel([...level, idLevel])
             setName([...name, type])
         }
         else {
-            setLevel(level.slice(0,-1));
-            setName(name.slice(0,-1));
+            setLevel(level.slice(0, -1));
+            setName(name.slice(0, -1));
         }
         if (id && idLevel === 2) {
             getArtistAction(id);
@@ -82,7 +83,7 @@ function CollectionSearch(props) {
         let xhtml = null;
         switch (level[level.length - 1]) {
             case 0:
-                xhtml = <CollectionSearchList data={sortResult.slice(0, 10)} setLevelData={setLevelData} level={level[level.length - 1]} addItem={addItemToPlaylistAction} idPlaylist={idPlaylist}/>
+                xhtml = <CollectionSearchList data={sortResult.slice(0, 10)} setLevelData={setLevelData} level={level[level.length - 1]} addItem={addItemToPlaylistAction} idPlaylist={idPlaylist} />
                 break;
             case 1:
                 xhtml = (<>
@@ -90,7 +91,12 @@ function CollectionSearch(props) {
                         <i className="fas fa-chevron-left"></i>
                         <h3>{renderName().title}</h3>
                     </div>
-                    <CollectionSearchList data={renderName().data} setLevelData={setLevelData} addItem={addItemToPlaylistAction} idPlaylist={idPlaylist}/>
+                    <CollectionSearchList
+                        data={renderName().data}
+                        setLevelData={setLevelData}
+                        addItem={addItemToPlaylistAction}
+                        idPlaylist={idPlaylist}
+                    />
                 </>)
                 break;
             case 2:
@@ -100,9 +106,19 @@ function CollectionSearch(props) {
                         <h3>{renderName().title}</h3>
                     </div>
                     <h3>Track</h3>
-                    <CollectionSearchList data={topTracks} setLevelData={setLevelData} addItem={addItemToPlaylistAction} idPlaylist={idPlaylist}/>
+                    <CollectionSearchList
+                        data={topTracks}
+                        setLevelData={setLevelData}
+                        addItem={addItemToPlaylistAction}
+                        idPlaylist={idPlaylist}
+                    />
                     <h3>Album</h3>
-                    <CollectionSearchList data={topAlbums.items.slice(0, 10)} setLevelData={setLevelData} addItem={addItemToPlaylistAction} idPlaylist={idPlaylist}/>
+                    <CollectionSearchList
+                        data={topAlbums.slice(0, 10)}
+                        setLevelData={setLevelData}
+                        addItem={addItemToPlaylistAction}
+                        idPlaylist={idPlaylist}
+                    />
                 </>)
                 break;
             case 3:
@@ -112,7 +128,14 @@ function CollectionSearch(props) {
                             <i className="fas fa-chevron-left"></i>
                             <h3>{titleName}</h3>
                         </div>
-                        <CollectionSearchList data={albumtracks.items} setLevelData={setLevelData} defaultimg={defaultimg} addItem={addItemToPlaylistAction} idPlaylist={idPlaylist} albumInfo={album.albumInfo} />
+                        <CollectionSearchList
+                            data={albumtracks.items}
+                            setLevelData={setLevelData}
+                            defaultimg={defaultimg}
+                            addItem={addItemToPlaylistAction}
+                            idPlaylist={idPlaylist}
+                            albumInfo={album.albumInfo}
+                        />
                     </>
                 )
                 break;
@@ -151,7 +174,7 @@ const mapStateToProps = (state) => {
         artistInfo: state.artist.artistInfo,
         albumtracks: state.artist.albumtracks,
         album: state.album,
-        param:state.search.param
+        param: state.search.param
     }
 }
 export default connect(mapStateToProps, mapDispatchToProps)(CollectionSearch);

@@ -10,8 +10,7 @@ const info = (state = infoInitialState, action) => {
         case constants.GET_USER_INFO_SUCCESS:
             return action.payload
         case constants.GET_USER_INFO_FAILED:
-            localStorage.removeItem('token');
-            return state
+            return {status:action.payload}
         default:
             return state
     }

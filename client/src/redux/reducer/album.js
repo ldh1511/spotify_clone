@@ -32,8 +32,24 @@ const album = (state = albumInitialState, action) => {
         case constants.SAVE_ALBUMS:
             return state
         case constants.SAVE_ALBUMS_SUCCESS:
-            return state
+            return {
+                ...state,
+                savedAlbums:{
+                    ...state.savedAlbums,
+                    items:[...state.savedAlbums.items,action.payload]
+                }
+            }
         case constants.SAVE_ALBUMS_FAILED:
+            return state
+        case constants.REMOVE_ALBUMS:
+            return state
+        case constants.REMOVE_ALBUMS_SUCCESS:
+            let newItems=state.savedAlbums.items.filter(item=>item.album.id!==action.payload)
+            return {
+                ...state,
+                savedAlbums:{...state.savedAlbums,items:newItems}
+            }
+        case constants.REMOVE_ALBUMS_FAILED:
             return state
         default:
             return state

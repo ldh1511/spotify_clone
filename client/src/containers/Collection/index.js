@@ -82,6 +82,12 @@ function Collection(props) {
                 break;
             case 'albums':
                 data = savedAlbums.items
+                data.map((item,i)=>{
+                    if(item && item.album){
+                        data[i]=item.album;
+                    }
+                    return true;
+                })
                 break;
             case 'podcasts':
                 data = savedShows.items
@@ -95,7 +101,7 @@ function Collection(props) {
                 return (< CardItem
                     key={newItem.id}
                     name={newItem.name}
-                    image={newItem.images[0] ? newItem.images[0].url : ''}
+                    image={newItem.images && newItem.images[0] ? newItem.images[0].url : ''}
                     description={newItem.description}
                     id={newItem.id}
                     type={type}

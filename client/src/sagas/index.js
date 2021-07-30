@@ -48,7 +48,15 @@ import {
     getShowSuccess,
     getShowFailed,
     addNotification,
-    hideNotification
+    hideNotification,
+    saveAlbumsSuccess,
+    saveAlbumsFailed,
+    getContentHomeFailed,
+    getTracksPlaylistFailed,
+    getCategoryFailed,
+    getCategoriesFailed,
+    removeAlbumsSuccess,
+    removeAlbumsFailed
 } from '../redux/actions/info';
 import { hideContentLoading, hideLoading, showContentLoading, showLoading } from '../redux/actions/ui';
 function* watchFetchUserInfo() {
@@ -58,22 +66,20 @@ function* watchFetchUserInfo() {
         yield put(getUserInfoSuccess(res.data));
         yield put(hideLoading());
     }
-    catch {
-        yield put(getUserInfoFailed('error'))
+    catch (error) {
+        yield put(getUserInfoFailed(error.response.status))
     }
 }
 function* watchFetchUserPlaylist({ payload }) {
     try {
         const res = yield call(api.getUserPlaylists, payload);
         yield put(getUserPlaylistSuccess(res.data));
-
     }
     catch {
         yield put(getUserPlaylistFailed('error'))
     }
 }
 function* watchFetchRecentPlaylist() {
-
     try {
         const res = yield call(api.getRecentlyPlaylistTrack);
         let idPlaylist = [];
@@ -95,63 +101,83 @@ function* watchFetchRecentPlaylist() {
         })
         yield put(getRecentPlaylistSuccess(newData));
     }
-    catch {
-        yield put(getRecentPlaylistFailed('error'))
+    catch (error) {
+        yield put(getRecentPlaylistFailed(error))
     }
 }
 function* watchFetchContentHome() {
-    yield put(showContentLoading());
-    const resp = yield call(api.getMyTop, 'artists');
-    let [relatedArtists, categories] = yield all([
-        yield all(resp.data.items.map(item => call(api.getArtistRelatedArtists, item.id))),
-        call(api.getCategories, { country: 'VN' }),
-    ])
-    const randCatArr = [];
-    for (let i = 0; i < 9; i++) {
-        // lấy ngãu nhiên category
-        const randCat = Math.floor(Math.random() * (categories.data.categories.items.length - 1));
-        randCatArr.push(randCat);
+    try {
+        yield put(showContentLoading());
+        const resp = yield call(api.getMyTop, 'artists');
+        let [relatedArtists, categories] = yield all([
+            yield all(resp.data.items.map(item => call(api.getArtistRelatedArtists, item.id))),
+            call(api.getCategories, { country: 'VN' }),
+        ])
+        const randCatArr = [];
+        for (let i = 0; i < 9; i++) {
+            // lấy ngãu nhiên category
+            const randCat = Math.floor(Math.random() * (categories.data.categories.items.length - 1));
+            randCatArr.push(randCat);
+        }
+        categories = categories.data.categories.items.filter((item, i) => randCatArr.includes(i) === true);
+        const tracks = yield all(categories.map(item => call(api.getCategoryPlaylists, item.id)));
+        let newTracks = [];
+        let newRelatedArtists = [];
+        tracks.map(item => {
+            newTracks.push(item.data);
+            return true;
+        });
+        relatedArtists.map(item => {
+            newRelatedArtists.push(item.data);
+            return true;
+        });
+        const data = [relatedArtists, categories, newTracks];
+        yield put(getContentHomeSuccess(data));
+        yield put(hideContentLoading());
     }
-    categories = categories.data.categories.items.filter((item, i) => randCatArr.includes(i) === true);
-    const tracks = yield all(categories.map(item => call(api.getCategoryPlaylists, item.id)));
-    let newTracks = [];
-    let newRelatedArtists = [];
-    tracks.map(item => {
-        newTracks.push(item.data);
-        return true;
-    });
-    relatedArtists.map(item => {
-        newRelatedArtists.push(item.data);
-        return true;
-    });
-    const data = [relatedArtists, categories, newTracks];
-    yield put(getContentHomeSuccess(data));
-    yield put(hideContentLoading());
+    catch (error) {
+        yield put(getContentHomeFailed(error));
+    }
 }
 function* watchFetchArtistFollowed() {
     const res = yield call(api.getFollowedArtists, { limit: 50 });
     yield put(getArtistFollowedSuccess(res.data.artists));
 }
 function* watchFetchTracksInPlaylist({ payload }) {
-    yield put(showContentLoading());
-    const data = yield call(api.getPlaylist, payload);
-    const res = yield call(api.getPlaylistTracks, payload);
-    const dataArr = [data.data, res.data.items];
-    yield put(getTracksPlaylistSuccess(dataArr));
-    yield put(hideContentLoading());
+    try {
+        yield put(showContentLoading());
+        const data = yield call(api.getPlaylist, payload);
+        const res = yield call(api.getPlaylistTracks, payload);
+        const dataArr = [data.data, res.data.items];
+        yield put(getTracksPlaylistSuccess(dataArr));
+        yield put(hideContentLoading());
+    }
+    catch (error) {
+        yield put(getTracksPlaylistFailed(error));
+    }
 }
 function* watchFetchCategory({ payload }) {
-    yield put(showContentLoading());
-    const info = yield call(api.getCategory, payload, { country: 'VN' });
-    const res = yield call(api.getCategoryPlaylists, payload, { country: 'VN' });
-    yield put(getCategorySuccess([info.data, res.data]));
-    yield put(hideContentLoading());
+    try {
+        yield put(showContentLoading());
+        const info = yield call(api.getCategory, payload, { country: 'VN' });
+        const res = yield call(api.getCategoryPlaylists, payload, { country: 'VN' });
+        yield put(getCategorySuccess([info.data, res.data]));
+        yield put(hideContentLoading());
+    }
+    catch (error) {
+        yield put(getCategoryFailed(error));
+    }
 }
 function* watchFetchCategories() {
-    yield put(showContentLoading());
-    const res = yield call(api.getCategories, { country: 'VN' });
-    yield put(getCategoriesSuccess(res.data.categories.items))
-    yield put(hideContentLoading());
+    try {
+        yield put(showContentLoading());
+        const res = yield call(api.getCategories, { country: 'VN' });
+        yield put(getCategoriesSuccess(res.data.categories.items));
+        yield put(hideContentLoading());
+    }
+    catch (error) {
+        yield put(getCategoriesFailed(error));
+    }
 }
 function* Search({ payload }) {
     if (payload !== '') {
@@ -170,7 +196,7 @@ function* Search({ payload }) {
             }));
         }
     }
-    else{
+    else {
         yield put(SearchValue({
             albums: { items: [] },
             artists: { items: [] },
@@ -232,10 +258,8 @@ function* watchFetchAlbum({ payload }) {
     yield put(getAlbumSuccess(res.data));
 }
 function* watchFetchArtistAlbum({ payload }) {
-
     const res = yield call(api.getArtistAlbums, payload, { limit: 50 });
     yield put(getArtistAlbumSuccess(res.data));
-
 }
 function* watchFollowArtist({ payload }) {
     try {
@@ -304,7 +328,10 @@ function* watchUploadImage({ payload }) {
 function* watchUpdatePlaylistDetail({ payload }) {
     try {
         yield call(api.updatePlaylistDetail, payload.id, payload.data);
-        yield put(updatePlaylistDetailSuccess(payload.data))
+        yield put(updatePlaylistDetailSuccess(payload.data));
+        yield put(addNotification('Update Successfully !'));
+        yield delay(2000);
+        yield put(hideNotification());
     }
     catch {
         yield put(updatePlaylistDetailFailed('error'))
@@ -379,15 +406,46 @@ function* watchRemoveItemFromPlaylist({ payload }) {
 function* watchFetchShow({ payload }) {
     try {
         const res = yield call(api.getShow, payload);
-        yield put(getShowSuccess(res.data))
+        yield put(getShowSuccess(res.data));
     }
     catch {
         yield put(getShowFailed('error'))
     }
 }
+function* watchSaveAlbums({ payload }) {
+    let data=payload.data
+    if (payload.data.added_at === undefined) {
+        data={
+            added_at: constants.getFormattedDate(),
+            album:payload.data
+        }
+    }
+    try {
+        yield call(api.saveAlbums, payload.id);
+        yield put(saveAlbumsSuccess(data));
+        yield put(addNotification('Added to library !'));
+        yield delay(2000);
+        yield put(hideNotification());
+    }
+    catch {
+        yield put(saveAlbumsFailed('error'))
+    }
+}
+function* watchRemoveAlbums({payload}){
+    try {
+        yield call(api.removeAlbums, payload);
+        yield put(removeAlbumsSuccess(payload));
+        yield put(addNotification('Removed from library !'));
+        yield delay(2000);
+        yield put(hideNotification());
+    }
+    catch {
+        yield put(removeAlbumsFailed('error'))
+    }
+}
 function* rootSaga() {
-    yield takeLatest(constants.GET_USER_INFO, watchFetchUserInfo);
-    yield takeLatest(constants.GET_RECENT_PLAYLISTS, watchFetchRecentPlaylist);
+    yield takeEvery(constants.GET_USER_INFO, watchFetchUserInfo);
+    yield takeEvery(constants.GET_RECENT_PLAYLISTS, watchFetchRecentPlaylist);
     yield takeEvery(constants.GET_USER_PLAYLISTS, watchFetchUserPlaylist);
     yield takeEvery(constants.GET_CONTENT_HOME, watchFetchContentHome);
     yield takeEvery(constants.GET_ARTIST_FOLLOWED, watchFetchArtistFollowed);
@@ -416,6 +474,7 @@ function* rootSaga() {
     yield takeEvery(constants.SAVE_TRACKS, watchSaveTracks);
     yield takeEvery(constants.REMOVE_FROM_TRACKS, watchRemoveFromTracks);
     yield takeEvery(constants.REMOVE_ITEM_FROM_PLAYLIST, watchRemoveItemFromPlaylist);
-
+    yield takeEvery(constants.SAVE_ALBUMS, watchSaveAlbums);
+    yield takeEvery(constants.REMOVE_ALBUMS, watchRemoveAlbums);
 }
 export default rootSaga;

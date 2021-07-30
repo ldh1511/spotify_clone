@@ -347,3 +347,15 @@ export const saveAlbums = (ids) => {
         }
     });
 }
+export const removeAlbums = (ids) => {
+    let token = localStorage.getItem('token');
+    return axiosServices.delete(`${API_ENDPOINT}/v1/me/albums`, {
+        headers: {
+            Authorization: 'Bearer ' + token,
+            "content-type":'application/json'
+        },
+        params:{
+            ids
+        }
+    });
+}

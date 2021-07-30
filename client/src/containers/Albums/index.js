@@ -4,7 +4,7 @@ import './styles.css';
 import { connect } from 'react-redux';
 import CardList from '../../components/CardList';
 import AlbumBlock from '../../components/AlbumBlock';
-import { getAlbumTracks, RemoveFromTracks, SaveTracks } from '../../redux/actions/info';
+import { getAlbumTracks, GetSavedALbums, removeAlbums, RemoveFromTracks, saveAlbums, SaveTracks } from '../../redux/actions/info';
 import { bindActionCreators } from 'redux';
 import { useHistory } from 'react-router';
 Albums.propTypes = {
@@ -15,15 +15,21 @@ Albums.propTypes = {
 Albums.defaultProps = {
     albums: [],
     albumtracks: [],
-    singles: []
+    singles: [],
+    savedAlbums:{
+        items:[]
+    }
 }
 function Albums(props) {
     const history = useHistory();
     const [list, setList] = useState(false);
     const {
         albums, name, getAlbumTracksAction, albumtracks, location, singles,
-        SaveTracksAction, removeFromTracksAction, savedTracks
+        SaveTracksAction, removeFromTracksAction, savedTracks,
+        saveAlbumsAction, getSavedAlbumsAction,savedAlbums,
+        removeAlbumsAction
     } = props;
+    const {items}=savedAlbums;
     const pathname = location.pathname.split('/');
     const match = pathname[pathname.length - 1];
     const [type, setType] = useState(match);
@@ -48,6 +54,7 @@ function Albums(props) {
             return idArr
         }
         getAlbumTracksAction(getData())
+        getSavedAlbumsAction();
     }, [type, getAlbumTracksAction, data])
     const renderCardList = () => {
         let xhtml = null;
@@ -60,6 +67,9 @@ function Albums(props) {
                             SaveTracksAction={SaveTracksAction}
                             removeFromTrack={removeFromTracksAction}
                             savedTracks={savedTracks}
+                            saveAlbums={saveAlbumsAction}
+                            removeAlbums={removeAlbumsAction}
+                            check={items.filter((item) =>item.album.id===albums[i].id)}
                         />
                     )) :
                     albumtracks.map((item, i) => (
@@ -68,7 +78,10 @@ function Albums(props) {
                             SaveTracksAction={SaveTracksAction}
                             removeFromTrack={removeFromTracksAction}
                             savedTracks={savedTracks}
-                        />))
+                            saveAlbums={saveAlbumsAction}
+                            check={items.filter((item) =>item.album.id===singles[i].id)}
+                        />
+                    ))
                 }
             </div>
         )
@@ -112,6 +125,7 @@ const mapStateToProps = (state) => {
         name: state.artist.artistInfo.name,
         albumtracks: state.artist.albumtracks,
         savedTracks: state.tracks.savedTracks,
+        savedAlbums:state.album.savedAlbums
     }
 }
 const mapDispatchToProps = (dispatch) => {
@@ -119,6 +133,9 @@ const mapDispatchToProps = (dispatch) => {
         getAlbumTracksAction: bindActionCreators(getAlbumTracks, dispatch),
         SaveTracksAction: bindActionCreators(SaveTracks, dispatch),
         removeFromTracksAction: bindActionCreators(RemoveFromTracks, dispatch),
+        getSavedAlbumsAction: bindActionCreators(GetSavedALbums, dispatch),
+        saveAlbumsAction: bindActionCreators(saveAlbums, dispatch),
+        removeAlbumsAction: bindActionCreators(removeAlbums, dispatch),
     }
 }
 export default connect(mapStateToProps, mapDispatchToProps)(Albums);

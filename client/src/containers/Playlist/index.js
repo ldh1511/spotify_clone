@@ -84,7 +84,12 @@ function Playlist(props) {
             }
         }
     }
-
+    const handlePlayAudio=()=>{
+        let type=pathname[pathname.length - 2];
+        if(type==='playlist'){
+            getPreviewUrlAction(tracksInPlaylist[0],tracksInPlaylist);
+        }
+    }
     return (
         <div ref={wrapperRef} className="playlist">
             <Banner
@@ -100,6 +105,11 @@ function Playlist(props) {
                 getPredominantColor={getPredominantColorAction}
                 predominantColor={predominantColor}
             />
+            <div className="mid-content" style={{ backgroundColor: `${predominantColor}` }}>
+                <button className="play-btn" onClick={()=>handlePlayAudio()}>
+                    <i className="fas fa-play"></i>
+                </button>
+            </div>
             <div className="playlist-detail">
                 <TrackTable
                     data={match !== 'tracks' ? tracksInPlaylist : savedTracks.items}
@@ -107,10 +117,8 @@ function Playlist(props) {
                     SaveTracksAction={SaveTracksAction}
                     removeFromTrack={removeFromTracksAction}
                     getPreviewUrl={getPreviewUrlAction}
-                    
                 />
                 {id === playlistInfo.owner.id ? <CollectionSearch idPlaylist={match} /> : <></>}
-
             </div>
             <Modal
                 check={stateModal}

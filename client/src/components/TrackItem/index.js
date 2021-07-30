@@ -46,7 +46,7 @@ function TrackItem(props) {
 			xhtml = (
 				<tr style={{ gridTemplateColumns: '5% 85% 10%' }} className="track-tr">
 					<td>{i + 1}</td>
-					<td className="track-info" onClick={() => handlePlayAudio(data)}>
+					<td className="track-info">
 						<div className="track-info-right">
 							<h3>{name_track}</h3>
 						</div>

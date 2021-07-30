@@ -3,17 +3,25 @@ import PropTypes from 'prop-types';
 import './styles.css';
 import { NavLink } from 'react-router-dom';
 AlbumBlockHeader.propTypes = {
-    data:PropTypes.object,
+    data: PropTypes.object,
 };
 AlbumBlockHeader.defaultProps = {
-    data:{
-        release_date:'',
-        images:[{url:''}]
+    data: {
+        release_date: '',
+        images: [{ url: '' }]
     }
 }
 function AlbumBlockHeader(props) {
-    const {data}=props;
-    const {name, release_date, album_type, total_tracks, images, id}=data;
+    const { data, saveAlbums, check, removeAlbums } = props;
+    const { name, release_date, album_type, total_tracks, images, id } = data;
+    const handleSaveAlbums = () => {
+        if(check===false){
+            saveAlbums(id,data);
+        }
+        else{
+            removeAlbums(id);
+        }
+    }
     return (
         <div className="album-block--header">
             <img alt="" src={images[0].url} />
@@ -30,7 +38,10 @@ function AlbumBlockHeader(props) {
                     <button className="play-btn btn-active">
                         <i className="fas fa-play"></i>
                     </button>
-                    <i className="far fa-heart"></i>
+                    <i
+                        className={check === true ? `fas fa-heart active` : `far fa-heart `}
+                        onClick={() => handleSaveAlbums()}>
+                    </i>
                 </div>
             </div>
         </div>

@@ -629,10 +629,13 @@ export const hideNotification=()=>{
     }
 }
 
-export const saveAlbums=(id)=>{
+export const saveAlbums=(id,data)=>{
     return{
         type:constants.SAVE_ALBUMS,
-        payload:id
+        payload:{
+            id:id,
+            data:data
+        }
     }
 }
 export const saveAlbumsSuccess=(data)=>{
@@ -644,6 +647,25 @@ export const saveAlbumsSuccess=(data)=>{
 export const saveAlbumsFailed=(data)=>{
     return{
         type:constants.SAVE_ALBUMS_FAILED,
+        payload:data
+    }
+}
+
+export const removeAlbums=(id)=>{
+    return{
+        type:constants.REMOVE_ALBUMS,
+        payload:id
+    }
+}
+export const removeAlbumsSuccess=(data)=>{
+    return{
+        type:constants.REMOVE_ALBUMS_SUCCESS,
+        payload:data
+    }
+}
+export const removeAlbumsFailed=(data)=>{
+    return{
+        type:constants.REMOVE_ALBUMS_FAILED,
         payload:data
     }
 }
