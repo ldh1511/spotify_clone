@@ -24,47 +24,42 @@ Album.defaultProps = {
     relatedAlbum: {
         items: []
     },
-    savedAlbums:{
-        items:[]
+    savedAlbums: {
+        items: []
     }
 }
 function Album(props) {
     const { location,
-        getAlbumAction,savedAlbums,
+        getAlbumAction, savedAlbums,
         albumInfo, getArtistAlbumAction,
         relatedAlbum, getSavedTracksAction,
         savedTracks, getPredominantColorAction,
-        predominantColor,getSavedAlbumsAction,
+        predominantColor, getSavedAlbumsAction,
         SaveTracksAction, removeFromTracksAction,
         saveAlbumsAction, removeAlbumsAction,
         getPreviewUrlAction } = props;
     const { images, name, tracks, type, artists, release_date, id } = albumInfo;
-    const {items}=savedAlbums;
-    const [check, setCheck]=useState(false);
+    const { items } = savedAlbums;
+    const [check, setCheck] = useState(false);
     let pathname = location.pathname.split('/');
     let match = pathname[pathname.length - 1];
     useEffect(() => {
         getAlbumAction(match);
         getSavedTracksAction();
         getSavedAlbumsAction();
-    }, [match, getSavedTracksAction, getAlbumAction,getSavedAlbumsAction])
+    }, [match, getSavedTracksAction, getAlbumAction, getSavedAlbumsAction])
     useEffect(() => {
         if (artists[0].id !== '') {
             getArtistAlbumAction(artists[0].id);
         }
     }, [artists, getArtistAlbumAction])
     useEffect(() => {
-        if(id){
-            let checked= items.filter((item)=>item.album.id===id);
-            if(checked.length===1){
-                setCheck(true);
-            }
-            else{
-                setCheck(false);
-            }
+        if (id) {
+            let checked = items.filter((item) => item.album.id === id);
+            if (checked.length === 1) { setCheck(true) }
+            else { setCheck(false) }
         }
-
-    },[albumInfo,items, id])
+    }, [albumInfo, items, id])
     const getNameArtist = (arr) => {
         let artist_name = '';
         if (arr.length > 1) {
@@ -73,9 +68,7 @@ function Album(props) {
                 return true;
             })
         }
-        else {
-            artist_name = arr[0].name;
-        }
+        else { artist_name = arr[0].name;}
         return artist_name;
     }
     const renderCardBlock = () => {
@@ -91,24 +84,27 @@ function Album(props) {
                 own='album'
                 path='related-albums'
                 match={match}
+                getAlbum={getAlbumAction}
+                albumInfo={albumInfo}
+                getPreviewUrl={getPreviewUrlAction}
             />)
         return xhtml;
     }
-    const handleSaveAlbums=()=>{
-        if(check===true){
+    const handleSaveAlbums = () => {
+        if (check === true) {
             removeAlbumsAction(id);
         }
-        else{
+        else {
             saveAlbumsAction(id, albumInfo);
         }
     }
-    const handlePlayAudio = ()=>{
-        let newTracks=tracks;
-        newTracks.items.map(item=>{
-            item.images=images
+    const handlePlayAudio = () => {
+        let newTracks = tracks;
+        newTracks.items.map(item => {
+            item.images = images
             return true;
         })
-        getPreviewUrlAction(newTracks.items[0],newTracks.items);
+        getPreviewUrlAction(newTracks.items[0], newTracks.items);
     }
     return (
         <div className="album">
@@ -122,12 +118,12 @@ function Album(props) {
                 predominantColor={predominantColor}
             />
             <div className="mid-content" style={{ backgroundColor: `${predominantColor}` }}>
-                <button className="play-btn" onClick={() =>handlePlayAudio()}>
+                <button className="play-btn" onClick={() => handlePlayAudio()}>
                     <i className="fas fa-play"></i>
                 </button>
                 <i
-                    className={check===true?`fas fa-heart item-icon active`:`far fa-heart item-icon`}
-                    onClick={() =>handleSaveAlbums()}
+                    className={check === true ? `fas fa-heart item-icon active` : `far fa-heart item-icon`}
+                    onClick={() => handleSaveAlbums()}
                 ></i>
             </div>
             <TrackTable
@@ -147,7 +143,7 @@ const mapStateToProps = (state) => {
         relatedAlbum: state.album.relatedAlbum,
         savedTracks: state.tracks.savedTracks,
         predominantColor: state.ui.predominantColor,
-        savedAlbums:state.album.savedAlbums
+        savedAlbums: state.album.savedAlbums
     }
 }
 const mapDispatchToProps = (dispatch) => {

@@ -43,7 +43,7 @@ function Modal(props) {
     }
     const handleUploadImg = () => {
         if (img) {
-            upload(id, img);
+            upload(id, img, imgSrc);
         }
         if (data.name !== name || data.description !== description) {
             update(id, data);

@@ -9,16 +9,18 @@ CurrentList.defaultProps = {
 };
 
 function CurrentList(props) {
-    const { data } = props;
+    const { data, getPreviewUrl,  getTracksInPlaylist, tracks } = props;
     const renderCurrentItem = () => {
         let xhtml = null;
         xhtml = data.map(item => (
-           
             <CurrentItem
                 key={item.description}
                 name={item.name}
                 images={item.images[0]}
                 id={item.id}
+                getPreviewUrl={getPreviewUrl}
+                getTracksInPlaylist={getTracksInPlaylist}
+                tracks={tracks}
             />)
         )
         return xhtml

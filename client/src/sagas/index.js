@@ -56,7 +56,12 @@ import {
     getCategoryFailed,
     getCategoriesFailed,
     removeAlbumsSuccess,
-    removeAlbumsFailed
+    removeAlbumsFailed,
+    getUserPlaylist,
+    createPlaylistSuccess,
+    createPlaylistFailed,
+    uploadPlaylistImage_Success,
+    uploadPlaylistImage_Failed
 } from '../redux/actions/info';
 import { hideContentLoading, hideLoading, showContentLoading, showLoading } from '../redux/actions/ui';
 function* watchFetchUserInfo() {
@@ -322,8 +327,17 @@ function* watchFetchSavedEpisodes() {
     }
 }
 function* watchUploadImage({ payload }) {
-    const img = yield call(constants.getBase64, payload.data);
-    yield call(api.uploadPlaylistImage, payload.id, img.split(',')[1])
+    try{
+        const img = yield call(constants.getBase64, payload.data);
+        yield call(api.uploadPlaylistImage, payload.id, img.split(',')[1])
+        yield put(uploadPlaylistImage_Success(payload.src));
+        yield put(addNotification('Update Successfully !'));
+        yield delay(2000);
+        yield put(hideNotification());
+    }
+    catch{
+        yield put(uploadPlaylistImage_Failed('error'))
+    }
 }
 function* watchUpdatePlaylistDetail({ payload }) {
     try {
@@ -443,6 +457,20 @@ function* watchRemoveAlbums({payload}){
         yield put(removeAlbumsFailed('error'))
     }
 }
+function* watchCreatePlaylist({payload}){
+    try{
+        yield call(api.createPlaylist,payload.id,payload.num);
+        const res=yield call(api.getUserPlaylists,payload.id);
+        yield put(createPlaylistSuccess(res.data));
+        yield put(addNotification('Create Playlist Successfully !'));
+        yield delay(2000);
+        yield put(hideNotification());
+    }
+    catch{
+        yield put (createPlaylistFailed('error'))
+    }
+    console.log(payload)
+}
 function* rootSaga() {
     yield takeEvery(constants.GET_USER_INFO, watchFetchUserInfo);
     yield takeEvery(constants.GET_RECENT_PLAYLISTS, watchFetchRecentPlaylist);
@@ -476,5 +504,6 @@ function* rootSaga() {
     yield takeEvery(constants.REMOVE_ITEM_FROM_PLAYLIST, watchRemoveItemFromPlaylist);
     yield takeEvery(constants.SAVE_ALBUMS, watchSaveAlbums);
     yield takeEvery(constants.REMOVE_ALBUMS, watchRemoveAlbums);
+    yield takeEvery(constants.CREATE_PLAYLIST, watchCreatePlaylist);
 }
 export default rootSaga;

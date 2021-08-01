@@ -41,6 +41,9 @@
     margin-left: 40px;
     color: #b3b3b3;
 }
+.footer-left--icon .active{
+    color:#1ed760;
+}
 .footer-center{
     display: flex;
     flex-direction: column;

@@ -1,11 +1,11 @@
-import React, { useEffect, useState } from 'react';
+import React, {useState } from 'react';
 import PropTypes from 'prop-types';
 import './styles.css';
 import CollectionSearchBar from '../../components/CollectionSearchBar';
 import CollectionSearchList from '../../components/CollectionSearchList';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { getAlbumTracks, getArtist, addItemToPlaylist, getAlbum, Search } from '../../redux/actions/info';
+import { getAlbumTracks, getArtist, addItemToPlaylist, getAlbum } from '../../redux/actions/info';
 CollectionSearch.propTypes = {
     sortResult: PropTypes.array
 };

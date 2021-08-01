@@ -34,6 +34,16 @@ const tracks = (state = tracksInitialState, action) => {
             }
         case constants.UPDATE_PLAYLIST_DETAIL_FAILED:
             return state
+        case constants.UPLOAD_PLAYLIST_IMAGE:
+            return state
+        case constants.UPLOAD_PLAYLIST_IMAGE_SUCCESS:
+            return {
+                ...state,
+                playlistInfo: {
+                    ...state.playlistInfo,
+                    images:[{url: `${action.payload}`}]
+                }
+            }
         case constants.ADD_ITEM_TO_PLAYLIST:
             return state
         case constants.ADD_ITEM_TO_PLAYLIST_SUCCESS:

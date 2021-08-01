@@ -75,7 +75,7 @@ function Banner(props) {
                                 </div>
                             </> :
                             <>
-                                <img className="custom-img--off" alt="" src={image === currentImg || currentImg === '' ? image : currentImg}></img>
+                                <img className="custom-img--off" alt="" src={image}></img>
                                 <div className="custom-img--on">
                                     <i className="fas fa-pencil-alt"></i>
                                     <p>Chọn ảnh</p>

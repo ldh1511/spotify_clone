@@ -445,12 +445,13 @@ export const CloseModal=()=>{
         type:constants.CLOSE_MODAL
     }
 }
-export const uploadPlaylistImage=(id, data)=>{
+export const uploadPlaylistImage=(id, data, srcImg)=>{
     return{
         type:constants.UPLOAD_PLAYLIST_IMAGE,
         payload:{
             id:id,
-            data:data
+            data:data,
+            src:srcImg
         }
     }
 }
@@ -666,6 +667,28 @@ export const removeAlbumsSuccess=(data)=>{
 export const removeAlbumsFailed=(data)=>{
     return{
         type:constants.REMOVE_ALBUMS_FAILED,
+        payload:data
+    }
+}
+
+export const createPlaylist=(id,num)=>{
+    return{
+        type:constants.CREATE_PLAYLIST,
+        payload:{
+            id:id,
+            num:num
+        }
+    }
+}
+export const createPlaylistSuccess=(data)=>{
+    return{
+        type:constants.CREATE_PLAYLIST_SUCCESS,
+        payload:data
+    }
+}
+export const createPlaylistFailed=(data)=>{
+    return{
+        type:constants.CREATE_PLAYLIST_FAILED,
         payload:data
     }
 }

@@ -10,7 +10,7 @@ Sidebar.defaultProps = {
     items: []
 }
 function Sidebar(props) {
-    const { items } = props;
+    const { items, createPlaylist, info } = props;
     const renderSidebarPlaylist = () => {
         let xhtml = null;
         xhtml = items.map(item => (
@@ -18,6 +18,9 @@ function Sidebar(props) {
             <NavLink to={`/playlist/${item.id}`}>{item.name}</NavLink>
         </li>))
         return xhtml
+    }
+    const handleCreatePlaylist = async() =>{
+        await createPlaylist(info.id,items.length+1);
     }
     return (
         <div className="sidebar">
@@ -51,14 +54,14 @@ function Sidebar(props) {
                 </li>
             </ul>
             <ul className="sidebar-list mid">
-                <li>
-                    <a href="true">
+                <li onClick={()=>handleCreatePlaylist()}>
+                    <p>
                         <svg role="img" height="12" width="12" viewBox="0 0 16 16" className="Svg-sc__sc-1bi12j5-0 hPiOwj">
                             <path d="M14 7H9V2H7v5H2v2h5v5h2V9h5z"></path>
                             <path fillRule="none" d="M0 0h16v16H0z"></path>
                         </svg>
                         Create Playlist
-                    </a>
+                    </p>
                 </li>
                 <li>
                     <NavLink activeClassName="li-active" to="/collection/tracks">

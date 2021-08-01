@@ -26,7 +26,6 @@ function Header(props) {
         <h3>{name}</h3>
         <div className="dropdown-list">
           <ul>
-            <li>Hồ sơ</li>
             <li onClick={()=>handleLogout()}>Đăng xuất</li>
           </ul>
         </div>

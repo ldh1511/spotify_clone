@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import './styles.css';
-import { FollowArtist, getArtist, getArtistFollowed, GetSavedTracks, UnFollowArtist, getPredominantColor, SaveTracks, RemoveFromTracks } from '../../redux/actions/info';
+import { FollowArtist, getArtist, getArtistFollowed, GetSavedTracks, UnFollowArtist, getPredominantColor, SaveTracks, RemoveFromTracks, getAlbum, getPreviewUrl } from '../../redux/actions/info';
 import TrackTable from '../../components/TrackTable';
 import CardBlock from '../../components/CardBlock';
 import Banner from '../../components/Banner';
@@ -39,7 +39,8 @@ function Artist(props) {
         getArtistFollowedAction,
         savedTracks, getSavedTracksAction,
         getPredominantColorAction, predominantColor,
-        SaveTracksAction, removeFromTracksAction
+        SaveTracksAction, removeFromTracksAction,
+        getAlbumAction, albumInfo, getPreviewUrlAction
       } = props;
     const { items } = followedArtists, { id } = artist;
     let pathname = location.pathname.split('/');
@@ -89,6 +90,9 @@ function Artist(props) {
                     match={match}
                     path='albums'
                     own='artist'
+                    getAlbum={getAlbumAction}
+                    albumInfo={albumInfo}
+                    getPreviewUrl={getPreviewUrlAction}
                 />
             )
         }
@@ -107,6 +111,9 @@ function Artist(props) {
                     match={match}
                     path='singles'
                     own='artist'
+                    getAlbum={getAlbumAction}
+                    albumInfo={albumInfo}
+                    getPreviewUrl={getPreviewUrlAction}
                 />
             )
         }
@@ -165,7 +172,8 @@ const mapStateToProps = state => {
         singles: state.artist.singles,
         followedArtists: state.artist.followedArtists,
         savedTracks: state.tracks.savedTracks,
-        predominantColor:state.ui.predominantColor
+        predominantColor:state.ui.predominantColor,
+        albumInfo: state.album.albumInfo,
     }
 };
 const mapDispatchToProps = (dispatch) => {
@@ -178,6 +186,8 @@ const mapDispatchToProps = (dispatch) => {
         getPredominantColorAction:bindActionCreators(getPredominantColor, dispatch),
         SaveTracksAction: bindActionCreators(SaveTracks, dispatch),
         removeFromTracksAction: bindActionCreators(RemoveFromTracks, dispatch),
+        getAlbumAction: bindActionCreators(getAlbum, dispatch),
+        getPreviewUrlAction: bindActionCreators(getPreviewUrl, dispatch)
     }
 }
 export default connect(mapStateToProps, mapDispatchToProps)(Artist);

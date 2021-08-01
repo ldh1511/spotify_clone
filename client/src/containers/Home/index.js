@@ -36,7 +36,7 @@ function Home(props) {
         getRecentPlaylistAcion();
         getContentHomeAction();
         getArtistFollowedAction();
-    }, [getRecentPlaylistAcion,getContentHomeAction,getArtistFollowedAction])
+    }, [getRecentPlaylistAcion, getContentHomeAction, getArtistFollowedAction])
     const renderCategoriesPlaylists = () => {
         let categoriesPlaylistsLimit = categoriesPlaylists.map(item => (
             item = item.playlists.items.filter((e, i) => i < 5)
@@ -75,8 +75,12 @@ function Home(props) {
         <div className="home">
             <div className="home-banner">
                 <h1>{getTime()}, {info.display_name}</h1>
-                <CurrentList data={recentlyPlaylist} />
-
+                <CurrentList
+                    data={recentlyPlaylist}
+                    getPreviewUrl={getPreviewUrlAction}
+                    getTracksInPlaylist={getTracksInPlaylistAction}
+                    tracks={tracks}
+                />
             </div>
             {renderCategoriesPlaylists()}
         </div>
@@ -98,7 +102,7 @@ const mapStateToProps = state => {
         relatedArtists: state.contentHome.relatedArtists,
         categories: state.contentHome.categories,
         categoriesPlaylists: state.contentHome.categoriesPlaylists,
-        tracks:state.tracks
+        tracks: state.tracks
     }
 }
 export default connect(mapStateToProps, mapDispatchToProps)(Home);

@@ -74,8 +74,11 @@ function Playlist(props) {
     }
     const handlePlayAudio=()=>{
         let type=pathname[pathname.length - 2];
-        if(type==='playlist'){
+        if(type==='playlist' && tracksInPlaylist.length>0){
             getPreviewUrlAction(tracksInPlaylist[0],tracksInPlaylist);
+        }
+        if(match==='tracks' && savedTracks.items.length>0){
+            getPreviewUrlAction(savedTracks.items[0],savedTracks.items);
         }
     }
     return (
@@ -89,7 +92,7 @@ function Playlist(props) {
                 custom={id === playlistInfo.owner.id ? true : false}
                 openModal={OpenModalAction}
                 getCurImg={getCurrentImgAction}
-                currentImg={currentImg}
+               // currentImg={currentImg}
                 getPredominantColor={getPredominantColorAction}
                 predominantColor={predominantColor}
             />

@@ -151,6 +151,10 @@ export const REMOVE_ALBUMS = "REMOVE_ALBUMS";
 export const REMOVE_ALBUMS_SUCCESS = "REMOVE_ALBUMS_SUCCESS";
 export const REMOVE_ALBUMS_FAILED = "REMOVE_ALBUMS_FAILED";
 
+export const CREATE_PLAYLIST = "CREATE_PLAYLIST";
+export const CREATE_PLAYLIST_SUCCESS = "CREATE_PLAYLIST_SUCCESS";
+export const CREATE_PLAYLIST_FAILED = "CREATE_PLAYLIST_FAILED";
+
 // function constants
 export const getBase64 = (file) => {
   return new Promise((resolve, reject) => {
