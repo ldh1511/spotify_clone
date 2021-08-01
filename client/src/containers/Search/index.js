@@ -112,6 +112,15 @@ function SearchPage(props) {
         }
         return xhtml;
     }
+    const renderSearchShows = () => {
+        const { shows } = search;
+        let xhtml = null;
+        let data = shows.items.slice(0, 5);
+        if (shows.items.length > 0) {
+            xhtml = <CardBlock data={data} name="podcasts" param={param} type='podcast' />
+        }
+        return xhtml;
+    }
     const renderSearchResult = () => {
         let xhtml = null;
         if (renderSearchPlaylists() && renderSearchAlbums()) {
@@ -121,6 +130,7 @@ function SearchPage(props) {
                     {renderSearchArtists()}
                     {renderSearchPlaylists()}
                     {renderSearchAlbums()}
+                    {renderSearchShows()}
                 </>
             )
         }

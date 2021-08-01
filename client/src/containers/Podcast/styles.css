@@ -78,3 +78,6 @@
     color: #b3b3b3;
     line-height: 25px;
 }
+.podcast-container .mid-content{
+    min-height: 100px;
+}

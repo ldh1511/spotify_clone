@@ -370,3 +370,27 @@ export const createPlaylist = (id, num) => {
         },
     });
 }
+export const saveEpisodes = (ids) => {
+    let token = localStorage.getItem('token');
+    return axiosServices.put(`${API_ENDPOINT}/v1/me/episodes`, null, {
+        headers: {
+            Authorization: 'Bearer ' + token,
+            "content-type": 'application/json'
+        },
+        params: {
+            ids
+        }
+    });
+}
+export const removeEpisodes = (ids) => {
+    let token = localStorage.getItem('token');
+    return axiosServices.delete(`${API_ENDPOINT}/v1/me/episodes`, {
+        headers: {
+            Authorization: 'Bearer ' + token,
+            "content-type": 'application/json'
+        },
+        params: {
+            ids
+        }
+    });
+}

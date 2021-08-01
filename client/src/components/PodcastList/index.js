@@ -7,10 +7,15 @@ PodcastList.propTypes = {
 };
 
 function PodcastList(props) {
-    const {data}=props;
+    const {data, getPreviewUrl}=props;
     const renderPodcastItem=()=>{
         let xhtml = null;
-        xhtml=data.map(item=><PodcastItem key={item.id} data={item}/>)
+        xhtml=data.map(item=>(<PodcastItem 
+            key={item.id} 
+            data={item}
+            getPreviewUrl={getPreviewUrl}
+            listData={data}
+            />))
         return xhtml;
     }
     return (

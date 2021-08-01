@@ -210,6 +210,22 @@ export const SearchTracks=(param,cur)=>{
     }
 }
 
+export const SearchShowsResult=(data)=>{
+    return{
+        type:constants.SEARCH_SHOWS_RESULT,
+        payload:data
+    }
+}
+export const SearchShows=(param,cur)=>{
+    return{
+        type:constants.SEARCH_SHOWS,
+        payload:{
+            p:param,
+            cur:cur
+        }
+    }
+}
+
 export const getArtistSuccess=(data)=>{
     return{
         type:constants.GET_ARTIST_SUCCESS,
@@ -689,6 +705,45 @@ export const createPlaylistSuccess=(data)=>{
 export const createPlaylistFailed=(data)=>{
     return{
         type:constants.CREATE_PLAYLIST_FAILED,
+        payload:data
+    }
+}
+export const saveEpisodes=(ids,data)=>{
+    return{
+        type:constants.SAVE_EPISODES,
+        payload:{
+            ids:ids,
+            data:data
+        }
+    }
+}
+export const saveEpisodesSuccess=(data)=>{
+    return{
+        type:constants.SAVE_EPISODES_SUCCESS,
+        payload:data
+    }
+}
+export const saveEpisodesFailed=(data)=>{
+    return{
+        type:constants.SAVE_EPISODES_FAILED,
+        payload:data
+    }
+}
+export const removeEpisodes=(ids)=>{
+    return{
+        type:constants.REMOVE_EPISODES,
+        payload:ids
+    }
+}
+export const removeEpisodesSuccess=(data)=>{
+    return{
+        type:constants.REMOVE_EPISODES_SUCCESS,
+        payload:data
+    }
+}
+export const removeEpisodesFailed=(data)=>{
+    return{
+        type:constants.REMOVE_EPISODES_FAILED,
         payload:data
     }
 }

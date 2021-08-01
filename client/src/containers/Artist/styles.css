@@ -10,3 +10,6 @@
     text-transform: capitalize;
     font-size: 2rem;
 }
+.artists .mid-content{
+    min-height: 100px ;
+}

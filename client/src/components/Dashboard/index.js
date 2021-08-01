@@ -8,7 +8,7 @@ import './styles.css'
 import { Switch, Route } from "react-router-dom";
 import { connect } from 'react-redux';
 import { bindActionCreators } from "redux";
-import { addNotification, createPlaylist, GetSavedTracks, getUserPlaylist, hideNotification, RemoveFromTracks, SaveTracks } from "../../redux/actions/info";
+import { addNotification, createPlaylist, GetSavedEpisodes, GetSavedTracks, getUserPlaylist, hideNotification, removeEpisodes, RemoveFromTracks, saveEpisodes, SaveTracks } from "../../redux/actions/info";
 import Playlist from "../../containers/Playlist";
 import Gene from "../../containers/Gene";
 import Search from "../../containers/Search";
@@ -32,14 +32,16 @@ function Dashboard(props) {
     addNotificationAction, hideNotificationAction,
     getSavedTracksAction, savedTracks,
     createPlaylistAction, removeFromTracksAction,
-    SaveTracksAction
+    SaveTracksAction, SaveEpisodesAction, savedEpisodes,
+    getSavedEpisodesAction, RemoveEpisodesAction
    } = props;
   useEffect(() => {
     if (info.id) {
       getUserPlaylistAction(info.id)
     }
     getSavedTracksAction();
-  }, [info,getUserPlaylistAction,getSavedTracksAction])
+    getSavedEpisodesAction();
+  }, [info,getUserPlaylistAction,getSavedTracksAction, getSavedEpisodesAction])
   return (
     <div className="dashboard">
       <Sidebar items={playlist.items} createPlaylist={createPlaylistAction} info={info}/>
@@ -100,7 +102,10 @@ function Dashboard(props) {
       hideNoti={hideNotificationAction}
       savedTracks={savedTracks}
       SaveTracksAction={SaveTracksAction}
+      SaveEpisodesAction={SaveEpisodesAction}
       removeFromTracksAction={removeFromTracksAction}
+      savedEpisodes={savedEpisodes}
+      RemoveEpisodesAction={RemoveEpisodesAction}
       />
     </div>
   );
@@ -112,6 +117,7 @@ const mapStateToProps = state => {
     predominantColor:state.ui.predominantColor,
     music:state.music,
     savedTracks: state.tracks.savedTracks,
+    savedEpisodes: state.show.savedEpisodes,
   }
 }
 const mapDispatchToProps = dispatch => {
@@ -124,6 +130,9 @@ const mapDispatchToProps = dispatch => {
     createPlaylistAction: bindActionCreators(createPlaylist, dispatch),
     removeFromTracksAction: bindActionCreators(RemoveFromTracks, dispatch),
     SaveTracksAction: bindActionCreators(SaveTracks, dispatch), 
+    SaveEpisodesAction: bindActionCreators(saveEpisodes, dispatch), 
+    getSavedEpisodesAction: bindActionCreators(GetSavedEpisodes, dispatch),
+    RemoveEpisodesAction: bindActionCreators(removeEpisodes, dispatch),
   }
 }
 export default connect(mapStateToProps, mapDispatchToProps)(Dashboard);

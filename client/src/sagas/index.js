@@ -57,11 +57,15 @@ import {
     getCategoriesFailed,
     removeAlbumsSuccess,
     removeAlbumsFailed,
-    getUserPlaylist,
     createPlaylistSuccess,
     createPlaylistFailed,
     uploadPlaylistImage_Success,
-    uploadPlaylistImage_Failed
+    uploadPlaylistImage_Failed,
+    saveEpisodesSuccess,
+    saveEpisodesFailed,
+    removeEpisodesSuccess,
+    removeEpisodesFailed,
+    SearchShowsResult
 } from '../redux/actions/info';
 import { hideContentLoading, hideLoading, showContentLoading, showLoading } from '../redux/actions/ui';
 function* watchFetchUserInfo() {
@@ -231,6 +235,11 @@ function* SearchTracks({ payload }) {
     const { p, cur } = payload;
     const res = yield call(api.search, p, ["track"], { limit: 50, offset: cur });
     yield put(SearchTracksResult(res.data.tracks));
+}
+function* SearchShows({ payload }) {
+    const { p, cur } = payload;
+    const res = yield call(api.search, p, ["show"], { limit: 50, offset: cur });
+    yield put(SearchShowsResult(res.data.shows));
 }
 function* watchFetchArtist({ payload }) {
     yield put(showContentLoading());
@@ -471,6 +480,34 @@ function* watchCreatePlaylist({payload}){
     }
     console.log(payload)
 }
+function*watchSaveEpisodes({payload}){
+    let ids = `${payload.ids}`;
+    if (payload.data.added_at === undefined) {
+        payload.data = { ...payload.data, added_at: constants.getFormattedDate() }
+    }
+    try {
+        yield call(api.saveEpisodes, ids);
+        yield put(saveEpisodesSuccess(payload.data));
+        yield put(addNotification('Added to saved episodes !'));
+        yield delay(2000);
+        yield put(hideNotification());
+    }
+    catch {
+        yield put(saveEpisodesFailed('error'))
+    }
+}
+function* watchRemoveEpisodes({ payload }) {
+    try {
+        yield call(api.removeEpisodes, payload);
+        yield put(removeEpisodesSuccess(payload));
+        yield put(addNotification('Removed from library !'));
+        yield delay(2000);
+        yield put(hideNotification());
+    }
+    catch {
+        yield put(removeEpisodesFailed('error'))
+    }
+}
 function* rootSaga() {
     yield takeEvery(constants.GET_USER_INFO, watchFetchUserInfo);
     yield takeEvery(constants.GET_RECENT_PLAYLISTS, watchFetchRecentPlaylist);
@@ -485,6 +522,7 @@ function* rootSaga() {
     yield takeLatest(constants.SEARCH_ARTISTS, SearchArtists);
     yield takeLatest(constants.SEARCH_PLAYLISTS, SearchPlaylists);
     yield takeLatest(constants.SEARCH_TRACKS, SearchTracks);
+    yield takeLatest(constants.SEARCH_SHOWS, SearchShows);
     yield takeEvery(constants.GET_A_SHOW, watchFetchShow);
     yield takeLatest(constants.GET_ARTIST, watchFetchArtist);
     yield takeLatest(constants.GET_ALBUM_TRACK, watchFetchAlbumTrack);
@@ -505,5 +543,7 @@ function* rootSaga() {
     yield takeEvery(constants.SAVE_ALBUMS, watchSaveAlbums);
     yield takeEvery(constants.REMOVE_ALBUMS, watchRemoveAlbums);
     yield takeEvery(constants.CREATE_PLAYLIST, watchCreatePlaylist);
+    yield takeEvery(constants.SAVE_EPISODES, watchSaveEpisodes);
+    yield takeEvery(constants.REMOVE_EPISODES, watchRemoveEpisodes);
 }
 export default rootSaga;

@@ -15,8 +15,8 @@
     align-items: center;
 }
 .footer-left img{
-    width: 80px;
-    height: 80px;
+    width: 70px;
+    height: 70px;
     display: block;
     border-radius: 4px;
 }
@@ -56,7 +56,7 @@
     align-items: center;
 }
 .footer-center--top i{
-    margin: 0 10px;
+    margin: 0 19px;
     cursor: pointer;
     color: #b3b3b3;
 }
@@ -81,8 +81,8 @@
     margin: 0 19px;
 }
 .icon-play{
-    width: 40px;
-    height: 40px;
+    width: 35px;
+    height: 35px;
     background: white;
     border-radius: 50%;
     color: black;

@@ -58,7 +58,7 @@ function Playlist(props) {
         getUserInfoAction();
         getSavedTracksAction();
         searchAction('');
-    }, [match, getTracksInPlaylist, getUserInfoAction, getSavedTracksAction]);
+    }, [match, getTracksInPlaylist, getUserInfoAction, getSavedTracksAction,searchAction]);
     const getImage = () => {
         if (match === 'tracks') {
             return ''

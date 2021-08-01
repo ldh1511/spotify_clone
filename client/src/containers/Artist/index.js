@@ -154,6 +154,8 @@ function Artist(props) {
                 getPredominantColor={getPredominantColorAction}
                 predominantColor={predominantColor}
             />
+            <div className="mid-content" style={{ backgroundColor: `${predominantColor}` }}>
+            </div>
             <div className="playlist-detail">
                 {renderPlaylists()}
                 {renderAlbums()}

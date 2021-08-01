@@ -11,6 +11,10 @@ const music = (state = musicInitialState, action) => {
                     listUrl.push(item.track.preview_url);
                     listData.push(item.track);
                 }
+                else if(item && item.audio_preview_url){
+                    listUrl.push(item.audio_preview_url);
+                    listData.push(item);
+                }
                 else if(item && item.id){
                     listUrl.push(item.preview_url);
                     listData.push(item);
@@ -23,6 +27,11 @@ const music = (state = musicInitialState, action) => {
                 index=listData.findIndex(item=>item.name===data.track.track.name);
                 preview_url=data.track.track.preview_url;
                 currentTrack=data.track
+            }
+            else if(data.track.audio_preview_url){
+                index=listData.findIndex(item=>item.name===data.track.name);
+                preview_url=data.preview_url;
+                currentTrack=data.track;
             }
             else{
                 index=listData.findIndex(item=>item.name===data.track.name);

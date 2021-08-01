@@ -25,10 +25,34 @@ const show = (state = showInitialState, action) => {
         case constants.GET_A_SHOW_SUCCESS:
             return {
                 ...state,
-                showInfo:action.payload,
-                episodes:action.payload.episodes
+                showInfo: action.payload,
+                episodes: action.payload.episodes
             }
         case constants.GET_A_SHOW_FAILED:
+            return state
+        case constants.SAVE_EPISODES:
+            return state
+        case constants.SAVE_EPISODES_SUCCESS:
+            return {
+                ...state,
+                savedEpisodes: {
+                    ...state.savedEpisodes,
+                    items: [...state.savedEpisodes.items, action.payload]
+                }
+            }
+        case constants.SAVE_EPISODES_FAILED:
+            return state
+        case constants.REMOVE_EPISODES:
+            return state
+        case constants.REMOVE_EPISODES_SUCCESS:
+            return {
+                ...state,
+                savedEpisodes: {
+                    ...state.savedEpisodes,
+                    items: state.savedEpisodes.items.filter(item=>item.episode.id!==action.payload)
+                }
+            }
+        case constants.REMOVE_EPISODES_FAILED:
             return state
         default:
             return state

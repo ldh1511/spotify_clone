@@ -45,6 +45,10 @@ const search = (state = searchInitialState, action) => {
             return {
                 ...state
             }
+        case constants.SEARCH_SHOWS:
+            return {
+                ...state
+            }
         case constants.SEARCH_ALBUMS_RESULT:
             let newAlbums = state.result.albums.items.concat(action.payload.items)
             return {
@@ -90,6 +94,18 @@ const search = (state = searchInitialState, action) => {
                     playlists: {
                         ...state.result.playlists,
                         items: newPlaylists
+                    }
+                }
+            }
+        case constants.SEARCH_SHOWS_RESULT:
+            let newShows = state.result.shows.items.concat(action.payload.items)
+            return {
+                ...state,
+                result: {
+                    ...state.result,
+                    shows: {
+                        ...state.result.shows,
+                        items: newShows
                     }
                 }
             }

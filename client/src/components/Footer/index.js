@@ -26,12 +26,14 @@ Footer.defaultProps = {
         }
     ],
     cur_index: 0,
-    savedTracks: { items: [] }
+    savedTracks: { items: [] },
+    savedEpisodes: { items: [] }
 }
 
 function Footer(props) {
     const { list_url, list_data, cur_index, addNoti, hideNoti, savedTracks,
-        SaveTracksAction, removeFromTracksAction } = props;
+        SaveTracksAction, removeFromTracksAction, SaveEpisodesAction,
+        savedEpisodes, RemoveEpisodesAction } = props;
     const { items } = savedTracks;
     const audioRef = useRef();
     const [audioIndex, setAudioIndex] = useState(cur_index);
@@ -79,7 +81,13 @@ function Footer(props) {
         setPlay(!isPlay);
     };
     const handleCheckSave = (track) => {
-        let check = items.filter(item => item.track.id === track.id);
+        let check = []
+        if (items && items[0] && items[0].track) {
+            check = items.filter(item => item.track.id === track.id)
+        }
+        if (savedEpisodes.items && savedEpisodes.items[0] && savedEpisodes.items[0].episode) {
+            check = savedEpisodes.items.filter(item => item.episode.id === track.id)
+        }
         if (check.length === 1) { return true }
         else { return false }
     }
@@ -104,11 +112,19 @@ function Footer(props) {
             setAudioIndex(audioIndex - 1);
         }
     }
-    const handleSaveTrack=()=>{
-        let newData={track:list_data[audioIndex]}
-        handleCheckSave(list_data[audioIndex]) === true ?
-        removeFromTracksAction(list_data[audioIndex].id):
-        SaveTracksAction(list_data[audioIndex].id,newData)
+    const handleSaveTrack = () => {
+        let newData =
+            list_data[audioIndex].artists ?
+                { track: list_data[audioIndex] } :
+                { episode: list_data[audioIndex] }
+        list_data[audioIndex].artists ?
+            handleCheckSave(list_data[audioIndex]) === true ?
+                removeFromTracksAction(list_data[audioIndex].id) :
+                SaveTracksAction(list_data[audioIndex].id, newData)
+            :
+            handleCheckSave(list_data[audioIndex]) === true ?
+                RemoveEpisodesAction(list_data[audioIndex].id) :
+                SaveEpisodesAction(list_data[audioIndex].id, newData)
     }
     return (
         <div className="footer" style={list_url.length > 0 ? { display: 'grid' } : { display: 'none' }}>
@@ -120,14 +136,19 @@ function Footer(props) {
                 } />
                 <div className="footer-left--content">
                     <h4>{list_data[audioIndex].name}</h4>
-                    <span>{getNameOfArtist(list_data[audioIndex].artists)}</span>
+                    <span>
+                        {
+                            list_data[audioIndex].artists ?
+                                getNameOfArtist(list_data[audioIndex].artists) : ''
+                        }
+                    </span>
                 </div>
                 <div className="footer-left--icon">
                     <i
                         className={handleCheckSave(list_data[audioIndex]) === true ?
                             "fas fa-heart active" : "far fa-heart"
                         }
-                        onClick={()=>handleSaveTrack()}
+                        onClick={() => handleSaveTrack()}
                     >
                     </i>
                 </div>
@@ -157,11 +178,11 @@ function Footer(props) {
                             track: {
                                 width: '300px',
                                 backgroundColor: "#424141",
-                                height: "2px",
+                                height: "5px",
                             },
                             active: {
                                 backgroundColor: "#cacaca",
-                                height: "2px",
+                                height: "5px",
                             },
                             thumb: {
                                 width: "10px",
@@ -175,10 +196,10 @@ function Footer(props) {
             </div>
             <div className="footer-right">
                 <div className="volum-box">
-                    <i className="fas fa-volume-up"></i>
+                    {/* <i className="fas fa-volume-up"></i>
                     <div className="volumn">
                         test
-                    </div>
+                    </div> */}
                 </div>
             </div>
             <audio

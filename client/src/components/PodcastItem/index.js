@@ -5,14 +5,15 @@ PodcastItem.propTypes = {
     data:PropTypes.object
 };
 PodcastItem.defaultProps = {
-    data:{
-
-    }
+    data:{}
 }
 function PodcastItem(props) {
-    const {data}=props;
+    const {data, getPreviewUrl, listData}=props;
     const {name, description, release_date}=data;
     const date=release_date.split('-');
+    const handlePlayAudio = ()=>{
+        getPreviewUrl(data,listData)
+    }
     let curDate=new Date();
     let curYear=curDate.getFullYear();
     return (
@@ -22,7 +23,9 @@ function PodcastItem(props) {
                 <h4>{name}</h4>
                 <p>{description}</p>
                 <div className="podcast-item--btn">
-                    <button><i className="fas fa-play"></i></button>
+                    <button onClick={()=>handlePlayAudio()}>
+                        <i className="fas fa-play"></i>
+                    </button>
                     <p>
                         {date[date.length-1]} thg {date[date.length-2]} {date[0]===curYear?'':date[date.length-3]}
                     </p>

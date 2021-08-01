@@ -49,6 +49,9 @@ export const SEARCH_ALBUMS_RESULT = "SEARCH_ALBUMS_RESULT";
 export const SEARCH_ARTISTS = "SEARCH_ARTISTS";
 export const SEARCH_ARTISTS_RESULT = "SEARCH_ARTISTS_RESULT";
 
+export const SEARCH_SHOWS = "SEARCH_SHOWS";
+export const SEARCH_SHOWS_RESULT = "SEARCH_SHOWS_RESULT";
+
 export const GET_ARTIST = "GET_ARTIST";
 export const GET_ARTIST_SUCCESS = "GET_ARTIST_SUCCESS";
 export const GET_ARTIST_FAILED = "GET_ARTIST_FAILED";
@@ -155,6 +158,14 @@ export const CREATE_PLAYLIST = "CREATE_PLAYLIST";
 export const CREATE_PLAYLIST_SUCCESS = "CREATE_PLAYLIST_SUCCESS";
 export const CREATE_PLAYLIST_FAILED = "CREATE_PLAYLIST_FAILED";
 
+export const SAVE_EPISODES = "SAVE_EPISODES";
+export const SAVE_EPISODES_SUCCESS = "SAVE_EPISODES_SUCCESS";
+export const SAVE_EPISODES_FAILED = "SAVE_EPISODES_FAILED";
+
+export const REMOVE_EPISODES = "REMOVE_EPISODES";
+export const REMOVE_EPISODES_SUCCESS = "REMOVE_EPISODES_SUCCESS";
+export const REMOVE_EPISODES_FAILED = "REMOVE_EPISODES_FAILED";
+
 // function constants
 export const getBase64 = (file) => {
   return new Promise((resolve, reject) => {
@@ -178,8 +189,9 @@ export const getFormattedDate = () => {
 export const getNameOfArtist = (data) => {
   let result = "";
   data.map(item => {
-      result += `${item.name}, `;
-      return true;
+    result += `${item.name}, `;
+    return true;
   });
+  result = result.slice(0, -2); 
   return result
 }

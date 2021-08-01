@@ -6,6 +6,6 @@
 .dashboard-content{
     width: 81%;
     background: #121212;
-    /* background: linear-gradient(180deg, #210c54 0%, rgba(18,18,18,1) 90%); */
+    min-height: 100vh;
 }
 

@@ -17,7 +17,8 @@ function CollectionCard(props) {
         xhtml = newData.map(item =>
         (
             <>
-                {item.track.artists[0].name} <span>{item.track.name}</span>
+                {item.track && item.track.artists?item.track.artists[0].name:item.episode.name} 
+                <span>{item.track? item.track.name: ''}</span>
                 <i className="fas fa-circle"></i>
             </>
         ))

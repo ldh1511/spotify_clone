@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import './styles.css';
-import { getPreviewUrl, getTracksPlaylist, RemoveFromTracks, SaveTracks, SearchAlbums, SearchArtists, SearchPlaylists, SearchTracks } from '../../redux/actions/info';
+import { getPreviewUrl, getTracksPlaylist, RemoveFromTracks, SaveTracks, SearchAlbums, SearchArtists, SearchPlaylists, SearchShows, SearchTracks } from '../../redux/actions/info';
 import TrackTable from '../../components/TrackTable';
 import CardList from '../../components/CardList';
 import { bindActionCreators } from 'redux';
@@ -21,6 +21,7 @@ function SearchResult(props) {
         SearchArtistsAction,
         SearchTracksAction,
         SearchPlaylistsAction,
+        SearchShowsAction,
         search,
         SaveTracksAction,
         removeFromTracksAction,
@@ -30,7 +31,7 @@ function SearchResult(props) {
     let param = pathname[pathname.length - 2];
     let typeSearch = pathname[pathname.length - 1];
     const getData = () => {
-        const { playlists, artists, albums, tracks } = search;
+        const { playlists, artists, albums, tracks, shows } = search;
         let data = null;
         let total = null;
         let type = null;
@@ -55,6 +56,11 @@ function SearchResult(props) {
                 total = tracks.total;
                 type = "track";
                 break;
+            case "podcasts":
+                data = shows.items;
+                total = shows.total;
+                type = "podcast";
+                break;
             default:
                 break;
         }
@@ -78,6 +84,9 @@ function SearchResult(props) {
                     break;
                 case "playlist":
                     SearchPlaylistsAction(param, cur);
+                    break;
+                case "podcast":
+                    SearchShowsAction(param, cur);
                     break;
                 default:
                     break;
@@ -145,6 +154,7 @@ const mapDispatchToProps = (dispatch) => {
         SearchArtistsAction: bindActionCreators(SearchArtists, dispatch),
         SearchPlaylistsAction: bindActionCreators(SearchPlaylists, dispatch),
         SearchTracksAction: bindActionCreators(SearchTracks, dispatch),
+        SearchShowsAction: bindActionCreators(SearchShows, dispatch),
         SaveTracksAction: bindActionCreators(SaveTracks, dispatch),
         removeFromTracksAction: bindActionCreators(RemoveFromTracks, dispatch),
         getTracksInPlaylistAction: bindActionCreators(getTracksPlaylist, dispatch),
