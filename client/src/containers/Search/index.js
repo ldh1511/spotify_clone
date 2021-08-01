@@ -1,8 +1,10 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { getCategories, GetSavedTracks, RemoveFromTracks, SaveTracks, Search } from '../../redux/actions/info';
+import { useHistory } from "react-router-dom";
+import queryString from 'query-string';
+import { getAlbum, getCategories, getPreviewUrl, GetSavedTracks, getTracksPlaylist, RemoveFromTracks, SaveTracks, Search } from '../../redux/actions/info';
 import './styles.css';
 import CategoriesList from '../../components/CategoriesList';
 import SearchBar from '../../components/SearchBar';
@@ -21,40 +23,54 @@ Search.defaultProps = {
         playlists: { items: [] },
         tracks: { items: [] }
     },
-    param: ''
+    param: '',
+    albumInfo: {
+        images: [{ url: '' }],
+        tracks: {
+            items: []
+        },
+        release_date: '',
+        artists: [{ name: '', id: '' }],
+        id: ''
+    },
 }
 function SearchPage(props) {
     const { getCategoriesAction,
-        categories, search,
-        param, savedTracks,
+        categories, search,location,
+        param, savedTracks,tracks,
         getSavedTracksAction, SaveTracksAction,
-        removeFromTracksAction, searchAction
+        removeFromTracksAction, searchAction,
+        getTracksInPlaylistAction,getPreviewUrlAction,
+        getAlbumAction, albumInfo
     } = props;
-    const wrapperRef = useRef(null);
-    function useOutsideAlerter(ref) {
-        useEffect(() => {
-            function handleClickOutside(event) {
-                if (ref.current && !ref.current.contains(event.target)) {
-                    if (param !== '') {searchAction('')}
-                }
-            }
-            document.addEventListener("mousedown", handleClickOutside);
-            return () => {
-                document.removeEventListener("mousedown", handleClickOutside);
-            };
-        }, [ref]);
-    }
-    useOutsideAlerter(wrapperRef);
+    let history = useHistory();
     useEffect(() => {
         getCategoriesAction();
         getSavedTracksAction();
     }, [getCategoriesAction, getSavedTracksAction])
+    useEffect(()=>{
+        const parsed = queryString.parse(location.search);
+        if(parsed.q){
+            searchAction(parsed.q);
+        }
+        else{
+            searchAction('');
+        }
+    },[location,tracks,searchAction])
     const renderSearchPlaylists = () => {
         const { playlists } = search;
         let xhtml = null;
         let data = playlists.items.slice(0, 5);
         if (playlists.items.length > 0) {
-            xhtml = <CardBlock data={data} name="playlists" param={param} type='playlist' />
+            xhtml = (<CardBlock 
+                data={data} 
+                name="playlists" 
+                param={param} 
+                type='playlist'
+                getTracksInPlaylist={getTracksInPlaylistAction}
+                tracks={tracks}
+                getPreviewUrl={getPreviewUrlAction} 
+            />)
         }
         return xhtml;
     }
@@ -77,7 +93,13 @@ function SearchPage(props) {
         let xhtml = null;
         let data = albums.items.slice(0, 5);
         if (albums.items.length > 0) {
-            xhtml = <CardBlock data={data} name="albums" param={param} type='album' />
+            xhtml = (<CardBlock 
+                data={data} name="albums" 
+                param={param} type='album'
+                albumInfo={albumInfo}
+                getPreviewUrl={getPreviewUrlAction} 
+                getAlbum={getAlbumAction}
+            />)
         }
         return xhtml;
     }
@@ -108,8 +130,8 @@ function SearchPage(props) {
         return xhtml;
     }
     return (
-        <div ref={wrapperRef} className="search-container">
-            <SearchBar type="default-search" />
+        <div className="search-container">
+            <SearchBar type="default-search" history={history}/>
             {renderSearchResult()}
         </div>
     );
@@ -120,6 +142,8 @@ const mapStateToProps = (state) => {
         search: state.search.result,
         param: state.search.param,
         savedTracks: state.tracks.savedTracks,
+        tracks:state.tracks,
+        albumInfo: state.album.albumInfo,
     }
 };
 const mapDispatchToProps = (dispatch) => {
@@ -128,7 +152,10 @@ const mapDispatchToProps = (dispatch) => {
         getSavedTracksAction: bindActionCreators(GetSavedTracks, dispatch),
         SaveTracksAction: bindActionCreators(SaveTracks, dispatch),
         removeFromTracksAction: bindActionCreators(RemoveFromTracks, dispatch),
-        searchAction: bindActionCreators(Search, dispatch)
+        searchAction: bindActionCreators(Search, dispatch),
+        getTracksInPlaylistAction: bindActionCreators(getTracksPlaylist, dispatch),
+        getPreviewUrlAction: bindActionCreators(getPreviewUrl, dispatch),
+        getAlbumAction: bindActionCreators(getAlbum, dispatch),
     }
 }
 export default connect(mapStateToProps, mapDispatchToProps)(SearchPage);

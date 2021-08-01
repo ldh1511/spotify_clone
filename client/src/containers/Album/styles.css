@@ -9,3 +9,21 @@
     padding: 0 20px;
     margin-bottom: 50px;
 }
+.album .mid-content{
+    display:flex;
+    align-items:center;
+}
+.album .mid-content button{
+    margin-right: 10px;
+}
+.album .mid-content i{
+    font-size: 2rem;
+    opacity:1;
+    color:#b3b3b3;
+}
+.album .item-icon.active{
+    color:#1ed760;
+}
+.album .mid-content button i{
+    color:white !important;
+}

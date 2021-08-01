@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import './styles.css';
-import { RemoveFromTracks, SaveTracks, SearchAlbums, SearchArtists, SearchPlaylists, SearchTracks } from '../../redux/actions/info';
+import { getPreviewUrl, getTracksPlaylist, RemoveFromTracks, SaveTracks, SearchAlbums, SearchArtists, SearchPlaylists, SearchTracks } from '../../redux/actions/info';
 import TrackTable from '../../components/TrackTable';
 import CardList from '../../components/CardList';
 import { bindActionCreators } from 'redux';
@@ -23,7 +23,7 @@ function SearchResult(props) {
         SearchPlaylistsAction,
         search,
         SaveTracksAction,
-        removeFromTracksAction, 
+        removeFromTracksAction,
         savedTracks
     } = props;
     let pathname = location.pathname.split('/');
@@ -92,9 +92,9 @@ function SearchResult(props) {
         if (typeSearch !== 'tracks') {
             xhtml = (
                 <>
-                    <CardList 
-                    data={data} 
-                    type={typeSearch.substring(0, typeSearch.length - 1)} 
+                    <CardList
+                        data={data}
+                        type={typeSearch.substring(0, typeSearch.length - 1)}
                     />
                     <p
                         onClick={() => handleClick(data.length, total, type)}
@@ -107,14 +107,14 @@ function SearchResult(props) {
         else {
             xhtml = (
                 <>
-                    <TrackTable 
-                    data={data} 
-                    name="tracks" 
-                    param={param} 
-                    type='track'
-                    SaveTracksAction={SaveTracksAction}
-                    removeFromTrack={removeFromTracksAction}
-                    savedTracks={savedTracks} 
+                    <TrackTable
+                        data={data}
+                        name="tracks"
+                        param={param}
+                        type='track'
+                        SaveTracksAction={SaveTracksAction}
+                        removeFromTrack={removeFromTracksAction}
+                        savedTracks={savedTracks}
                     />
                     <p
                         onClick={() => handleClick(data.length, total, type)}
@@ -147,6 +147,8 @@ const mapDispatchToProps = (dispatch) => {
         SearchTracksAction: bindActionCreators(SearchTracks, dispatch),
         SaveTracksAction: bindActionCreators(SaveTracks, dispatch),
         removeFromTracksAction: bindActionCreators(RemoveFromTracks, dispatch),
+        getTracksInPlaylistAction: bindActionCreators(getTracksPlaylist, dispatch),
+        getPreviewUrlAction: bindActionCreators(getPreviewUrl, dispatch)
     }
 }
 export default connect(mapStateToProps, mapDispatchToProps)(SearchResult);

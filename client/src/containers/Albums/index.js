@@ -4,7 +4,7 @@ import './styles.css';
 import { connect } from 'react-redux';
 import CardList from '../../components/CardList';
 import AlbumBlock from '../../components/AlbumBlock';
-import { getAlbumTracks, GetSavedALbums, removeAlbums, RemoveFromTracks, saveAlbums, SaveTracks } from '../../redux/actions/info';
+import { getAlbumTracks, getPreviewUrl, GetSavedALbums, removeAlbums, RemoveFromTracks, saveAlbums, SaveTracks } from '../../redux/actions/info';
 import { bindActionCreators } from 'redux';
 import { useHistory } from 'react-router';
 Albums.propTypes = {
@@ -27,7 +27,7 @@ function Albums(props) {
         albums, name, getAlbumTracksAction, albumtracks, location, singles,
         SaveTracksAction, removeFromTracksAction, savedTracks,
         saveAlbumsAction, getSavedAlbumsAction,savedAlbums,
-        removeAlbumsAction
+        removeAlbumsAction, getPreviewUrlAction
     } = props;
     const {items}=savedAlbums;
     const pathname = location.pathname.split('/');
@@ -55,7 +55,7 @@ function Albums(props) {
         }
         getAlbumTracksAction(getData())
         getSavedAlbumsAction();
-    }, [type, getAlbumTracksAction, data])
+    }, [type, getAlbumTracksAction, data, getSavedAlbumsAction])
     const renderCardList = () => {
         let xhtml = null;
         xhtml = (
@@ -70,6 +70,7 @@ function Albums(props) {
                             saveAlbums={saveAlbumsAction}
                             removeAlbums={removeAlbumsAction}
                             check={items.filter((item) =>item.album.id===albums[i].id)}
+                            getPreviewUrl={getPreviewUrlAction}
                         />
                     )) :
                     albumtracks.map((item, i) => (
@@ -80,6 +81,7 @@ function Albums(props) {
                             savedTracks={savedTracks}
                             saveAlbums={saveAlbumsAction}
                             check={items.filter((item) =>item.album.id===singles[i].id)}
+                            getPreviewUrl={getPreviewUrlAction}
                         />
                     ))
                 }
@@ -136,6 +138,7 @@ const mapDispatchToProps = (dispatch) => {
         getSavedAlbumsAction: bindActionCreators(GetSavedALbums, dispatch),
         saveAlbumsAction: bindActionCreators(saveAlbums, dispatch),
         removeAlbumsAction: bindActionCreators(removeAlbums, dispatch),
+        getPreviewUrlAction: bindActionCreators(getPreviewUrl, dispatch)
     }
 }
 export default connect(mapStateToProps, mapDispatchToProps)(Albums);

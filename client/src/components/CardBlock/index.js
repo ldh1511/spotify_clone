@@ -8,8 +8,11 @@ CardBlock.defaultProps = {
     data: []
 }
 function CardBlock(props) {
-    const { name, data, id, param, type, match, path, own, savedTracks, SaveTracksAction,
-        removeFromTrack, getTracksInPlaylist, tracks, getPreviewUrl } = props;
+    const { 
+        name, data, id, param, type, match, path, own, 
+        savedTracks, SaveTracksAction,
+        removeFromTrack, getTracksInPlaylist, 
+        tracks, getPreviewUrl,getAlbum, albumInfo } = props;
     const renderCardList = () => {
         let xhtml = null;
         if (type !== 'track') {
@@ -19,6 +22,8 @@ function CardBlock(props) {
                 getTracksInPlaylist={getTracksInPlaylist}
                 tracks={tracks}
                 getPreviewUrl={getPreviewUrl}
+                getAlbum={type==='album'?getAlbum:null}
+                albumInfo={type==='album'?albumInfo:null}
                 />)
         }
         else {

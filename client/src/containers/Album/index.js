@@ -1,8 +1,8 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import './styles.css';
 import { bindActionCreators } from 'redux';
-import { getAlbum, getArtistAlbum, GetSavedTracks, getPredominantColor, SaveTracks, RemoveFromTracks } from '../../redux/actions/info';
+import { getAlbum, getArtistAlbum, GetSavedTracks, getPredominantColor, SaveTracks, RemoveFromTracks, GetSavedALbums, saveAlbums, removeAlbums, getPreviewUrl } from '../../redux/actions/info';
 import { connect } from 'react-redux';
 import Banner from '../../components/Banner';
 import TrackTable from '../../components/TrackTable';
@@ -23,28 +23,48 @@ Album.defaultProps = {
     },
     relatedAlbum: {
         items: []
+    },
+    savedAlbums:{
+        items:[]
     }
 }
 function Album(props) {
-    const { location, 
-        getAlbumAction, 
-        albumInfo, getArtistAlbumAction, 
-        relatedAlbum, getSavedTracksAction, 
+    const { location,
+        getAlbumAction,savedAlbums,
+        albumInfo, getArtistAlbumAction,
+        relatedAlbum, getSavedTracksAction,
         savedTracks, getPredominantColorAction,
-        predominantColor,
-        SaveTracksAction, removeFromTracksAction } = props;
+        predominantColor,getSavedAlbumsAction,
+        SaveTracksAction, removeFromTracksAction,
+        saveAlbumsAction, removeAlbumsAction,
+        getPreviewUrlAction } = props;
     const { images, name, tracks, type, artists, release_date, id } = albumInfo;
+    const {items}=savedAlbums;
+    const [check, setCheck]=useState(false);
     let pathname = location.pathname.split('/');
     let match = pathname[pathname.length - 1];
     useEffect(() => {
         getAlbumAction(match);
         getSavedTracksAction();
-    }, [match,getSavedTracksAction,getAlbumAction])
+        getSavedAlbumsAction();
+    }, [match, getSavedTracksAction, getAlbumAction,getSavedAlbumsAction])
     useEffect(() => {
         if (artists[0].id !== '') {
             getArtistAlbumAction(artists[0].id);
         }
-    }, [artists,getArtistAlbumAction])
+    }, [artists, getArtistAlbumAction])
+    useEffect(() => {
+        if(id){
+            let checked= items.filter((item)=>item.album.id===id);
+            if(checked.length===1){
+                setCheck(true);
+            }
+            else{
+                setCheck(false);
+            }
+        }
+
+    },[albumInfo,items, id])
     const getNameArtist = (arr) => {
         let artist_name = '';
         if (arr.length > 1) {
@@ -61,7 +81,7 @@ function Album(props) {
     const renderCardBlock = () => {
         const { items } = relatedAlbum;
         let newItems = items.filter((item, i) => (item.id !== id));
-        newItems=newItems.slice(0,5);
+        newItems = newItems.slice(0, 5);
         let xhtml = null;
         xhtml = (
             <CardBlock
@@ -74,6 +94,22 @@ function Album(props) {
             />)
         return xhtml;
     }
+    const handleSaveAlbums=()=>{
+        if(check===true){
+            removeAlbumsAction(id);
+        }
+        else{
+            saveAlbumsAction(id, albumInfo);
+        }
+    }
+    const handlePlayAudio = ()=>{
+        let newTracks=tracks;
+        newTracks.items.map(item=>{
+            item.images=images
+            return true;
+        })
+        getPreviewUrlAction(newTracks.items[0],newTracks.items);
+    }
     return (
         <div className="album">
             <Banner
@@ -85,12 +121,21 @@ function Album(props) {
                 getPredominantColor={getPredominantColorAction}
                 predominantColor={predominantColor}
             />
-            <TrackTable 
-            data={tracks.items} 
-            note='album-track' 
-            savedTracks={savedTracks}
-            SaveTracksAction={SaveTracksAction}
-            removeFromTrack={removeFromTracksAction}
+            <div className="mid-content" style={{ backgroundColor: `${predominantColor}` }}>
+                <button className="play-btn" onClick={() =>handlePlayAudio()}>
+                    <i className="fas fa-play"></i>
+                </button>
+                <i
+                    className={check===true?`fas fa-heart item-icon active`:`far fa-heart item-icon`}
+                    onClick={() =>handleSaveAlbums()}
+                ></i>
+            </div>
+            <TrackTable
+                data={tracks.items}
+                note='album-track'
+                savedTracks={savedTracks}
+                SaveTracksAction={SaveTracksAction}
+                removeFromTrack={removeFromTracksAction}
             />
             {renderCardBlock()}
         </div>
@@ -101,7 +146,8 @@ const mapStateToProps = (state) => {
         albumInfo: state.album.albumInfo,
         relatedAlbum: state.album.relatedAlbum,
         savedTracks: state.tracks.savedTracks,
-        predominantColor:state.ui.predominantColor
+        predominantColor: state.ui.predominantColor,
+        savedAlbums:state.album.savedAlbums
     }
 }
 const mapDispatchToProps = (dispatch) => {
@@ -109,9 +155,13 @@ const mapDispatchToProps = (dispatch) => {
         getAlbumAction: bindActionCreators(getAlbum, dispatch),
         getArtistAlbumAction: bindActionCreators(getArtistAlbum, dispatch),
         getSavedTracksAction: bindActionCreators(GetSavedTracks, dispatch),
-        getPredominantColorAction:bindActionCreators(getPredominantColor, dispatch),
+        getPredominantColorAction: bindActionCreators(getPredominantColor, dispatch),
         SaveTracksAction: bindActionCreators(SaveTracks, dispatch),
         removeFromTracksAction: bindActionCreators(RemoveFromTracks, dispatch),
+        getSavedAlbumsAction: bindActionCreators(GetSavedALbums, dispatch),
+        saveAlbumsAction: bindActionCreators(saveAlbums, dispatch),
+        removeAlbumsAction: bindActionCreators(removeAlbums, dispatch),
+        getPreviewUrlAction: bindActionCreators(getPreviewUrl, dispatch)
     }
 }
 export default connect(mapStateToProps, mapDispatchToProps)(Album);

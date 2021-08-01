@@ -12,7 +12,7 @@ AlbumBlockHeader.defaultProps = {
     }
 }
 function AlbumBlockHeader(props) {
-    const { data, saveAlbums, check, removeAlbums } = props;
+    const { data, saveAlbums, check, removeAlbums, tracks, getPreviewUrl } = props;
     const { name, release_date, album_type, total_tracks, images, id } = data;
     const handleSaveAlbums = () => {
         if(check===false){
@@ -21,6 +21,14 @@ function AlbumBlockHeader(props) {
         else{
             removeAlbums(id);
         }
+    }
+    const handlePlayAudio=()=>{
+        let newTracks=tracks;
+        newTracks.map(item=>{
+            item.images=images
+            return true;
+        })
+        getPreviewUrl(newTracks[0],newTracks);
     }
     return (
         <div className="album-block--header">
@@ -35,7 +43,7 @@ function AlbumBlockHeader(props) {
                     </ul>
                 </div>
                 <div className="album-block-btn">
-                    <button className="play-btn btn-active">
+                    <button className="play-btn btn-active" onClick={() =>handlePlayAudio()}>
                         <i className="fas fa-play"></i>
                     </button>
                     <i

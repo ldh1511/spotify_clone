@@ -65,7 +65,7 @@ function Footer(props) {
                 }
             })
         }
-    },[audioIndex,list_url])
+    },[audioIndex,list_url,addNoti,hideNoti,list_data])
     const handleLoadedData = () => {
         setDuration(audioRef.current.duration);
         if (isPlay) audioRef.current.play();
@@ -87,10 +87,27 @@ function Footer(props) {
             audioRef.current.play();
         }
     };
+    const handleIncrementIndex=()=>{
+        if(audioIndex === list_data.length - 1){
+            setAudioIndex(0);
+        }
+        else{
+            setAudioIndex(audioIndex+1);
+        }
+    }
+    const handleDecrementIndex=()=>{
+        if(audioIndex >0){
+            setAudioIndex(audioIndex-1);
+        }
+    }
     return (
         <div className="footer" style={list_url.length>0?{display:'grid'}:{display:'none'}}>
             <div className="footer-left">
-                <img alt="" src={list_data[audioIndex].album.images[0].url} />
+                <img alt="" src={
+                    list_data[audioIndex] && list_data[audioIndex].album ?
+                    list_data[audioIndex].album.images[0].url :
+                    list_data[audioIndex].images[0].url
+                } />
                 <div className="footer-left--content">
                     <h4>{list_data[audioIndex].name}</h4>
                     <span>{getNameOfArtist(list_data[audioIndex].artists)}</span>
@@ -101,9 +118,9 @@ function Footer(props) {
             </div>
             <div className="footer-center">
                 <div className="footer-center--top">
-                    <i className="far fa-heart"></i>
+                    {/* <i className="far fa-heart"></i> */}
                     <i className="fas fa-step-backward"
-                        onClick={() => setAudioIndex((audioIndex - 1))}
+                        onClick={() => handleDecrementIndex()}
                     ></i>
                     <button className="icon-play" onClick={handlePausePlayClick}>
                         {isPlay ?
@@ -112,9 +129,9 @@ function Footer(props) {
                         }
                     </button>
                     <i className="fas fa-step-forward"
-                        onClick={() => setAudioIndex((audioIndex + 1))}
+                        onClick={() => handleIncrementIndex()}
                     ></i>
-                    <i className="fas fa-sync-alt"></i>
+                    {/* <i className="fas fa-sync-alt"></i> */}
                 </div>
                 <div className="footer-center--bottom">
                     <TimeSlider

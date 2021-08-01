@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import './styles.css';
 import CollectionSearchBar from '../../components/CollectionSearchBar';
@@ -26,7 +26,12 @@ CollectionSearch.defaultProps = {
 }
 
 function CollectionSearch(props) {
-    const { sortResult, searchResult, getArtistAction, topTracks, topAlbums, artistInfo, getAlbumTracksAction, albumtracks, idPlaylist, addItemToPlaylistAction, getAlbumAction, album, param, searchAction } = props;
+    const { 
+        sortResult, searchResult, getArtistAction, 
+        topTracks, topAlbums, artistInfo, 
+        getAlbumTracksAction, albumtracks, idPlaylist, 
+        addItemToPlaylistAction, getAlbumAction, 
+        album} = props;
     const { albums, artists, tracks } = searchResult;
     const [level, setLevel] = useState([0]);
     const [name, setName] = useState(['default']);
@@ -162,7 +167,6 @@ const mapDispatchToProps = (dispatch) => {
         getAlbumTracksAction: bindActionCreators(getAlbumTracks, dispatch),
         addItemToPlaylistAction: bindActionCreators(addItemToPlaylist, dispatch),
         getAlbumAction: bindActionCreators(getAlbum, dispatch),
-        searchAction: bindActionCreators(Search, dispatch)
     }
 }
 const mapStateToProps = (state) => {

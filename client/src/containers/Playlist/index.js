@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import Banner from '../../components/Banner';
@@ -47,8 +47,8 @@ function Playlist(props) {
         currentImg, updatePlaylistDetailAction,
         openTrackMenuAction, getSavedTracksAction, savedTracks, SaveTracksAction,
         removeFromTracksAction, info,
-        getPredominantColorAction, predominantColor, searchAction,
-        getPreviewUrlAction } = props;
+        getPredominantColorAction, predominantColor,
+        getPreviewUrlAction, searchAction } = props;
     let pathname = location.pathname.split('/');
     let match = pathname[pathname.length - 1];
     useEffect(() => {
@@ -57,20 +57,8 @@ function Playlist(props) {
         }
         getUserInfoAction();
         getSavedTracksAction();
+        searchAction('');
     }, [match, getTracksInPlaylist, getUserInfoAction, getSavedTracksAction]);
-    const wrapperRef = useRef(null);
-    function useOutsideAlerter(ref) {
-        useEffect(() => {
-            function handleClickOutside(event) {
-                if (ref.current && !ref.current.contains(event.target)) { searchAction(''); }
-            }
-            document.addEventListener("mousedown", handleClickOutside);
-            return () => {
-                document.removeEventListener("mousedown", handleClickOutside);
-            };
-        }, [ref]);
-    }
-    useOutsideAlerter(wrapperRef);
     const getImage = () => {
         if (match === 'tracks') {
             return ''
@@ -91,7 +79,7 @@ function Playlist(props) {
         }
     }
     return (
-        <div ref={wrapperRef} className="playlist">
+        <div className="playlist">
             <Banner
                 name={match !== 'tracks' ? playlistInfo.name : 'Bài hát đã thích'}
                 image={getImage()}

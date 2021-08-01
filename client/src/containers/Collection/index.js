@@ -141,7 +141,7 @@ function Collection(props) {
         </div>
     );
 }
-const mapStateToProps = (state, ownProps) => {
+const mapStateToProps = (state) => {
     return {
         id: state.info.id,
         playlist: state.playlist.items,

@@ -9,12 +9,19 @@ SearchBar.propTypes = {
 };
 
 function SearchBar(props) {
-    const { searchAction, type,param } = props;
+    const { searchAction, type, param, history } = props;
     const handleOnChange = (e) => {
         const { value } = e.target;
-        searchAction(value.substring().toLowerCase());
+        const params=value.substring().toLowerCase();
+       // searchAction(params);
+        if(params!==""){
+            history.push(`/search?q=${params}`);
+        }
+        else{
+            history.push(`/search`);
+        }
     }
-    const handleDeleteQuery=()=>{
+    const handleDeleteQuery = () => {
         searchAction('');
     }
     return (
@@ -34,9 +41,9 @@ function SearchBar(props) {
         </div>
     );
 }
-const mapStateToProps = (state)=>{
-    return{
-        param:state.search.param
+const mapStateToProps = (state) => {
+    return {
+        param: state.search.param
     }
 };
 const mapDispatchToProps = (dispatch) => {

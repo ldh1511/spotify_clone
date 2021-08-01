@@ -6,19 +6,27 @@ CardItem.defaultProps = {
     image: '',
     description: '',
     type: '',
-    tracks:{
-        tracksInPlaylist:[],
-        playlistInfo:{id:''}
+    tracks: {
+        tracksInPlaylist: [],
+        playlistInfo: { id: '' }
     }
 }
 function CardItem(props) {
-    const { name, image, description, id, type, getTracksInPlaylist,tracks,
-        getPreviewUrl } = props;
+    const { name, image, description, id, type, getTracksInPlaylist, tracks,
+        getPreviewUrl, getAlbum, albumInfo } = props;
     useEffect(() => {
-        if(getPreviewUrl && tracks && tracks.playlistInfo && tracks.playlistInfo.id===id){
-            getPreviewUrl(tracks.tracksInPlaylist[0],tracks.tracksInPlaylist)
+        if (getPreviewUrl && tracks && tracks.playlistInfo && tracks.playlistInfo.id === id) {
+            getPreviewUrl(tracks.tracksInPlaylist[0], tracks.tracksInPlaylist)
         }
-    },[tracks])
+        if (albumInfo && albumInfo.id===id){
+            let newTracks=albumInfo.tracks;
+            newTracks.items.map(item=>{
+                item.images=albumInfo.images
+                return true;
+            })
+            getPreviewUrl(newTracks.items[0],newTracks.items);
+        }
+    }, [tracks, getPreviewUrl, id, albumInfo])
     const limitdescription = (data) => {
         if (data) {
             let newstring = data.split(' ').slice(0, 7).join(' ')
@@ -26,16 +34,24 @@ function CardItem(props) {
             return newstring
         }
     }
-    const handlePlaySound= ()=>{
-        if(type==='playlist'){
-           getTracksInPlaylist(id);
+    const handlePlaySound = () => {
+        if (type === 'playlist') {
+            getTracksInPlaylist(id);
+        }
+        if (type === 'album') {
+            getAlbum(id);
         }
     }
     return (
         <div className="card-item">
-            <button className="play-btn" onClick={() =>handlePlaySound()}>
-                <i className="fas fa-play"></i>
-            </button>
+            {
+                type === 'playlist' || type === 'album' ?
+                    <button className="play-btn" onClick={() => handlePlaySound()}>
+                        <i className="fas fa-play"></i>
+                    </button>
+                    :
+                    <></>
+            }
             <NavLink to={`/${type}/${id}`}>
                 <div
                     className="card-item-top"
@@ -53,7 +69,7 @@ function CardItem(props) {
                     <h4>{name}</h4>
                     <p>{limitdescription(description)}</p>
                 </div>
-               
+
             </NavLink>
         </div>
     );

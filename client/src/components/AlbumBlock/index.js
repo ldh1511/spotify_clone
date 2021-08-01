@@ -11,7 +11,7 @@ function AlbumBlock(props) {
         data, SaveTracksAction, 
         removeFromTrack, savedTracks, 
         saveAlbums, check,
-        removeAlbums } = props;
+        removeAlbums,getPreviewUrl } = props;
     return (
         <div className="album-block">
             <AlbumBlockHeader 
@@ -19,6 +19,8 @@ function AlbumBlock(props) {
             saveAlbums={saveAlbums}
             removeAlbums={removeAlbums}
             check={check.length===1? true:false}
+            tracks={data[0]}
+            getPreviewUrl={getPreviewUrl}
             />
             <TrackTable
                 data={data[0]} note='album-track'

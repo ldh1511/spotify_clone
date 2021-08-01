@@ -62,10 +62,12 @@ function TrackTable(props) {
                         key={i}
                         i={i}
                         id={item.id}
-                        image={note !== 'album-track' ? item.album.images[0].url : null}
+                        image={
+                            note !== 'album-track' && item.album ? item.album.images[0].url : ''
+                        }
                         name_track={item.name}
-                        name_artist={getNameOfArtist(item.artists)}
-                        id_artist={getIdOfArtist(item.artists)}
+                        name_artist={item.artists? getNameOfArtist(item.artists): ''}
+                        id_artist={item.artists? getIdOfArtist(item.artists):''}
                         duration={
                             (Math.round((item.duration_ms * convert) * 100) / 100).toFixed(2)
                         }
