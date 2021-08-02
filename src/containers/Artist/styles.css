@@ -1,0 +1,18 @@
+.artists{
+    width: 100%;
+    height: 100%;
+    background: inherit;
+    color: white;
+    margin-bottom: 120px;
+}
+.artists h2{
+    font-weight: 100;
+    text-transform: capitalize;
+    font-size: 2rem;
+}
+.artists .mid-content{
+    min-height: 100px ;
+}
+.artists .playlist-detail .card-block{
+    padding: 0 5px;
+}

@@ -1,0 +1,73 @@
+.collection-search--item{
+    display: grid;
+    grid-template-columns: 50% 40% 10%;
+    align-items: center;
+    color: white;
+    padding: 10px;
+    border-radius: 4px;
+    cursor: context-menu;
+    transition: all .3s;
+    justify-items: baseline;
+}
+.collection-search--item:hover{
+    background:#333;
+}
+.collection-search--item:hover .search-item--center p,
+.collection-search--item:hover .search-item--left .search-item--content p{
+    color:white
+}
+.search-item--left{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.search-item--left img{
+    width: 40px;
+    height: 40px;
+    margin-right: 15px;
+}
+.search-item--content h4{
+    font-weight: 500;
+}
+.search-item--content p{
+    color: #9e9e9e;
+    font-weight: 400;
+}
+.search-item--center p{
+    color: #9e9e9e;
+}
+.search-item--right{
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+}
+.search-item--right button{
+    font-family: inherit;
+    background: no-repeat;
+    color: white;
+    border: 2px solid white;
+    padding: 5px 15px;
+    border-radius: 40px;
+    font-weight: 700;
+    font-size: 1rem;
+}
+.search-item--center.hidden{
+    display:none;
+}
+.seach-item--artist{
+    border-radius: 50%;
+}
+@media only screen and (max-width: 800px){
+    .search-item--right button {
+        font-weight: 500;
+        font-size: 0.7rem;
+        padding: 5px;
+        border: 1px solid white;
+    }
+    .search-item--left img {
+        width: 35px;
+        height: 35px;
+        margin-right: 10px;
+    }
+}

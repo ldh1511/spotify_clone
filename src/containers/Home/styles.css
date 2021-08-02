@@ -1,0 +1,79 @@
+.home{
+    width: 100%;
+    height: 100%;
+    background: inherit;
+    color: white;
+    margin-bottom: 100px;
+}
+.home-banner{
+    background-image: linear-gradient(transparent,#121212);
+    background-color: #210c54;
+    padding: 0 20px;
+    padding-top:70px;
+}
+.home-banner h1{
+    font-weight: 100;
+}
+.current-list{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    margin-top: 25px;
+    margin-bottom: 25px;
+}
+.current-list--item{
+    background-color: hsla(0,0%,100%,.1);
+    position: relative;
+    height: 80px;
+    border-radius: 4px;
+    overflow: hidden;
+    width: calc(33.33% - 20px);
+    margin-bottom: 15px;
+    cursor: pointer;
+    transition: all .4s ease-in;
+}
+.current-list--item a{
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+}
+.current-list--item:hover{
+    background-color: hsla(0,0%,100%,.2);
+}
+.current-list--item img{
+    width: 80px;
+    height: 80px;
+    display: block;
+}
+.current-list--item h2{
+    color: white;
+    margin-left: 15px;
+    text-transform: capitalize;
+    font-size: 1rem;
+    font-weight: 600;
+}
+.play-btn{
+    position: absolute;
+    top: 50%;
+    right: 0%;
+    transform: translate(-50%, -50%);
+    background: #1ed760;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    border: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    display:none;
+}
+.current-list--item:hover .play-btn{
+    display: block;
+}
+@media only screen and (max-width:800px) {
+    .home-banner {
+        padding: 0 5px;
+        padding-top: 60px;
+    }
+}

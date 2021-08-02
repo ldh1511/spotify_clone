@@ -1,0 +1,101 @@
+nav{
+    background: none;
+    display: flex;
+    justify-content: space-between;
+    padding: 0px 20px;
+    position: fixed;
+    width: inherit;
+    z-index: 9;
+}
+.navbar-left{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 7%;
+}
+.navbar-left button{
+    width:35px;
+    height:35px;
+    outline:none;
+    border-radius: 50%;
+    border: none;
+    display:flex;
+    justify-content:center;
+    align-items: center;
+    color:white;
+    background-color: hsla(0,0%,100%,.1);
+    cursor:pointer;
+}
+
+.account{
+    display: flex;
+    justify-content: flex-start;
+    position: relative;
+    border-radius: 38px;
+    background-color: hsla(0,0%,100%,.1);
+    cursor: pointer;
+    width: 140px;
+    padding: 5px;
+    align-items: center;
+    
+}
+.account img{
+    display:block;
+    width:35px;
+    height:35px;
+    border-radius: 50%;
+}
+.account h3{
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: white;
+    margin-left: 5px;
+}
+.dropdown-list{
+    position: absolute;
+    top: 100%;
+    right: 0;
+    width: 130%;
+    z-index: 9;
+    display: none;
+    transition:all .2s ease-in;
+}
+.dropdown-list ul{
+    background-color: #2a2a2a;
+    padding:5px;
+    margin-top:10px;
+    border-radius: 4px;
+}
+.dropdown-list ul li{
+    list-style: none;
+    color: white;
+    padding: 5px 0px;
+}
+.account:hover .dropdown-list{
+    display:block;
+}
+@media only screen and (max-width:1200px) {
+    .navbar-left {
+      width: 11%;
+    }
+}
+@media only screen and (max-width:800px) {
+    nav {
+        padding: 0px 0px;
+    }
+    .navbar-left {
+        width: 19%;
+    }
+    .account img {
+        width: 30px;
+        height: 30px;
+    }
+}
+@media only screen and (max-width:800px) {
+    .navbar-left {
+        width: 24%;
+    }
+    .account {
+        width: fit-content;
+    }
+}

@@ -1,0 +1,52 @@
+.collection-card{
+    background: linear-gradient(149.46deg,#450af5,#8e8ee5 99.16%);
+    padding: 20px;
+    margin-right: 20px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+    width: 400px;
+    cursor: pointer;
+    position: relative;
+    text-decoration: none;
+    color: white;
+}
+
+.collection-card p{
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 15px;
+}
+.collection-card--content{
+    margin-top: 50px;
+    margin-bottom: 30px !important;
+    font-size: 1rem !important;
+    font-weight: unset !important;
+    min-height: 70px;
+}
+.collection-card--content i{
+    font-size: 0.5rem;
+    color: #e0e0e0;
+    margin:0 5px;
+}
+.collection-card--content span{
+    color: #e0e0e0;
+    font-weight: unset !important;
+}
+
+.collection-card span{
+    font-weight: 500;
+}
+svg{
+    border-radius: 2px;
+    height: 100%;
+    left: 0;
+    position: absolute;
+    top: 0;
+    width: 100%;
+    stroke:#b3b3b3;
+}
+@media only screen and (max-width:1200px) {
+    .collection-card{
+      width: auto;
+    }
+}

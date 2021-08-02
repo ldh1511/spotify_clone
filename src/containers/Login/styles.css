@@ -1,0 +1,31 @@
+.login-container{
+    display: flex;
+    background: black;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height:100vh;
+}
+.login-container img{
+    display:block;
+}
+.login-container a{
+    font-size: 19px;
+    text-decoration: none;
+    color: white;
+    background: #1ed760;
+    padding: 10px 30px;
+    border-radius: 30px;
+    font-weight: 500;
+}
+.login-container p{
+    color: #b3b3b3;
+    position: absolute;
+    bottom: 20px;
+    font-size: 1.2rem;
+}
+@media only screen and (max-width:1200px) {
+    .login-container img {
+        width: 245px;
+    }
+}
