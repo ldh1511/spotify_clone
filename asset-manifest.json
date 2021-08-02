@@ -1,0 +1,25 @@
+{
+  "files": {
+    "main.css": "/spotify_clone/static/css/main.6933adb8.chunk.css",
+    "main.js": "/spotify_clone/static/js/main.09b9d3f7.chunk.js",
+    "main.js.map": "/spotify_clone/static/js/main.09b9d3f7.chunk.js.map",
+    "runtime-main.js": "/spotify_clone/static/js/runtime-main.9a655299.js",
+    "runtime-main.js.map": "/spotify_clone/static/js/runtime-main.9a655299.js.map",
+    "static/js/2.558f8b58.chunk.js": "/spotify_clone/static/js/2.558f8b58.chunk.js",
+    "static/js/2.558f8b58.chunk.js.map": "/spotify_clone/static/js/2.558f8b58.chunk.js.map",
+    "static/js/3.7df0c7b2.chunk.js": "/spotify_clone/static/js/3.7df0c7b2.chunk.js",
+    "static/js/3.7df0c7b2.chunk.js.map": "/spotify_clone/static/js/3.7df0c7b2.chunk.js.map",
+    "index.html": "/spotify_clone/index.html",
+    "static/css/main.6933adb8.chunk.css.map": "/spotify_clone/static/css/main.6933adb8.chunk.css.map",
+    "static/js/2.558f8b58.chunk.js.LICENSE.txt": "/spotify_clone/static/js/2.558f8b58.chunk.js.LICENSE.txt",
+    "static/media/content_loading.12203312.gif": "/spotify_clone/static/media/content_loading.12203312.gif",
+    "static/media/loadingfile.f5d187e3.gif": "/spotify_clone/static/media/loadingfile.f5d187e3.gif",
+    "static/media/logo_spotify.ccb63f93.jpg": "/spotify_clone/static/media/logo_spotify.ccb63f93.jpg"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.9a655299.js",
+    "static/js/2.558f8b58.chunk.js",
+    "static/css/main.6933adb8.chunk.css",
+    "static/js/main.09b9d3f7.chunk.js"
+  ]
+}
