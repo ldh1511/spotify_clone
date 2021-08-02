@@ -19,16 +19,14 @@ function App(props) {
   }
   const curToken = localStorage.getItem('token');
   useEffect(() => {
-    if (!curToken) {
-      const code = getTokenFromUrl();
+    const code = getTokenFromUrl();
+    if (!curToken && code!===undefined) {
       const setTokenActions = async () => {
-        if(code!==undefined) {
-          let res = await getToken(code);
-          localStorage.setItem('token', res.data.access_token);
-          runLogoutTimer(res.data.expires_in * 1000);
-          loginAction(res.data.access_token);
-          window.history.pushState({}, null, "/");
-        }
+        let res = await getToken(code);
+        localStorage.setItem('token', res.data.access_token);
+        runLogoutTimer(res.data.expires_in * 1000);
+        loginAction(res.data.access_token);
+        window.history.pushState({}, null, "/");
       }
       setTokenActions();
       getUserInfoAction();
@@ -37,7 +35,7 @@ function App(props) {
       loginAction(curToken);
       getUserInfoAction();
     }
-  }, [loginToken, getUserInfoAction, curToken, loginAction,])
+  }, [loginToken, getUserInfoAction, curToken, loginAction,code])
   return (
     <div className="App">
       {loginToken && loginToken !== null ?
