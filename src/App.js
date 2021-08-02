@@ -23,6 +23,7 @@ function App(props) {
       const code = getTokenFromUrl();
       const setTokenActions = async () => {
         let res = await getToken(code);
+        console.log("test");
         localStorage.setItem('token', res.data.access_token);
         runLogoutTimer(res.data.expires_in * 1000);
         loginAction(res.data.access_token);
@@ -35,7 +36,6 @@ function App(props) {
       loginAction(curToken);
       getUserInfoAction();
     }
-    console.log("ok");
   }, [loginToken, getUserInfoAction, curToken, loginAction,])
   return (
     <div className="App">
