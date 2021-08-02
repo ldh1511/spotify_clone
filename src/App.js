@@ -20,10 +20,10 @@ function App(props) {
   const curToken = localStorage.getItem('token');
   useEffect(() => {
     if (!curToken) {
+      console.log("test");
       const code = getTokenFromUrl();
       const setTokenActions = async () => {
         let res = await getToken(code);
-        console.log("test");
         localStorage.setItem('token', res.data.access_token);
         runLogoutTimer(res.data.expires_in * 1000);
         loginAction(res.data.access_token);
