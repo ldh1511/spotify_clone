@@ -27,7 +27,6 @@ function App(props) {
         runLogoutTimer(res.data.expires_in * 1000);
         loginAction(res.data.access_token);
         window.history.pushState({}, null, "/");
-        console.log("ok");
       }
       setTokenActions();
       getUserInfoAction();
@@ -36,6 +35,7 @@ function App(props) {
       loginAction(curToken);
       getUserInfoAction();
     }
+    console.log("ok");
   }, [loginToken, getUserInfoAction, curToken, loginAction,])
   return (
     <div className="App">
