@@ -27,6 +27,7 @@ function App(props) {
         runLogoutTimer(res.data.expires_in * 1000);
         loginAction(res.data.access_token);
         window.history.pushState({}, null, "/");
+        console.log("ok");
       }
       setTokenActions();
       getUserInfoAction();
