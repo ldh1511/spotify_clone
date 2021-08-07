@@ -1,8 +1,18 @@
 import { API_ENDPOINT } from "./../constants/api";
 import axiosServices from "./axiosServices";
 
-export const setAccessToken = () => {
-    return
+export const setRefreshToken = () => {
+    let refresh_token = localStorage.getItem('refresh_token');
+    return axiosServices.post(`https://accounts.spotify.com/api/token`, null, {
+        headers: {
+            Authorization: 'Basic OWExZTcxYWY0MTA3NDkwMGFmN2VlNmVkZTViYTEwNWI6NmViZjkwNTZhN2U3NDJiMWFmMzVlNmY5MGJlYjFiNzU=',
+            "content-type": 'application/x-www-form-urlencoded'
+        },
+        params: {
+            grant_type: 'refresh_token',
+            refresh_token: `${refresh_token}`
+        }
+    });
 }
 export const getMe = () => {
     let token = localStorage.getItem('token');
@@ -16,7 +26,7 @@ export const getToken = (param) => {
     return axiosServices.post(`https://accounts.spotify.com/api/token`, null, {
         params: {
             code: `${param}`,
-            redirect_uri: 'https://ldh1511.github.io/spotify_clone/',
+            redirect_uri: 'https://ldh-spotify-clone.surge.sh/',
             grant_type: 'authorization_code',
             client_secret: '6ebf9056a7e742b1af35e6f90beb1b75',
             client_id: '9a1e71af41074900af7ee6ede5ba105b',

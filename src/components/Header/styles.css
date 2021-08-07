@@ -34,7 +34,7 @@ nav{
     border-radius: 38px;
     background-color: hsla(0,0%,100%,.1);
     cursor: pointer;
-    width: 140px;
+    width: fit-content;
     padding: 5px;
     align-items: center;
     
@@ -93,7 +93,7 @@ nav{
 }
 @media only screen and (max-width:800px) {
     .navbar-left {
-        width: 24%;
+        width: 20%;
     }
     .account {
         width: fit-content;

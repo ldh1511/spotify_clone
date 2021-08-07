@@ -149,6 +149,9 @@
         width: 100%;
         display: flex !important;
     }
+    .footer-center--bottom > div{
+        width: 100%;
+    }
     .footer-left--content {
         margin-left: 10px;
     }

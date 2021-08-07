@@ -76,7 +76,7 @@ function* watchFetchUserInfo() {
         yield put(hideLoading());
     }
     catch (error) {
-        yield put(getUserInfoFailed(error.response.status))
+        yield put(getUserInfoFailed(error.response.status));
     }
 }
 function* watchFetchUserPlaylist({ payload }) {
@@ -345,7 +345,10 @@ function* watchUploadImage({ payload }) {
         yield put(hideNotification());
     }
     catch{
-        yield put(uploadPlaylistImage_Failed('error'))
+        yield put(uploadPlaylistImage_Failed('error'));
+        yield put(addNotification('Image size must be smaller than 256 KB !'));
+        yield delay(3000);
+        yield put(hideNotification());
     }
 }
 function* watchUpdatePlaylistDetail({ payload }) {

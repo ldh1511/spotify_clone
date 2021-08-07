@@ -1,14 +1,17 @@
 const authEndpoint = "https://accounts.spotify.com/authorize";
-const redirectUri = "https://ldh1511.github.io/spotify_clone/";
+const redirectUri = "https://ldh-spotify-clone.surge.sh/";
 const clientId = "9a1e71af41074900af7ee6ede5ba105b";
 
 const scopes = [
+  "user-read-email",
+  "user-read-private",
   "user-read-currently-playing",
   "user-read-recently-played",
   "user-read-playback-state",
   "user-library-read",
   "user-library-modify",
   "user-top-read",
+  "user-read-playback-position",
   "user-modify-playback-state",
   "user-follow-modify",
   "user-follow-read",

@@ -18,7 +18,7 @@ function Banner(props) {
         type, followed,
         id, follow,
         unfollow, custom,
-        openModal, getCurImg, currentImg,
+        openModal, getCurImg,
         getPredominantColor, predominantColor } = props;
     const [followState, setFollowState] = useState(followed);
     let crossOrigin = "Anonymous";

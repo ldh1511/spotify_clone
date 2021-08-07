@@ -112,11 +112,12 @@ td{
     }
     tr {
         grid-template-columns: 5% 70% 15%;
+        justify-content: center;
     }
 }
 @media only screen and (max-width:471px) {
     tr {
-        grid-template-columns: 8% 70% 12%;
+        grid-template-columns: 13% 70% 17%;
     }
     .track-info img {
         width: 35px;

@@ -2,6 +2,7 @@ import React from 'react';
 import './styles.css';
 import { PropTypes } from 'prop-types';
 import { useHistory } from "react-router-dom";
+import logo from '../../assets/images/default.jpg';
 Header.propsTypes = {
   info: PropTypes.array,
 }
@@ -22,7 +23,7 @@ function Header(props) {
         <button><i className="fas fa-chevron-right"></i></button>
       </div>
       <div className="account">
-        <img src={images[0].url} alt=""></img>
+        <img src={images && images[0] && images[0].url ? images[0].url :logo} alt=""></img>
         <h3>{name}</h3>
         <div className="dropdown-list">
           <ul>

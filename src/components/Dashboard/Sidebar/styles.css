@@ -29,6 +29,21 @@
     top: 50%;
     transform: translateY(-50%);
 }
+.sidebar-list li svg path{
+    fill:white
+}
+.sidebar-list.mid li:nth-child(1) svg{
+    background-color: white;
+}
+.sidebar-list.mid li:nth-child(1) svg path{
+    fill:none;
+}
+.sidebar-list.mid li:nth-child(1) svg path:first-child{
+    fill:black;
+}
+.sidebar-list.mid li:nth-child(2) svg path:first-child{
+    fill:none;
+}
 .sidebar-list li a,
 .sidebar-list li p{
     color: #b3b3b3;

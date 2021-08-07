@@ -123,8 +123,8 @@
         width: calc(33.33% - 5px);
     }
     .card-item .card-item-top {
-        width: 130px;
-        height: 130px;
+        width: 100%;
+        height: 100%;
     }
 }
 @media only screen and (max-width:471px) {

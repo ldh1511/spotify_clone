@@ -3,39 +3,23 @@ import Login from './containers/Login';
 import Dashboard from './components/Dashboard';
 import GLobalLoading from './components/GlobalLoading';
 import React, { useEffect } from 'react';
-import { getTokenFromUrl } from './spotify';
-import { getUserInfo, setToken } from './redux/actions/info';
+import { getUserInfo } from './redux/actions/info';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { getToken } from './apis/info';
 import { login } from './redux/actions/ui';
+import refreshToken from './helper/refreshToken';
 function App(props) {
-  const { getUserInfoAction, loginToken, loginAction, state } = props;
-  const runLogoutTimer = (timer) => {
-    setTimeout(() => {
-      localStorage.removeItem('token');
-      loginAction("");
-    }, timer)
-  }
-  const curToken = localStorage.getItem('token');
+  const { getUserInfoAction, loginToken, info } = props;
   useEffect(() => {
-    const code = getTokenFromUrl();
-    if (!curToken && code!===undefined) {
-      const setTokenActions = async () => {
-        let res = await getToken(code);
-        localStorage.setItem('token', res.data.access_token);
-        runLogoutTimer(res.data.expires_in * 1000);
-        loginAction(res.data.access_token);
-        window.history.pushState({}, null, "/");
-      }
-      setTokenActions();
-      getUserInfoAction();
+    if (loginToken) {
+      getUserInfoAction()
     }
-    else {
-      loginAction(curToken);
-      getUserInfoAction();
+  }, [loginToken, getUserInfoAction]);
+  useEffect(() => {
+    if(info.statusCode && info.statusCode===401){
+      refreshToken([getUserInfoAction]);
     }
-  }, [loginToken, getUserInfoAction, curToken, loginAction,code])
+  },[info,getUserInfoAction])
   return (
     <div className="App">
       {loginToken && loginToken !== null ?
@@ -53,12 +37,11 @@ const mapStateToProps = (state) => {
   return {
     loginToken: state.login.loginToken,
     info: state.info,
-    state:state
+    state: state
   }
 }
 const mapDispatchToProps = dispatch => {
   return {
-    setAccessTokenAction: bindActionCreators(setToken, dispatch),
     getUserInfoAction: bindActionCreators(getUserInfo, dispatch),
     loginAction: bindActionCreators(login, dispatch),
   }
