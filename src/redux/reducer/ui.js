@@ -42,11 +42,12 @@ const ui = (state = uiInitialState, action) => {
                 openModal:false
             }
         case constants.OPEN_TRACK_MENU:
+            console.log(action.payload.artists.split(", "));
             return {
                 ...state,
                 openTrackMenu:true,
                 albumId:action.payload.id,
-                artists:action.payload.artists.split(", ").slice(0,action.payload.artists.split(", ").length-1),
+                artists:action.payload.artists.split(", "),
                 idArtists:action.payload.idArtists.split(", ").slice(0,action.payload.idArtists.split(", ").length-1),
                 idTracks:action.payload.idTracks,
                 dataTracks:action.payload.dataTracks

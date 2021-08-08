@@ -205,10 +205,6 @@ function Footer(props) {
             </div>
             <div className="footer-right">
                 <div className="volum-box">
-                    {/* <i className="fas fa-volume-up"></i>
-                    <div className="volumn">
-                        test
-                    </div> */}
                 </div>
             </div>
             <audio

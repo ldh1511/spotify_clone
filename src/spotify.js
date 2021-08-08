@@ -1,5 +1,5 @@
 const authEndpoint = "https://accounts.spotify.com/authorize";
-const redirectUri = "https://ldh-spotify-clone.surge.sh/";
+const redirectUri = "http://localhost:3000/";
 const clientId = "9a1e71af41074900af7ee6ede5ba105b";
 
 const scopes = [

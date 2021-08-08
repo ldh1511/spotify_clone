@@ -52,7 +52,9 @@
 }
 .track-menu ul li a{
     text-decoration:none;
-    color:white
+    color:white;
+    width: 100%;
+    display: block;
 }
 .track-menu ul li:hover{
     background: #4a4a4a;
@@ -66,5 +68,33 @@
         left: 50%;
         transform: translate(-50%, -50%);
         width: 100%;
+    }
+}
+@media only screen and (max-width:471px) {
+    .track-menu {
+        width: 90%;
+        background: white;
+        color: black;
+        height: 19%;
+    }
+    .track-menu ul li{
+        font-size: 1rem;
+    }
+    .track-menu ul li a {
+        color: black;
+    }
+    .track-menu ul li:hover {
+        background: #1ed760;
+    }
+    .sub-menu {
+        background: white;
+        left: 0;
+        top: 100%;
+        border-radius: 5px;
+        min-width: 100%;
+        max-width: 100%;
+    }
+    .sub-menu li {
+        background-color: white;
     }
 }

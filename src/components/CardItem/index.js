@@ -69,7 +69,6 @@ function CardItem(props) {
                     <h4>{name}</h4>
                     <p>{limitdescription(description)}</p>
                 </div>
-
             </NavLink>
         </div>
     );

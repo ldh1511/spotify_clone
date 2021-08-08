@@ -26,7 +26,7 @@ export const getToken = (param) => {
     return axiosServices.post(`https://accounts.spotify.com/api/token`, null, {
         params: {
             code: `${param}`,
-            redirect_uri: 'https://ldh-spotify-clone.surge.sh/',
+            redirect_uri: 'http://localhost:3000/',
             grant_type: 'authorization_code',
             client_secret: '6ebf9056a7e742b1af35e6f90beb1b75',
             client_id: '9a1e71af41074900af7ee6ede5ba105b',

@@ -747,3 +747,13 @@ export const removeEpisodesFailed=(data)=>{
         payload:data
     }
 }
+export const setPlaySound=()=>{
+    return{
+        type:constants.SET_PLAY_SOUND
+    }
+}
+export const setPauseSound=()=>{
+    return{
+        type:constants.SET_PAUSE_SOUND
+    }
+}

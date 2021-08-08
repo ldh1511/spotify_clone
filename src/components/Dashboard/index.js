@@ -135,6 +135,7 @@ const mapDispatchToProps = dispatch => {
     SaveEpisodesAction: bindActionCreators(saveEpisodes, dispatch), 
     getSavedEpisodesAction: bindActionCreators(GetSavedEpisodes, dispatch),
     RemoveEpisodesAction: bindActionCreators(removeEpisodes, dispatch),
+    
   }
 }
 export default connect(mapStateToProps, mapDispatchToProps)(Dashboard);

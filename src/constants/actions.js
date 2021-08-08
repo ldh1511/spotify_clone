@@ -166,6 +166,9 @@ export const REMOVE_EPISODES = "REMOVE_EPISODES";
 export const REMOVE_EPISODES_SUCCESS = "REMOVE_EPISODES_SUCCESS";
 export const REMOVE_EPISODES_FAILED = "REMOVE_EPISODES_FAILED";
 
+export const SET_PLAY_SOUND = "SET_PLAY_SOUND";
+export const SET_PAUSE_SOUND = "SET_PAUSE_SOUND";
+
 // function constants
 export const getBase64 = (file) => {
   return new Promise((resolve, reject) => {
